@@ -1,9 +1,9 @@
 // src/firebaseConfig.ts
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth"; // ✅ Import this
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3wZTanCdGxG6jpo39CkqUcM9LhK17BME",
@@ -15,20 +15,15 @@ const firebaseConfig = {
   measurementId: "G-XM2WK7W95Q",
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
+// ✅ Prevent duplicate app initialization
+const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// ✅ Add this line to initialize and export auth
 export const auth = getAuth(firebaseApp);
-
-// Initialize Firestore
 export const db = getFirestore(firebaseApp);
-
-// Initialize Firebase Storage
 export const storage = getStorage(firebaseApp);
 
-// Analytics only works in HTTPS / production
+// Optional: analytics
 let analytics: any = null;
-
 if (import.meta.env.PROD) {
   isSupported()
     .then((supported) => {
@@ -41,4 +36,4 @@ if (import.meta.env.PROD) {
     });
 }
 
-export { analytics };
+export { firebaseApp, analytics };
