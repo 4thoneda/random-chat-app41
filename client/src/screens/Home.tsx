@@ -83,7 +83,15 @@ export default function Home() {
   const [onlineUsers, setOnlineUsers] = useState(12847);
   const { showBonusNotification, NotificationComponent } =
     useInAppNotification();
-  const dailyBonusAttempted = useRef(false);
+
+  // Handle daily bonus notification
+  useDailyBonusNotification({
+    canClaimDailyBonus,
+    currentUser,
+    hasCompletedOnboarding,
+    showBonusNotification,
+    claimDailyBonus,
+  });
 
   // Redirect to onboarding if user hasn't completed it
   useEffect(() => {
