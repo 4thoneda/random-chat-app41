@@ -70,6 +70,7 @@ export default function Home() {
     claimDailyBonus,
     canClaimDailyBonus,
     isLoading: coinsLoading,
+    currentUser,
   } = useCoin();
   const { t } = useLanguage();
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
