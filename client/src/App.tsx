@@ -25,13 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
-import { ensureUserDocumentExists } from "./lib/firestoreUtils"; // ✅
-
-import {
-  ensureUserDocumentExists,
-  addCoins,
-  spendCoins,
-} from "./lib/firestoreUtils";
+import { ensureUserDocumentExists } from "./lib/firestoreUtils";
 
 
 function App() {
