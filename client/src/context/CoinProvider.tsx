@@ -19,6 +19,7 @@ interface CoinContextType {
   currentStreak: number;
   hasCompletedOnboarding: boolean;
   isLoading: boolean;
+  currentUser: string | null;
 }
 
 const CoinContext = createContext<CoinContextType | null>(null);
