@@ -99,21 +99,19 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-claim daily bonus on app open - with session tracking to prevent duplicates
+  // Auto-claim daily bonus on app open - only when user becomes eligible
   useEffect(() => {
+    // Only trigger when user first becomes eligible (all conditions met)
+    if (!canClaimDailyBonus || !currentUser || !hasCompletedOnboarding || dailyBonusAttempted.current) {
+      return;
+    }
+
     const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
     const hasShownToday = sessionStorage.getItem(sessionKey);
 
-    // Only attempt once per session and only if all conditions are met
-    if (canClaimDailyBonus &&
-        currentUser &&
-        hasCompletedOnboarding &&
-        !hasShownToday &&
-        !dailyBonusAttempted.current) {
-
-      // Mark as attempted in this session
+    if (!hasShownToday) {
+      // Mark as attempted and shown
       dailyBonusAttempted.current = true;
-      // Mark as shown for today
       sessionStorage.setItem(sessionKey, "true");
 
       // Show daily bonus notification with a delay
@@ -129,17 +127,6 @@ export default function Home() {
       return () => clearTimeout(timeoutId);
     }
   }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding]);
-
-  // Reset daily bonus attempt flag when date changes
-  useEffect(() => {
-    const today = new Date().toDateString();
-    const lastResetDate = sessionStorage.getItem('daily_bonus_reset_date');
-
-    if (lastResetDate !== today) {
-      dailyBonusAttempted.current = false;
-      sessionStorage.setItem('daily_bonus_reset_date', today);
-    }
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
