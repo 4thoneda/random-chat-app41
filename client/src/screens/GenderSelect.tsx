@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { firebaseApp, db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { Button } from "../components/ui/button";
 
 export default function GenderSelect() {
   const navigate = useNavigate();
-  const auth = getAuth(firebaseApp);
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingGender, setIsCheckingGender] = useState(true);
 

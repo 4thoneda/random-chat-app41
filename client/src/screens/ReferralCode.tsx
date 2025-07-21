@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { getAuth } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
-import { firebaseApp, db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +28,6 @@ export default function ReferralCodeScreen() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const auth = getAuth(firebaseApp);
 
   const handleApply = async () => {
     if (!inputCode.trim() || isLoading) return;

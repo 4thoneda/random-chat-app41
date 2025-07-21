@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Camera } from "lucide-react";
-import { auth } from "@/lib/firebase";
 import {
   doc,
   getDoc,
@@ -10,7 +9,7 @@ import {
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "../firebaseConfig";
 
 export default function ProfilePage() {
   const [name, setName] = useState("Mystery Person");
