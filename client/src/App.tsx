@@ -23,6 +23,10 @@ import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 import { useNavigate } from "react-router-dom";
 
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import { ensureUserDocumentExists } from "./lib/firestoreUtils"; // Adjust path if needed
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
