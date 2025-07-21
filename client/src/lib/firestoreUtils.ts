@@ -1,52 +1,40 @@
-import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
-import { auth } from "../firebaseConfig";
-import { db } from "../firebaseConfig"; // Ensure this is exported from firebaseConfig.ts
+// src/firebaseConfig.ts
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAnalytics, isSupported } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth"; // ✅ Add this
 
-/**
- * Ensures a Firestore user document exists after authentication.
- * Creates one if it doesn't exist.
- */
-export async function ensureUserDocumentExists() {
-  const user = auth.currentUser;
-  if (!user) return;
+const firebaseConfig = {
+  apiKey: "AIzaSyB3wZTanCdGxG6jpo39CkqUcM9LhK17BME",
+  authDomain: "ajnabicam.firebaseapp.com",
+  projectId: "ajnabicam",
+  storageBucket: "ajnabicam.appspot.com",
+  messagingSenderId: "558188110620",
+  appId: "1:558188110620:web:500cdf55801d5b00e9d0d9",
+  measurementId: "G-XM2WK7W95Q",
+};
 
-  const userDocRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(userDocRef);
+// ✅ Prevent duplicate initialization
+const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-  if (!docSnap.exists()) {
-    const referralCode = user.uid.slice(0, 6).toUpperCase();
-    await setDoc(userDocRef, {
-      name: "Mystery Person",
-      profileImage: "",
-      referralCode,
-      coins: 100, // Optional: default coin balance
-      createdAt: new Date(),
+// Exports
+export const db = getFirestore(firebaseApp);
+export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp); // ✅ Add this
+export { firebaseApp };
+
+// ✅ Optional: Analytics
+let analytics: any = null;
+if (import.meta.env.PROD) {
+  isSupported()
+    .then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(firebaseApp);
+      }
+    })
+    .catch(() => {
+      analytics = null;
     });
-
-    console.log(`Created new user doc for UID: ${user.uid}`);
-  }
 }
-
-/**
- * Adds coins to a user's account.
- * @param userId UID of the user
- * @param amount Number of coins to add
- */
-export async function addCoins(userId: string, amount: number) {
-  const userDocRef = doc(db, "users", userId);
-  await updateDoc(userDocRef, {
-    coins: increment(amount),
-  });
-}
-
-/**
- * Spends (subtracts) coins from a user's account.
- * @param userId UID of the user
- * @param amount Number of coins to subtract
- */
-export async function spendCoins(userId: string, amount: number) {
-  const userDocRef = doc(db, "users", userId);
-  await updateDoc(userDocRef, {
-    coins: increment(-amount),
-  });
-}
+export { analytics };
