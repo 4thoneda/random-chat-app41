@@ -1,40 +1,48 @@
-// src/firebaseConfig.ts
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { getAuth } from "firebase/auth"; // ✅ Add this
+// src/lib/firestoreUtils.ts
+import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import { auth, db } from "../firebaseConfig"; // ✅ Correct imports
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3wZTanCdGxG6jpo39CkqUcM9LhK17BME",
-  authDomain: "ajnabicam.firebaseapp.com",
-  projectId: "ajnabicam",
-  storageBucket: "ajnabicam.appspot.com",
-  messagingSenderId: "558188110620",
-  appId: "1:558188110620:web:500cdf55801d5b00e9d0d9",
-  measurementId: "G-XM2WK7W95Q",
-};
+/**
+ * Ensure a Firestore user document exists after auth.
+ */
+export async function ensureUserDocumentExists() {
+  const user = auth.currentUser;
+  if (!user) return;
 
-// ✅ Prevent duplicate initialization
-const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const userDocRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(userDocRef);
 
-// Exports
-export const db = getFirestore(firebaseApp);
-export const storage = getStorage(firebaseApp);
-export const auth = getAuth(firebaseApp); // ✅ Add this
-export { firebaseApp };
-
-// ✅ Optional: Analytics
-let analytics: any = null;
-if (import.meta.env.PROD) {
-  isSupported()
-    .then((supported) => {
-      if (supported) {
-        analytics = getAnalytics(firebaseApp);
-      }
-    })
-    .catch(() => {
-      analytics = null;
+  if (!docSnap.exists()) {
+    const referralCode = user.uid.slice(0, 6).toUpperCase();
+    await setDoc(userDocRef, {
+      name: "Mystery Person",
+      profileImage: "",
+      referralCode,
+      coins: 100,
+      createdAt: new Date(),
     });
+    console.log(`✅ Created user doc for UID: ${user.uid}`);
+  }
 }
-export { analytics };
+
+/**
+ * Add coins to a user’s Firestore doc.
+ */
+export async function addCoins(userId: string, amount: number) {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    coins: increment(amount),
+  });
+  console.log(`✅ Added ${amount} coins to ${userId}`);
+}
+
+/**
+ * Spend coins from a user’s Firestore doc.
+ */
+export async function spendCoins(userId: string, amount: number) {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    coins: increment(-amount),
+  });
+  console.log(`✅ Spent ${amount} coins from ${userId}`);
+}
