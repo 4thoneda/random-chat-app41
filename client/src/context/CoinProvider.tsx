@@ -293,6 +293,7 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
         currentStreak,
         hasCompletedOnboarding,
         isLoading,
+        currentUser,
       }}
     >
       {children}
