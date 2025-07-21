@@ -1,0 +1,49 @@
+# Docker container for building Android APK without Android Studio
+FROM openjdk:17-jdk-slim
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Set up Android SDK
+ENV ANDROID_HOME=/opt/android-sdk
+ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+
+RUN mkdir -p $ANDROID_HOME/cmdline-tools \
+    && wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip \
+    && unzip commandlinetools-linux-*_latest.zip -d $ANDROID_HOME/cmdline-tools \
+    && mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest \
+    && rm commandlinetools-linux-*_latest.zip
+
+# Install Android SDK packages
+RUN yes | sdkmanager --licenses \
+    && sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+
+WORKDIR /app
+
+# Copy project files
+COPY . .
+
+# Build the APK
+RUN npm install \
+    && cd client \
+    && npm install \
+    && npm run build \
+    && npx cap sync android \
+    && cd android \
+    && chmod +x gradlew \
+    && ./gradlew assembleDebug
+
+# Copy APK to output directory
+RUN mkdir -p /output \
+    && cp client/android/app/build/outputs/apk/debug/app-debug.apk /output/
+
+CMD ["echo", "APK built successfully! Check /output/app-debug.apk"]
