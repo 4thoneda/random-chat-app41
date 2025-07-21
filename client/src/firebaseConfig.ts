@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth"; // ✅ Import this
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3wZTanCdGxG6jpo39CkqUcM9LhK17BME",
@@ -16,6 +17,9 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
+// ✅ Add this line to initialize and export auth
+export const auth = getAuth(firebaseApp);
+
 // Initialize Firestore
 export const db = getFirestore(firebaseApp);
 
@@ -23,10 +27,8 @@ export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
 // Analytics only works in HTTPS / production
-// Initialize analytics asynchronously to avoid top-level await
 let analytics: any = null;
 
-// Only initialize analytics in production to prevent dev server errors
 if (import.meta.env.PROD) {
   isSupported()
     .then((supported) => {
