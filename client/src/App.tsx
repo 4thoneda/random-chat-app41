@@ -27,6 +27,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { ensureUserDocumentExists } from "./lib/firestoreUtils"; // ✅
 
+import {
+  ensureUserDocumentExists,
+  addCoins,
+  spendCoins,
+} from "./lib/firestoreUtils";
+
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
