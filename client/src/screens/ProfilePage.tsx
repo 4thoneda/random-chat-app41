@@ -17,7 +17,9 @@ export default function Profile({
   bio,
   interests,
   profilePic,
-}: ProfileProps) {
+}: ProfileProps & { interests?: string[] }) {
+  interests = interests || [];
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-between p-4 relative bg-gradient-to-b from-pink-100 to-white">
       <div className="w-full max-w-md mx-auto rounded-3xl overflow-hidden shadow-xl bg-white">
