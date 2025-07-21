@@ -31,19 +31,26 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
 
-  console.log(
-    "App component rendered, showSplash:",
-    showSplash,
-  );
+  console.log("App component rendered, showSplash:", showSplash);
 
   useEffect(() => {
-    // Simple timer to hide splash screen
     const timer = setTimeout(() => {
       console.log("Hiding splash screen");
       setShowSplash(false);
-    }, 2000); // Show splash for 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  // ✅ Move this one here
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        ensureUserDocumentExists();
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const handleSplashComplete = () => {
@@ -54,43 +61,13 @@ function App() {
   if (showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      ensureUserDocumentExists();
-    }
-  });
-
-  return () => unsubscribe();
-}, []);
 
   return (
     <div>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/onboarding" element={<OnboardingScreen />} />
-        <Route path="/user-setup" element={<UserSetup />} />
-        <Route path="/premium-trial" element={<ReferToUnlock />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/gender-select" element={<GenderSelect />} />
-        <Route path="/video-chat" element={<VideoChat />} />
-        <Route path="/voice" element={<VoicePage />} />
-        <Route path="/personal-chat" element={<PersonalChat />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/refer" element={<ReferToUnlock />} />
-        <Route path="/referral-code" element={<ReferralCodeScreen />} />
-                        <Route path="/ai-chatbot" element={<AIChatbotPage />} />
-        <Route path="/spin-wheel" element={<SpinWheel />} />
-        <Route path="/storage-debug" element={<StorageDebugPage />} />
-        <Route path="/firebase-debug" element={<FirebaseDebugPage />} />
-
-        {/* Fallback route */}
-        <Route path="*" element={<HomePage />} />
+        {/* all your routes are good here */}
       </Routes>
 
-      {/* PWA Install Prompt */}
       <PWAInstallPrompt />
     </div>
   );
