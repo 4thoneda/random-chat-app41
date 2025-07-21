@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface UseDailyBonusNotificationProps {
   canClaimDailyBonus: boolean;
@@ -17,10 +17,16 @@ export const useDailyBonusNotification = ({
 }: UseDailyBonusNotificationProps) => {
   const hasTriggeredToday = useRef(false);
   const lastCheckDate = useRef<string>('');
+  const functionsRef = useRef({ showBonusNotification, claimDailyBonus });
+
+  // Update function refs when they change
+  useEffect(() => {
+    functionsRef.current = { showBonusNotification, claimDailyBonus };
+  }, [showBonusNotification, claimDailyBonus]);
 
   useEffect(() => {
     const today = new Date().toDateString();
-    
+
     // Reset the trigger flag if it's a new day
     if (lastCheckDate.current !== today) {
       hasTriggeredToday.current = false;
@@ -28,9 +34,9 @@ export const useDailyBonusNotification = ({
     }
 
     // Only proceed if all conditions are met and we haven't triggered today
-    if (!canClaimDailyBonus || 
-        !currentUser || 
-        !hasCompletedOnboarding || 
+    if (!canClaimDailyBonus ||
+        !currentUser ||
+        !hasCompletedOnboarding ||
         hasTriggeredToday.current) {
       return;
     }
@@ -43,16 +49,16 @@ export const useDailyBonusNotification = ({
       hasTriggeredToday.current = true;
       sessionStorage.setItem(sessionKey, "true");
 
-      // Show notification after a delay
+      // Show notification after a delay using ref to avoid dependency issues
       const timeoutId = setTimeout(() => {
-        showBonusNotification(
+        functionsRef.current.showBonusNotification(
           "🎁 Daily Bonus Available!",
           "Claim your 5 coins now and keep your streak going!",
-          claimDailyBonus,
+          functionsRef.current.claimDailyBonus,
         );
       }, 2000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding, showBonusNotification, claimDailyBonus]);
+  }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding]); // Only include stable values
 };
