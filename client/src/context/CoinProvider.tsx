@@ -194,7 +194,10 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
   };
 
   const claimDailyBonus = async (): Promise<boolean> => {
-    if (!canClaimDailyBonus) {
+    if (!canClaimDailyBonus || !currentUser) {
+      if (!currentUser) {
+        alert("❌ Please sign in to claim daily bonus.");
+      }
       return false;
     }
 
