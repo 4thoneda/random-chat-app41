@@ -94,11 +94,11 @@ export default function Home() {
   useEffect(() => {
     const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
     const hasShownToday = sessionStorage.getItem(sessionKey);
-    
-    if (canClaimDailyBonus && !hasShownToday) {
+
+    if (canClaimDailyBonus && currentUser && !hasShownToday) {
       // Mark as shown for this session
       sessionStorage.setItem(sessionKey, "true");
-      
+
       // Show daily bonus notification
       setTimeout(() => {
         showBonusNotification(
@@ -108,7 +108,7 @@ export default function Home() {
         );
       }, 2000);
     }
-  }, [canClaimDailyBonus]);
+  }, [canClaimDailyBonus, currentUser]);
 
   useEffect(() => {
     const interval = setInterval(() => {
