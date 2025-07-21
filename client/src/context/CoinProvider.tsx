@@ -19,6 +19,7 @@ interface CoinContextType {
   currentStreak: number;
   hasCompletedOnboarding: boolean;
   isLoading: boolean;
+  currentUser: string | null;
 }
 
 const CoinContext = createContext<CoinContextType | null>(null);
@@ -194,7 +195,10 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
   };
 
   const claimDailyBonus = async (): Promise<boolean> => {
-    if (!canClaimDailyBonus) {
+    if (!canClaimDailyBonus || !currentUser) {
+      if (!currentUser) {
+        alert("❌ Please sign in to claim daily bonus.");
+      }
       return false;
     }
 
@@ -289,6 +293,7 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
         currentStreak,
         hasCompletedOnboarding,
         isLoading,
+        currentUser,
       }}
     >
       {children}

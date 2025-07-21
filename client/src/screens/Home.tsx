@@ -1,10 +1,11 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "../components/ui/button";
 import { playSound } from "../lib/audio";
 import { useSocket } from "../context/SocketProvider";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useInAppNotification } from "../components/InAppNotification";
+import { useDailyBonusNotification } from "../hooks/useDailyBonusNotification";
 import {
   Crown,
   Coins,
@@ -70,6 +71,8 @@ export default function Home() {
     claimDailyBonus,
     canClaimDailyBonus,
     isLoading: coinsLoading,
+    currentUser,
+    hasCompletedOnboarding,
   } = useCoin();
   const { t } = useLanguage();
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
@@ -81,6 +84,22 @@ export default function Home() {
   const { showBonusNotification, NotificationComponent } =
     useInAppNotification();
 
+  // Handle daily bonus notification
+  useDailyBonusNotification({
+    canClaimDailyBonus,
+    currentUser,
+    hasCompletedOnboarding,
+    showBonusNotification,
+    claimDailyBonus,
+  });
+
+  // Redirect to onboarding if user hasn't completed it
+  useEffect(() => {
+    if (currentUser && !coinsLoading && !hasCompletedOnboarding) {
+      navigate('/onboarding');
+    }
+  }, [currentUser, hasCompletedOnboarding, coinsLoading, navigate]);
+
   // Simulate online users count
   useEffect(() => {
     const interval = setInterval(() => {
@@ -89,19 +108,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-claim daily bonus on app open
-  useEffect(() => {
-    if (canClaimDailyBonus) {
-      // Show daily bonus notification
-      setTimeout(() => {
-        showBonusNotification(
-          "🎁 Daily Bonus Available!",
-          "Claim your 5 coins now and keep your streak going!",
-          claimDailyBonus,
-        );
-      }, 2000);
-    }
-  }, [canClaimDailyBonus, claimDailyBonus, showBonusNotification]);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -163,6 +170,18 @@ export default function Home() {
       () => {},
     );
   };
+
+  // Show loading while checking authentication and onboarding status
+  if (coinsLoading && currentUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-peach-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

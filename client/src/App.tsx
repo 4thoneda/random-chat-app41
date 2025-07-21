@@ -23,13 +23,14 @@ import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 import { useNavigate } from "react-router-dom";
 
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 import { ensureUserDocumentExists } from "./lib/firestoreUtils";
 
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [authInitialized, setAuthInitialized] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,11 +42,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // ✅ Make sure Firestore doc exists for logged-in user
-        ensureUserDocumentExists(user.uid);
+        await ensureUserDocumentExists(user.uid);
+      } else {
+        // ✅ Auto sign-in anonymously for new users
+        try {
+          await signInAnonymously(auth);
+          console.log("✅ User signed in anonymously");
+        } catch (error) {
+          console.error("❌ Error signing in anonymously:", error);
+        }
       }
+      setAuthInitialized(true);
     });
 
     return () => unsubscribe();
@@ -55,8 +65,21 @@ function App() {
     setShowSplash(false);
   };
 
+  // Show splash screen
   if (showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />;
+  }
+
+  // Show loading while authentication is initializing
+  if (!authInitialized) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-peach-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Initializing...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
