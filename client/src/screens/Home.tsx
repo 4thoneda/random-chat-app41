@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "../components/ui/button";
 import { playSound } from "../lib/audio";
 import { useSocket } from "../context/SocketProvider";
