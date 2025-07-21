@@ -42,9 +42,9 @@ class AdService {
   private defaultConfig: AdConfig = {
       publisherId: import.meta.env.VITE_ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713',
 adUnitIds: {
-  banner: import.meta.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-3940256099942544/6300978111',
+  banner: import.meta.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-1776596266948987/2770517385',
   interstitial: import.meta.env.VITE_ADMOB_INTERSTITIAL_ID || 'ca-app-pub-3940256099942544/1033173712',
-  rewarded: import.meta.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-3940256099942544/5224354917',
+  rewarded: import.meta.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-1776596266948987/2777206492',
   native: import.meta.env.VITE_ADMOB_NATIVE_ID || 'ca-app-pub-3940256099942544/2247696110'
 },
 testMode: import.meta.env.DEV

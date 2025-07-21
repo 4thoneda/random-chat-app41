@@ -38,9 +38,9 @@ class AdMobMediationService {
   private defaultConfig: AdMobConfig = {
     publisherId: process.env.VITE_ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713', // Test ID
     adUnitIds: {
-      banner: process.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-3940256099942544/6300978111',
+      banner: process.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-1776596266948987/2770517385',
       interstitial: process.env.VITE_ADMOB_INTERSTITIAL_ID || 'ca-app-pub-3940256099942544/1033173712',
-      rewarded: process.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-3940256099942544/5224354917',
+      rewarded: process.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-1776596266948987/2777206492',
       native: process.env.VITE_ADMOB_NATIVE_ID || 'ca-app-pub-3940256099942544/2247696110',
       appOpen: process.env.VITE_ADMOB_APP_OPEN_ID || 'ca-app-pub-3940256099942544/3419835294'
     },
