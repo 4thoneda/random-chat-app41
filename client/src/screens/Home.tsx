@@ -82,6 +82,7 @@ export default function Home() {
   const [onlineUsers, setOnlineUsers] = useState(12847);
   const { showBonusNotification, NotificationComponent } =
     useInAppNotification();
+  const dailyBonusAttempted = useRef(false);
 
   // Redirect to onboarding if user hasn't completed it
   useEffect(() => {
