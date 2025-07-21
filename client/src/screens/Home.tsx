@@ -89,9 +89,15 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-claim daily bonus on app open
+  // Auto-claim daily bonus on app open - with session tracking to prevent duplicates
   useEffect(() => {
-    if (canClaimDailyBonus) {
+    const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
+    const hasShownToday = sessionStorage.getItem(sessionKey);
+    
+    if (canClaimDailyBonus && !hasShownToday) {
+      // Mark as shown for this session
+      sessionStorage.setItem(sessionKey, "true");
+      
       // Show daily bonus notification
       setTimeout(() => {
         showBonusNotification(
@@ -101,7 +107,7 @@ export default function Home() {
         );
       }, 2000);
     }
-  }, [canClaimDailyBonus, claimDailyBonus, showBonusNotification]);
+  }, [canClaimDailyBonus]);
 
   useEffect(() => {
     const interval = setInterval(() => {
