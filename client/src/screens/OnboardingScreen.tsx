@@ -214,7 +214,7 @@ export default function OnboardingScreen() {
                 variant="outline"
                 size="sm"
                 className="text-peach-600 border-peach-300 hover:bg-peach-50"
-                onClick={() => document.querySelector('input[type="file"]')?.click()}
+              onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}
                 disabled={isLoading}
               >
                 <Upload className="h-4 w-4 mr-2" />
