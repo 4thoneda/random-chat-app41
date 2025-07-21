@@ -54,6 +54,15 @@ function App() {
   if (showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      ensureUserDocumentExists();
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
 
   return (
     <div>
