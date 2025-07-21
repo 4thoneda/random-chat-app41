@@ -32,7 +32,7 @@ import RewardedAdButton from "../components/RewardedAdButton";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
-  process.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-1776596266948987/2770517385', // Original banner ad
+  import.meta.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-1776596266948987/2770517385', // Original banner ad
   'ca-app-pub-1776596266948987/7315217300', // New ad unit 1
   'ca-app-pub-1776596266948987/2468099206', // New ad unit 2
 ];
