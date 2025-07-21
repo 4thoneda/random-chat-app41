@@ -35,6 +35,7 @@ import LanguageSelector from "../components/LanguageSelector";
 import SettingsModal from "../components/SettingsModal";
 import HelpSupportModal from "../components/HelpSupportModal";
 import PremiumPaywall from "../components/PremiumPaywall";
+import { TestTube } from "lucide-react";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -514,6 +515,18 @@ export default function ProfilePage() {
               <div>
                 <div className="font-medium">Storage Debug</div>
                 <div className="text-sm text-gray-500">Test Firebase Storage connection</div>
+              </div>
+            </Button>
+
+            <Button
+              onClick={() => navigate('/ad-testing')}
+              variant="outline"
+              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+            >
+              <TestTube className="h-5 w-5 mr-3 text-green-600" />
+              <div>
+                <div className="font-medium">AdMob Testing</div>
+                <div className="text-sm text-gray-500">Test mobile ads functionality</div>
               </div>
             </Button>
 

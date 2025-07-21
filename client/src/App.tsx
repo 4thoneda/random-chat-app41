@@ -18,6 +18,7 @@ import UserSetup from "./screens/UserSetup";
 import PersonalChat from "./screens/PersonalChat";
 import FriendsPage from "./screens/FriendsPage";
 import AIChatbotPage from "./screens/AIChatbotPage";
+import AdTestingPage from "./screens/AdTestingPage";
 import SpinWheel from "./components/SpinWheel";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
@@ -103,6 +104,7 @@ function App() {
         <Route path="/spin-wheel" element={<SpinWheel />} />
         <Route path="/storage-debug" element={<StorageDebugPage />} />
         <Route path="/firebase-debug" element={<FirebaseDebugPage />} />
+        <Route path="/ad-testing" element={<AdTestingPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
 
