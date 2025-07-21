@@ -28,13 +28,25 @@ export async function ensureUserDocumentExists() {
 }
 
 /**
- * Adds or subtracts coins to/from a user's account.
+ * Adds coins to a user's account.
  * @param userId UID of the user
- * @param amount Number of coins to add (negative to subtract)
+ * @param amount Number of coins to add
  */
 export async function addCoins(userId: string, amount: number) {
   const userDocRef = doc(db, "users", userId);
   await updateDoc(userDocRef, {
     coins: increment(amount),
+  });
+}
+
+/**
+ * Spends (subtracts) coins from a user's account.
+ * @param userId UID of the user
+ * @param amount Number of coins to subtract
+ */
+export async function spendCoins(userId: string, amount: number) {
+  const userDocRef = doc(db, "users", userId);
+  await updateDoc(userDocRef, {
+    coins: increment(-amount),
   });
 }
