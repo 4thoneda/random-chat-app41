@@ -71,6 +71,7 @@ export default function Home() {
     canClaimDailyBonus,
     isLoading: coinsLoading,
     currentUser,
+    hasCompletedOnboarding,
   } = useCoin();
   const { t } = useLanguage();
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
