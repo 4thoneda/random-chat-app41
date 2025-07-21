@@ -2,10 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import DebugApp from "./DebugApp";
-import MinimalApp from "./MinimalApp";
-import TestApp from "./TestApp";
-import WorkingApp from "./WorkingApp";
 import { BrowserRouter } from "react-router-dom";
 import { SocketProvider } from "./context/SocketProvider.tsx";
 
@@ -28,7 +24,7 @@ createRoot(document.getElementById("root")!).render(
           <PremiumProvider>
             <CoinProvider>
               <FriendsProvider>
-                                                                                <BrowserRouter>
+                <BrowserRouter>
                   <SocketProvider>
                     <App />
                   </SocketProvider>

@@ -1,13 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getAuth, signInAnonymously, User } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { firebaseApp, db } from "./firebaseConfig";
-import { initializeCoins } from "./lib/firestoreUtils";
-import { checkFirebaseStatus, logFirebaseStatus } from "./lib/firebaseStatus";
-import { adService } from "./lib/adService";
-import AdConsentModal from "./components/AdConsentModal";
 
 import VideoChat from "./screens/VideoChat";
 import SplashScreen from "./components/SplashScreen";
@@ -30,148 +23,32 @@ import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 import { useNavigate } from "react-router-dom";
 
-interface UserData {
-  uid: string;
-  onboardingComplete: boolean;
-  gender: string | null;
-  username: string | null;
-  language: string;
-  referredBy: string | null;
-  coins?: number;
-  createdAt: any;
-}
-
 function App() {
-    const [showSplash, setShowSplash] = useState(true); // Show splash briefly then main app
-  const [isLoading, setIsLoading] = useState(false);
-  const [showAdConsent, setShowAdConsent] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
-  const auth = getAuth(firebaseApp);
 
   console.log(
     "App component rendered, showSplash:",
     showSplash,
-    "isLoading:",
-    isLoading,
   );
 
-      useEffect(() => {
-    if (!showSplash) {
-      const initializeUser = async () => {
-        try {
-          console.log("🚀 Starting app initialization...");
+  useEffect(() => {
+    // Simple timer to hide splash screen
+    const timer = setTimeout(() => {
+      console.log("Hiding splash screen");
+      setShowSplash(false);
+    }, 2000); // Show splash for 2 seconds
 
-          // Initialize Ad Service in background (non-blocking)
-          adService.initialize().then((adInitialized) => {
-            console.log("✅ Ad Service ready");
-            if (!adService.hasConsent()) {
-              setTimeout(() => setShowAdConsent(true), 3000);
-            }
-          }).catch((error) => {
-            console.warn("⚠️ Ad Service failed, continuing:", error);
-          });
-
-          // Sign in anonymously with Firebase
-          const userCredential = await signInAnonymously(auth);
-          const user = userCredential.user;
-          console.log("✅ Signed in anonymously with UID:", user.uid);
-
-          // Check if user document exists in Firestore
-          const userDocRef = doc(db, "users", user.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (!userDocSnap.exists()) {
-            // New user - create document with initial data
-            const initialUserData: Partial<UserData> = {
-              uid: user.uid,
-              onboardingComplete: false,
-              gender: null,
-              username: null,
-              language: "en", // Default language
-              referredBy: null,
-              createdAt: new Date(),
-              coins: 100, // Initialize with 100 coins
-            };
-
-            await setDoc(userDocRef, initialUserData);
-            console.log("Created new user document");
-
-            // Redirect to onboarding for new users
-            navigate("/onboarding", { replace: true });
-          } else {
-            // Existing user - check onboarding status
-            const userData = userDocSnap.data() as UserData;
-            console.log("Existing user data:", userData);
-
-            // Initialize coins if not present (for existing users)
-            try {
-              await initializeCoins(user.uid);
-            } catch (error) {
-              console.error(
-                "Error initializing coins for existing user:",
-                error,
-              );
-            }
-
-            if (!userData.onboardingComplete) {
-              // User exists but onboarding not complete
-              navigate("/onboarding", { replace: true });
-            }
-            // If onboarding is complete, stay on current route or go to home
-          }
-        } catch (error) {
-          console.error("Error during user initialization:", error);
-          // Fallback to onboarding on error
-          // Don't navigate on error to prevent infinite loops
-          console.log("Continuing without navigation due to error");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      initializeUser();
-    }
-  }, [showSplash, navigate, auth]);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSplashComplete = () => {
     console.log("Splash screen completed, setting showSplash to false");
     setShowSplash(false);
   };
 
-  const handleAdConsent = async (consent: boolean) => {
-    setShowAdConsent(false);
-
-    if (consent) {
-      console.log("✅ User gave ad consent");
-      // Ad service will store the consent
-    } else {
-      console.log("❌ User declined ads - they can upgrade to premium");
-      // Show premium options or continue without ads
-    }
-
-    // Continue with app initialization after consent
-    if (!showSplash) {
-      // Re-trigger the initialization if not already done
-      const event = new Event('adConsentGiven');
-      window.dispatchEvent(event);
-    }
-  };
-
-    if (showSplash) {
+  if (showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-peach-50 via-cream-50 to-blush-100 px-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 border-b-2 border-peach-500 mx-auto mb-3 sm:mb-4"></div>
-          <p className="text-peach-600 font-medium text-sm sm:text-base lg:text-lg">
-            Loading...
-          </p>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -202,12 +79,6 @@ function App() {
 
       {/* PWA Install Prompt */}
       <PWAInstallPrompt />
-
-      {/* Ad Consent Modal */}
-      <AdConsentModal
-        isOpen={showAdConsent}
-        onConsent={handleAdConsent}
-      />
     </div>
   );
 }

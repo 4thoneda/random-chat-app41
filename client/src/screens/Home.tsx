@@ -125,16 +125,6 @@ export default function Home() {
       setIsConnecting(true);
       playSound("join");
 
-      // Send user profile to server for premium priority matching (if socket available)
-      if (socket && !isUsingMockMode) {
-        socket.emit("user:profile", {
-          isPremium,
-          genderFilter: "any",
-          voiceOnly: false,
-        });
-        socket.emit("find:match");
-      }
-
       // Navigate immediately to video chat page (it will handle the waiting state)
       navigate("/video-chat", {
         state: {
@@ -144,7 +134,7 @@ export default function Home() {
 
       setIsConnecting(false);
     },
-    [navigate, socket, isPremium, isConnecting],
+    [navigate, isConnecting],
   );
 
   const handleVoiceChat = useCallback(() => {
