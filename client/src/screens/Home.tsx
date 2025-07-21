@@ -104,20 +104,42 @@ export default function Home() {
     const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
     const hasShownToday = sessionStorage.getItem(sessionKey);
 
-    if (canClaimDailyBonus && currentUser && hasCompletedOnboarding && !hasShownToday) {
-      // Mark as shown for this session
+    // Only attempt once per session and only if all conditions are met
+    if (canClaimDailyBonus &&
+        currentUser &&
+        hasCompletedOnboarding &&
+        !hasShownToday &&
+        !dailyBonusAttempted.current) {
+
+      // Mark as attempted in this session
+      dailyBonusAttempted.current = true;
+      // Mark as shown for today
       sessionStorage.setItem(sessionKey, "true");
 
-      // Show daily bonus notification
-      setTimeout(() => {
+      // Show daily bonus notification with a delay
+      const timeoutId = setTimeout(() => {
         showBonusNotification(
           "🎁 Daily Bonus Available!",
           "Claim your 5 coins now and keep your streak going!",
           claimDailyBonus,
         );
       }, 2000);
+
+      // Cleanup timeout if component unmounts
+      return () => clearTimeout(timeoutId);
     }
   }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding]);
+
+  // Reset daily bonus attempt flag when date changes
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const lastResetDate = sessionStorage.getItem('daily_bonus_reset_date');
+
+    if (lastResetDate !== today) {
+      dailyBonusAttempted.current = false;
+      sessionStorage.setItem('daily_bonus_reset_date', today);
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
