@@ -1,6 +1,6 @@
 /**
  * Comprehensive Ad Management Service for AjnabiCam
- * Supports Google AdSense, AdMob, and custom ad networks
+ * Supports Google AdSense, AdMob, and custom ad networksimport { auth, 
  */
 
 export interface AdConfig {
