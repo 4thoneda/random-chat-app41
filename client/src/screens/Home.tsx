@@ -103,7 +103,7 @@ export default function Home() {
     const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
     const hasShownToday = sessionStorage.getItem(sessionKey);
 
-    if (canClaimDailyBonus && currentUser && !hasShownToday) {
+    if (canClaimDailyBonus && currentUser && hasCompletedOnboarding && !hasShownToday) {
       // Mark as shown for this session
       sessionStorage.setItem(sessionKey, "true");
 
@@ -116,7 +116,7 @@ export default function Home() {
         );
       }, 2000);
     }
-  }, [canClaimDailyBonus, currentUser]);
+  }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -173,7 +173,7 @@ export default function Home() {
     setShowPaywall(false);
 
     showBonusNotification(
-      "🎉 Welcome to Premium!",
+      "��� Welcome to Premium!",
       `Your ${plan} subscription is now active! Enjoy unlimited features.`,
       () => {},
     );
