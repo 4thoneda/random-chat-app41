@@ -25,28 +25,25 @@ import { useNavigate } from "react-router-dom";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
-import { ensureUserDocumentExists } from "./lib/firestoreUtils"; // Adjust path if needed
+import { ensureUserDocumentExists } from "./lib/firestoreUtils"; // ✅
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const navigate = useNavigate();
 
-  console.log("App component rendered, showSplash:", showSplash);
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log("Hiding splash screen");
       setShowSplash(false);
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // ✅ Move this one here
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        ensureUserDocumentExists();
+        // ✅ Make sure Firestore doc exists for logged-in user
+        ensureUserDocumentExists(user.uid);
       }
     });
 
@@ -54,7 +51,6 @@ function App() {
   }, []);
 
   const handleSplashComplete = () => {
-    console.log("Splash screen completed, setting showSplash to false");
     setShowSplash(false);
   };
 
@@ -65,7 +61,25 @@ function App() {
   return (
     <div>
       <Routes>
-        {/* all your routes are good here */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/onboarding" element={<OnboardingScreen />} />
+        <Route path="/user-setup" element={<UserSetup />} />
+        <Route path="/premium-trial" element={<ReferToUnlock />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/gender-select" element={<GenderSelect />} />
+        <Route path="/video-chat" element={<VideoChat />} />
+        <Route path="/voice" element={<VoicePage />} />
+        <Route path="/personal-chat" element={<PersonalChat />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/refer" element={<ReferToUnlock />} />
+        <Route path="/referral-code" element={<ReferralCodeScreen />} />
+        <Route path="/ai-chatbot" element={<AIChatbotPage />} />
+        <Route path="/spin-wheel" element={<SpinWheel />} />
+        <Route path="/storage-debug" element={<StorageDebugPage />} />
+        <Route path="/firebase-debug" element={<FirebaseDebugPage />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
 
       <PWAInstallPrompt />
