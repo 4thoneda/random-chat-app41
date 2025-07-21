@@ -173,11 +173,23 @@ export default function Home() {
     setShowPaywall(false);
 
     showBonusNotification(
-      "��� Welcome to Premium!",
+      "🎉 Welcome to Premium!",
       `Your ${plan} subscription is now active! Enjoy unlimited features.`,
       () => {},
     );
   };
+
+  // Show loading while checking authentication and onboarding status
+  if (coinsLoading && currentUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-peach-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
