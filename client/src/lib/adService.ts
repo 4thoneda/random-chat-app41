@@ -40,14 +40,15 @@ class AdService {
 
   // Default configuration for AjnabiCam
   private defaultConfig: AdConfig = {
-        publisherId: process.env.VITE_ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713', // Your real AdMob App ID
-    adUnitIds: {
-            banner: process.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-3940256099942544/6300978111',
-            interstitial: process.env.VITE_ADMOB_INTERSTITIAL_ID || 'ca-app-pub-3940256099942544/1033173712', 
-            rewarded: process.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-3940256099942544/5224354917',
-            native: process.env.VITE_ADMOB_NATIVE_ID || 'ca-app-pub-3940256099942544/2247696110'
-    },
-    testMode: process.env.NODE_ENV === 'development'
+      publisherId: import.meta.env.VITE_ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713',
+adUnitIds: {
+  banner: import.meta.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-3940256099942544/6300978111',
+  interstitial: import.meta.env.VITE_ADMOB_INTERSTITIAL_ID || 'ca-app-pub-3940256099942544/1033173712',
+  rewarded: import.meta.env.VITE_ADMOB_REWARDED_ID || 'ca-app-pub-3940256099942544/5224354917',
+  native: import.meta.env.VITE_ADMOB_NATIVE_ID || 'ca-app-pub-3940256099942544/2247696110'
+},
+testMode: import.meta.env.DEV
+
   };
 
   private constructor() {
