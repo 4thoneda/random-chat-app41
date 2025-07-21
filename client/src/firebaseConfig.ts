@@ -5,6 +5,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
+// ✅ Your actual Firebase project config
 const firebaseConfig = {
   apiKey: "AIzaSyB3wZTanCdGxG6jpo39CkqUcM9LhK17BME",
   authDomain: "ajnabicam.firebaseapp.com",
@@ -15,15 +16,20 @@ const firebaseConfig = {
   measurementId: "G-XM2WK7W95Q",
 };
 
-// ✅ Prevent duplicate app initialization
-const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// ✅ Prevent duplicate initialization
+const firebaseApp = getApps().length === 0
+  ? initializeApp(firebaseConfig)
+  : getApp();
 
+// ✅ Core exports
 export const auth = getAuth(firebaseApp);
 export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
+export { firebaseApp };
 
-// Optional: analytics
+// ✅ Optional: Analytics (only in production + HTTPS)
 let analytics: any = null;
+
 if (import.meta.env.PROD) {
   isSupported()
     .then((supported) => {
@@ -36,4 +42,4 @@ if (import.meta.env.PROD) {
     });
 }
 
-export { firebaseApp, analytics };
+export { analytics };
