@@ -156,7 +156,7 @@ testMode: import.meta.env.DEV
   /**
    * Load banner ad
    */
-  async loadBannerAd(containerId: string, placement: AdPlacement): Promise<boolean> {
+  async loadBannerAd(containerId: string, placement: AdPlacement, customAdUnitId?: string): Promise<boolean> {
     if (!this.canShowAds()) return false;
 
     try {
@@ -171,7 +171,7 @@ testMode: import.meta.env.DEV
       adElement.className = 'adsbygoogle';
       adElement.style.display = 'block';
       adElement.setAttribute('data-ad-client', this.config.publisherId);
-      adElement.setAttribute('data-ad-slot', this.config.adUnitIds.banner);
+      adElement.setAttribute('data-ad-slot', customAdUnitId || this.config.adUnitIds.banner);
       
       if (placement.size) {
         adElement.style.width = `${placement.size.width}px`;

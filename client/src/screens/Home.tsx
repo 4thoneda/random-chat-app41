@@ -30,11 +30,11 @@ import { useLanguage } from "../context/LanguageProvider";
 import BannerAd from "../components/BannerAd";
 import RewardedAdButton from "../components/RewardedAdButton";
 
-const bannerImages = [
-  "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop",
-  "https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop",
-  "https://images.pexels.com/photos/1043472/pexels-photo-1043472.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop",
-  "https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop",
+// Ad unit IDs for scrollable banner ads
+const adUnitIds = [
+  process.env.VITE_ADMOB_BANNER_ID || 'ca-app-pub-1776596266948987/2770517385', // Original banner ad
+  'ca-app-pub-1776596266948987/7315217300', // New ad unit 1
+  'ca-app-pub-1776596266948987/2468099206', // New ad unit 2
 ];
 
 const testimonials = [
@@ -72,7 +72,7 @@ export default function Home() {
     isLoading: coinsLoading,
   } = useCoin();
   const { t } = useLanguage();
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showTreasureChest, setShowTreasureChest] = useState(false);
@@ -105,7 +105,7 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentBannerIndex((prev) => (prev + 1) % bannerImages.length);
+      setCurrentAdIndex((prev) => (prev + 1) % adUnitIds.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -284,55 +284,51 @@ export default function Home() {
           </div>
                 </header>
 
-        {/* Top Banner Ad - Only for non-premium users */}
+        {/* Scrollable Banner Ads - Only for non-premium users */}
         {!isPremium && (
-          <BannerAd
-            size="responsive"
-            position="top"
-            className="shadow-sm"
-          />
-        )}
-
-        {/* Enhanced Banner Carousel - Moved to top as Ad */}
-        <div className="w-full relative">
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-1000 ease-in-out"
-              style={{
-                transform: `translateX(-${currentBannerIndex * 100}%)`,
-              }}
-            >
-              {bannerImages.map((image, index) => (
-                <div key={index} className="w-full flex-shrink-0 relative">
-                  <img
-                    src={image}
-                    alt={`Ad Banner ${index + 1}`}
-                    className="w-full h-24 sm:h-32 lg:h-40 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-1 sm:bottom-2 left-2 sm:left-4 text-white">
-                    <p className="text-xs opacity-90">Advertisement</p>
+          <div className="w-full relative bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-1000 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentAdIndex * 100}%)`,
+                }}
+              >
+                {adUnitIds.map((adUnitId, index) => (
+                  <div key={index} className="w-full flex-shrink-0 relative">
+                    <div className="h-24 sm:h-32 lg:h-40 w-full">
+                      <BannerAd
+                        size="responsive"
+                        position="top"
+                        className="h-full w-full"
+                        style={{ minHeight: '96px' }}
+                        key={`ad-${adUnitId}-${index}`}
+                      />
+                    </div>
+                    <div className="absolute bottom-1 sm:bottom-2 left-2 sm:left-4 text-gray-600">
+                      <p className="text-xs opacity-90 bg-white/80 px-2 py-1 rounded">Advertisement {index + 1}</p>
+                    </div>
                   </div>
-                </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Ad Carousel Dots */}
+            <div className="absolute bottom-1 right-4 flex gap-1">
+              {adUnitIds.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentAdIndex(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    currentAdIndex === index
+                      ? "bg-blue-600 w-4"
+                      : "bg-gray-400 w-1.5"
+                  }`}
+                />
               ))}
             </div>
           </div>
-
-          {/* Enhanced Carousel Dots */}
-          <div className="absolute bottom-1 right-16 flex gap-1">
-            {bannerImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentBannerIndex(index)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  currentBannerIndex === index
-                    ? "bg-white w-4"
-                    : "bg-white/60 w-1.5"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
+        )}
 
         <div className="flex-1 flex flex-col px-4 sm:px-6 lg:px-8 py-4 sm:py-6 relative z-10">
           {/* Enhanced Gender Filter - Moved to top */}

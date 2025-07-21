@@ -4,6 +4,7 @@ import { adService } from '../lib/adService';
 interface BannerAdProps {
   size?: 'small' | 'medium' | 'large' | 'responsive';
   position?: 'top' | 'bottom' | 'inline';
+  adUnitId?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -18,6 +19,7 @@ const AD_SIZES = {
 export default function BannerAd({ 
   size = 'responsive', 
   position = 'inline',
+  adUnitId,
   className = '',
   style = {}
 }: BannerAdProps) {
@@ -40,7 +42,7 @@ export default function BannerAd({
           size: AD_SIZES[size]
         };
 
-        const success = await adService.loadBannerAd(containerId, placement);
+        const success = await adService.loadBannerAd(containerId, placement, adUnitId);
         
         if (success) {
           setAdLoaded(true);
