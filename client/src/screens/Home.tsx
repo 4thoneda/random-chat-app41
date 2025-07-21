@@ -108,34 +108,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-claim daily bonus on app open - only when user becomes eligible
-  useEffect(() => {
-    // Only trigger when user first becomes eligible (all conditions met)
-    if (!canClaimDailyBonus || !currentUser || !hasCompletedOnboarding || dailyBonusAttempted.current) {
-      return;
-    }
 
-    const sessionKey = `daily_bonus_shown_${new Date().toDateString()}`;
-    const hasShownToday = sessionStorage.getItem(sessionKey);
-
-    if (!hasShownToday) {
-      // Mark as attempted and shown
-      dailyBonusAttempted.current = true;
-      sessionStorage.setItem(sessionKey, "true");
-
-      // Show daily bonus notification with a delay
-      const timeoutId = setTimeout(() => {
-        showBonusNotification(
-          "🎁 Daily Bonus Available!",
-          "Claim your 5 coins now and keep your streak going!",
-          claimDailyBonus,
-        );
-      }, 2000);
-
-      // Cleanup timeout if component unmounts
-      return () => clearTimeout(timeoutId);
-    }
-  }, [canClaimDailyBonus, currentUser, hasCompletedOnboarding]);
 
   useEffect(() => {
     const interval = setInterval(() => {
