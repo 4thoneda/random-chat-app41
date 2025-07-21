@@ -83,6 +83,13 @@ export default function Home() {
   const { showBonusNotification, NotificationComponent } =
     useInAppNotification();
 
+  // Redirect to onboarding if user hasn't completed it
+  useEffect(() => {
+    if (currentUser && !coinsLoading && !hasCompletedOnboarding) {
+      navigate('/onboarding');
+    }
+  }, [currentUser, hasCompletedOnboarding, coinsLoading, navigate]);
+
   // Simulate online users count
   useEffect(() => {
     const interval = setInterval(() => {
