@@ -4,15 +4,15 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-      "baseUrl": ".",            // Required for path aliases
+
+    /* Alias Setup */
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]         // This allows imports like "@/components/..."
+      "@/*": ["src/*"]
+    },
+
+    /* Firebase + React Compatibility */
     "skipLibCheck": true,
-    "baseUrl": ".",            // Required for path aliases
-    "paths": {
-      "@/*": ["src/*"]         // This allows imports like "@/components/..."
-    
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
