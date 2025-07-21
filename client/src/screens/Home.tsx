@@ -5,6 +5,7 @@ import { useSocket } from "../context/SocketProvider";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useInAppNotification } from "../components/InAppNotification";
+import { useDailyBonusNotification } from "../hooks/useDailyBonusNotification";
 import {
   Crown,
   Coins,
