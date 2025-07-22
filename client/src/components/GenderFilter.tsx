@@ -127,35 +127,22 @@ export default function GenderFilter({
                       {/* Multiple Animated Rings for Selected */}
                       {isSelected && (
                         <>
-                          <div className="absolute -inset-4 border-2 border-white/30 rounded-full animate-ping"></div>
+                          <div className="absolute -inset-3 border-2 border-white/30 rounded-full animate-ping"></div>
                           <div
-                            className="absolute -inset-3 border-2 border-white/50 rounded-full animate-pulse"
+                            className="absolute -inset-2 border-2 border-white/50 rounded-full animate-pulse"
                             style={{ animationDelay: "0.5s" }}
-                          ></div>
-                          <div
-                            className="absolute -inset-2 border-3 border-white/70 rounded-full animate-pulse"
-                            style={{ animationDelay: "1s" }}
                           ></div>
                         </>
                       )}
 
-                      {/* Hover Ring with Gradient */}
-                      <div
-                        className={`absolute -inset-3 border-2 rounded-full transition-all duration-500 ${
-                          isSelected
-                            ? "border-transparent"
-                            : "border-transparent group-hover:border-gradient-to-r group-hover:from-gray-300 group-hover:to-gray-400"
-                        }`}
-                      ></div>
-
                       {/* Sparkle Effects for Selected */}
                       {isSelected && (
                         <>
-                          <div className="absolute -top-2 -right-2 text-yellow-300 text-lg animate-bounce">
+                          <div className="absolute -top-1 -right-1 text-yellow-300 text-sm animate-bounce">
                             ✨
                           </div>
                           <div
-                            className="absolute -bottom-2 -left-2 text-pink-300 text-sm animate-pulse"
+                            className="absolute -bottom-1 -left-1 text-pink-300 text-xs animate-pulse"
                             style={{ animationDelay: "0.3s" }}
                           >
                             ⭐
@@ -165,9 +152,9 @@ export default function GenderFilter({
                     </div>
 
                     {/* Enhanced Content */}
-                    <div className="text-left flex-1">
+                    <div className="text-left flex-1 min-w-0 pr-2">
                       <div
-                        className={`text-xl font-bold mb-2 transition-all duration-300 ${
+                        className={`text-base sm:text-lg font-bold mb-1 transition-all duration-300 leading-tight ${
                           isSelected
                             ? "text-white drop-shadow-lg"
                             : "text-gray-800 group-hover:text-gray-900"
@@ -176,7 +163,7 @@ export default function GenderFilter({
                         {option.label}
                       </div>
                       <div
-                        className={`text-sm font-medium transition-all duration-300 ${
+                        className={`text-xs sm:text-sm font-medium transition-all duration-300 leading-tight break-words ${
                           isSelected
                             ? "text-white/90"
                             : "text-gray-600 group-hover:text-gray-700"
