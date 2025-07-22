@@ -810,7 +810,7 @@ export default function VideoChat() {
   useEffect(() => {
     socket?.on(
       "stay:connected:response",
-      ({ wantToStay, from }: { wantToStay: boolean; from: string }) => {
+      async ({ wantToStay, from }: { wantToStay: boolean; from: string }) => {
         setPartnerWantsToStay(wantToStay);
 
         if (myStayResponse === true && wantToStay === true) {
