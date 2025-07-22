@@ -306,11 +306,11 @@ export default function ProfilePage() {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="border-b border-passion-300 focus:outline-none focus:border-passion-500 px-2 text-lg text-center bg-transparent"
+                    className="border-b border-coral-300 focus:outline-none focus:border-coral-500 px-2 text-lg text-center bg-transparent"
                     autoFocus
                     maxLength={20}
                   />
-                  <Button size="sm" onClick={handleNameSave} className="bg-passion-500 text-white">
+                  <Button size="sm" onClick={handleNameSave} className="bg-coral-500 text-white">
                     Save
                   </Button>
                 </div>
