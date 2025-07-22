@@ -98,13 +98,7 @@ export default function GenderSelect() {
           >
             {isLoading ? 'Saving...' : 'Male'}
           </Button>
-          <Button 
-            className="w-full py-3 rounded-xl bg-gray-300 text-gray-700 font-bold text-base disabled:opacity-50" 
-            onClick={() => handleSelect("other")}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Other'}
-          </Button>
+
         </div>
       </div>
     </main>
