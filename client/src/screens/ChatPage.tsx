@@ -230,7 +230,7 @@ const PersonalChat = ({
       className={`max-w-md mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-20 ${getWallpaperClass()}`}
     >
       {/* Enhanced Header */}
-      <div className="p-4 bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 flex items-center shadow-lg relative overflow-hidden">
+      <div className="p-4 bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 flex items-center shadow-lg relative">
         <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>
 
