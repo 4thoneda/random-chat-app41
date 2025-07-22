@@ -1,5 +1,60 @@
-import { doc, getDoc, setDoc, updateDoc, increment } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment,
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+  serverTimestamp,
+  arrayUnion,
+  arrayRemove,
+  Timestamp
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
+
+// Types for user data
+export interface UserProfile {
+  userId: string;
+  username: string;
+  email?: string;
+  profileImage?: string;
+  gender: 'male' | 'female' | 'other';
+  language: string;
+  bio?: string;
+  age?: number;
+  location?: string;
+  interests?: string[];
+  isPremium: boolean;
+  premiumExpiry?: Timestamp;
+  coins: number;
+  totalCoinsEarned: number;
+  totalCoinsSpent: number;
+  friendsCount: number;
+  totalMatches: number;
+  totalChatTime: number;
+  lastSeen: Timestamp;
+  isOnline: boolean;
+  joinDate: Timestamp;
+  onboardingComplete: boolean;
+  settings: {
+    notifications: boolean;
+    soundEnabled: boolean;
+    cameraEnabled: boolean;
+    micEnabled: boolean;
+    autoMatch: boolean;
+    genderFilter?: 'male' | 'female' | 'all';
+  };
+  reportCount: number;
+  isBlocked: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
 
 /**
  * Ensure user document exists in Firestore
