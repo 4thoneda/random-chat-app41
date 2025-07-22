@@ -10,10 +10,14 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173",
       "http://localhost:5000",
+      "https://zp1v56uxy8rdx5ypatb0ockcb9tr6a-oci3.w-credentialless-staticblitz.com",
       "https://ajnabicam.com",
     ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
+  allowEIO3: true,
+  transports: ['websocket', 'polling'],
 });
 
 app.use(cors());

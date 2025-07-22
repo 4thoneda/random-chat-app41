@@ -35,24 +35,26 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       // Determine socket URL based on environment
       let socketUrl: string;
 
-      if (import.meta.env.VITE_API_SERVER_URL) {
-        socketUrl = import.meta.env.VITE_API_SERVER_URL;
+      if (window.location.hostname.includes('webcontainer-api.io')) {
+        // WebContainer environment - use the exposed port URL
+        socketUrl = window.location.origin.replace('5173', '8000');
       } else if (window.location.hostname === "localhost") {
-        // Try multiple ports in case 8000 is busy
         socketUrl = "http://localhost:8000";
       } else {
-        // For production or other environments
         socketUrl = `http://${window.location.hostname}:8000`;
       }
 
+      console.log('Attempting to connect to:', socketUrl);
+
       const newSocket = io(socketUrl, {
         transports: ["websocket", "polling"],
-        secure: false,
+        secure: window.location.protocol === 'https:',
         timeout: 20000,
         forceNew: true,
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
+        withCredentials: true,
       });
 
       newSocket.on("connect", () => {
