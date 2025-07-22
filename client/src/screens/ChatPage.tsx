@@ -287,14 +287,6 @@ const PersonalChat = ({
                 <Palette size={20} className="text-rose-600" />
                 <span className="font-semibold text-gray-800">Set Wallpaper</span>
               </button>
-              <div className="border-t border-gray-100"></div>
-              <button
-                onClick={() => setShowMenu(false)}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 w-full text-left transition-colors"
-              >
-                <X size={18} className="text-gray-400" />
-                <span className="font-medium">Close</span>
-              </button>
             </div>
           )}
         </div>
