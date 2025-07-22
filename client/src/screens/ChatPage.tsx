@@ -220,44 +220,31 @@ const PersonalChat = ({
 
   const getWallpaperStyle = () => {
     if (!currentWallpaper) {
-      return {
-        background: "linear-gradient(to bottom right, rgb(248 250 252), rgb(255 255 255), rgb(254 242 242))"
-      };
+      return {};
     }
 
     if (currentWallpaper.imageUrl) {
       return {
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(${currentWallpaper.imageUrl})`,
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${currentWallpaper.imageUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       };
     }
 
-    return {
-      background: `linear-gradient(to bottom right, ${currentWallpaper.gradient.replace('from-', '').replace('via-', '').replace('to-', '').split(' ').map((color: string) => {
-        const colorMap: { [key: string]: string } = {
-          'pink-400': 'rgb(244 114 182)',
-          'red-400': 'rgb(248 113 113)',
-          'yellow-400': 'rgb(251 191 36)',
-          'blue-300': 'rgb(147 197 253)',
-          'cyan-300': 'rgb(103 232 249)',
-          'teal-300': 'rgb(94 234 212)',
-          'purple-300': 'rgb(196 181 253)',
-          'green-400': 'rgb(74 222 128)',
-          'orange-400': 'rgb(251 146 60)',
-          'gray-300': 'rgb(209 213 219)',
-          'indigo-300': 'rgb(165 180 252)',
-          'rose-300': 'rgb(253 164 175)',
-          'emerald-400': 'rgb(52 211 153)',
-          'violet-400': 'rgb(167 139 250)',
-          'amber-400': 'rgb(251 191 36)',
-          'lime-300': 'rgb(190 242 100)',
-          'sky-300': 'rgb(125 211 252)',
-        };
-        return colorMap[color] || 'rgb(255 255 255)';
-      }).join(', ')})`
-    };
+    return {};
+  };
+
+  const getWallpaperClass = () => {
+    if (!currentWallpaper) {
+      return "bg-gradient-to-br from-slate-50 via-white to-rose-50";
+    }
+
+    if (currentWallpaper.imageUrl) {
+      return "";
+    }
+
+    return `bg-gradient-to-br ${currentWallpaper.gradient}`;
   };
 
   return (
