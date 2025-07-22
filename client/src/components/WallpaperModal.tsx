@@ -339,8 +339,8 @@ const premiumWallpapers = [
 interface WallpaperModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectWallpaper: (wallpaper: (typeof wallpaperThemes)[0]) => void;
-  currentWallpaper?: (typeof wallpaperThemes)[0];
+  onSelectWallpaper: (wallpaper: any) => void;
+  currentWallpaper?: any;
 }
 
 export default function WallpaperModal({
@@ -350,6 +350,7 @@ export default function WallpaperModal({
   currentWallpaper,
 }: WallpaperModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { isPremium } = usePremium();
 
   if (!isOpen) return null;
 
