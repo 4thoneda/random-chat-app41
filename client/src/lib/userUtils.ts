@@ -26,7 +26,7 @@ export function getUserProfile() {
   const userId = getUserId();
   const username = localStorage.getItem("ajnabicam_username") || "User";
   const profileImage = localStorage.getItem("ajnabicam_profile_image");
-  const gender = localStorage.getItem("ajnabicam_gender") || "other";
+  const gender = localStorage.getItem("ajnabicam_gender") || "male";
 
   return {
     userId,
