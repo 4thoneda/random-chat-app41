@@ -57,26 +57,55 @@ export interface UserProfile {
 }
 
 /**
- * Ensure user document exists in Firestore
+ * Ensure user document exists in Firestore with comprehensive profile
  */
-export async function ensureUserDocumentExists(userId: string): Promise<void> {
+export async function ensureUserDocumentExists(userId: string, initialData?: Partial<UserProfile>): Promise<void> {
   try {
     const userDocRef = doc(db, "users", userId);
     const userDocSnap = await getDoc(userDocRef);
 
     if (!userDocSnap.exists()) {
-      // Create new user document with default values
-      await setDoc(userDocRef, {
+      // Create new user document with comprehensive default values
+      const defaultUserProfile: UserProfile = {
         userId,
+        username: initialData?.username || `User${Math.floor(Math.random() * 10000)}`,
+        gender: initialData?.gender || 'male',
+        language: initialData?.language || 'en',
+        isPremium: false,
         coins: 100, // Starting coins
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        totalCoinsEarned: 100,
+        totalCoinsSpent: 0,
+        friendsCount: 0,
+        totalMatches: 0,
+        totalChatTime: 0,
+        lastSeen: serverTimestamp() as Timestamp,
+        isOnline: true,
+        joinDate: serverTimestamp() as Timestamp,
         onboardingComplete: false,
-        username: "User",
-        gender: "male",
-        language: "en"
+        settings: {
+          notifications: true,
+          soundEnabled: true,
+          cameraEnabled: true,
+          micEnabled: true,
+          autoMatch: true,
+          genderFilter: 'all'
+        },
+        reportCount: 0,
+        isBlocked: false,
+        createdAt: serverTimestamp() as Timestamp,
+        updatedAt: serverTimestamp() as Timestamp,
+        ...initialData
+      };
+
+      await setDoc(userDocRef, defaultUserProfile);
+      console.log("✅ Comprehensive user document created for:", userId);
+    } else {
+      // Update lastSeen and online status for existing users
+      await updateDoc(userDocRef, {
+        lastSeen: serverTimestamp(),
+        isOnline: true,
+        updatedAt: serverTimestamp()
       });
-      console.log("✅ User document created for:", userId);
     }
   } catch (error) {
     console.error("❌ Error ensuring user document exists:", error);
