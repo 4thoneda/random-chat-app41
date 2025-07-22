@@ -221,10 +221,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-passion-500 mx-auto mb-4"></div>
-          <p className="text-passion-600 font-medium">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral-500 mx-auto mb-4"></div>
+          <p className="text-coral-600 font-medium">Loading profile...</p>
         </div>
       </div>
     );
