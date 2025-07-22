@@ -270,7 +270,7 @@ export default function ProfilePage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute bottom-1 right-1 bg-passion-500 hover:bg-passion-600 text-white rounded-full shadow-lg"
+                className="absolute bottom-1 right-1 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingImage}
               >
