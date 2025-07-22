@@ -214,9 +214,8 @@ export async function markMessagesAsRead(chatRoomId: string, userId: string): Pr
     );
 
     const snapshot = await getDocs(q);
-    const batch = db._delegate._databaseId; // We'll update this with proper batch operations
 
-    const promises = snapshot.docs.map(doc => 
+    const promises = snapshot.docs.map(doc =>
       updateDoc(doc.ref, { isRead: true })
     );
 
