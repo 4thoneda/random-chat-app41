@@ -382,17 +382,17 @@ export default function WallpaperModal({
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white rounded-3xl shadow-2xl max-w-md sm:max-w-lg lg:max-w-2xl xl:max-w-4xl w-full max-h-[80vh] lg:max-h-[85vh] xl:max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 sm:p-8 lg:p-10 relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Choose Wallpaper</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">Choose Wallpaper</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-white/20 transition-colors"
+              className="p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20 transition-colors"
             >
-              <X size={20} />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
             </button>
           </div>
-          <p className="text-purple-100 text-sm mt-1">
+          <p className="text-purple-100 text-sm sm:text-base lg:text-lg mt-1">
             Set a unique mood for this chat
           </p>
         </div>
