@@ -131,56 +131,93 @@ export const FriendsProvider = ({ children }: FriendsProviderProps) => {
     };
   }, [currentUserId]);
 
-  const addFriend = (newFriend: Omit<Friend, 'addedAt'>): boolean => {
-    // Check if user has premium
-    const isPremium = localStorage.getItem("premium_status") === "true";
-    
+  const refreshFriendsData = async () => {
+    if (!currentUserId) return;
+
+    try {
+      const stats = await getFriendsStats(currentUserId);
+      setFriendsStats(stats);
+    } catch (error) {
+      console.error("Error refreshing friends data:", error);
+    }
+  };
+
+  const addFriend = async (friendId: string, friendName: string, friendAvatar?: string): Promise<boolean> => {
+    if (!currentUserId) return false;
+
     // Check if already at limit for free users
     if (!isPremium && friends.length >= maxFreeLimit) {
       return false; // Cannot add more friends
     }
 
     // Check if friend already exists
-    if (friends.some(friend => friend.id === newFriend.id)) {
+    if (friends.some(friend => friend.id === friendId)) {
       return true; // Already friends
     }
 
-    // Validate friend data
-    if (!newFriend.id || !newFriend.name) {
-      console.error('Invalid friend data:', newFriend);
-      return false;
-    }
-
-    const friendWithDate: Friend = {
-      ...newFriend,
-      addedAt: new Date()
-    };
-
-    setFriends(prev => [...prev, friendWithDate]);
-    return true;
+    // This will be used for direct friend addition (if needed)
+    // For now, we'll use the friend request system
+    return await sendFriendRequestToUser(friendId, friendName);
   };
 
-  const removeFriend = (friendId: string) => {
-    setFriends(prev => prev.filter(friend => friend.id !== friendId));
+  const sendFriendRequestToUser = async (toUserId: string, toUserName: string, message?: string): Promise<boolean> => {
+    if (!currentUserId) return false;
+
+    return await sendFriendRequest(currentUserId, currentUserName, toUserId, toUserName, message);
+  };
+
+  const acceptRequest = async (requestId: string): Promise<boolean> => {
+    const success = await acceptFriendRequest(requestId);
+    if (success) {
+      await refreshFriendsData();
+    }
+    return success;
+  };
+
+  const rejectRequest = async (requestId: string): Promise<boolean> => {
+    return await rejectFriendRequest(requestId);
+  };
+
+  const removeFriend = async (friendId: string): Promise<boolean> => {
+    if (!currentUserId) return false;
+
+    const success = await removeFirestoreFriend(currentUserId, friendId);
+    if (success) {
+      await refreshFriendsData();
+    }
+    return success;
   };
 
   const updateFriendStatus = (friendId: string, isOnline: boolean) => {
-    setFriends(prev => prev.map(friend => 
-      friend.id === friendId 
-        ? { 
-            ...friend, 
-            isOnline, 
-            lastSeen: isOnline ? undefined : new Date() 
+    if (!currentUserId) return;
+
+    // Update local state immediately for better UX
+    setFriends(prev => prev.map(friend =>
+      friend.id === friendId
+        ? {
+            ...friend,
+            isOnline,
+            lastSeen: isOnline ? undefined : new Date()
           }
         : friend
     ));
+
+    // Update in Firestore
+    updateFriendOnlineStatus(currentUserId, friendId, isOnline);
+  };
+
+  const toggleFriendFavorite = async (friendId: string): Promise<boolean> => {
+    if (!currentUserId) return false;
+
+    // Import the function dynamically to avoid circular dependency
+    const { toggleFriendFavorite: toggleFavorite } = await import("../lib/friendsFirestore");
+    return await toggleFavorite(currentUserId, friendId);
   };
 
   const getFriendById = (friendId: string): Friend | undefined => {
     return friends.find(friend => friend.id === friendId);
   };
 
-  const isPremium = localStorage.getItem("premium_status") === "true";
   const canAddMoreFriends = isPremium || friends.length < maxFreeLimit;
 
   return (
