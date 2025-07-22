@@ -259,10 +259,10 @@ const PersonalChat = ({
 
         <button
           onClick={onBack}
-          className="mr-3 text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20"
+          className="mr-3 text-white hover:scale-110 transition-all duration-200 p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20"
           aria-label="Go back"
         >
-          <ArrowLeft size={24} />
+          <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
         </button>
         <img
           src={chat.avatar}
