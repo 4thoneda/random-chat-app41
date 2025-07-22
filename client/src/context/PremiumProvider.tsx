@@ -161,8 +161,10 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
       value={{
         isPremium,
         premiumExpiry,
+        loading,
         setPremium,
         checkPremiumStatus,
+        syncPremiumStatus,
       }}
     >
       {children}
