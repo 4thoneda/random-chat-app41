@@ -35,6 +35,9 @@ function App() {
   const [authInitialized, setAuthInitialized] = useState(false);
   const navigate = useNavigate();
 
+  // Initialize analytics
+  useAnalytics();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
