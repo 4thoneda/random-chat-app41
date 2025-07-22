@@ -51,12 +51,12 @@ const SpinWheel: React.FC = () => {
   >([]);
   const maxSpinsPerDay = 3;
 
-  // Enhanced wheel segments with vibrant colors and patterns
+  // Enhanced wheel segments with vibrant colors and patterns matching home page
   const wheelSegments = [
     {
       coins: 10,
-      color: "from-emerald-400 to-emerald-600",
-      bgColor: "#10B981",
+      color: "from-peach-400 to-peach-600",
+      bgColor: "#FB923C",
       label: "10 Coins",
       probability: 50,
       icon: "💎",
@@ -64,8 +64,8 @@ const SpinWheel: React.FC = () => {
     },
     {
       coins: 0,
-      color: "from-gray-400 to-gray-600",
-      bgColor: "#6B7280",
+      color: "from-cream-400 to-cream-600",
+      bgColor: "#F59E0B",
       label: "Try Again",
       probability: 25,
       icon: "🔄",
@@ -73,8 +73,8 @@ const SpinWheel: React.FC = () => {
     },
     {
       coins: 20,
-      color: "from-amber-400 to-orange-500",
-      bgColor: "#F59E0B",
+      color: "from-coral-400 to-coral-600",
+      bgColor: "#F97316",
       label: "20 Coins",
       probability: 15,
       icon: "⭐",
@@ -82,8 +82,8 @@ const SpinWheel: React.FC = () => {
     },
     {
       coins: 0,
-      color: "from-slate-400 to-slate-600",
-      bgColor: "#64748B",
+      color: "from-blush-400 to-blush-600",
+      bgColor: "#EC4899",
       label: "Better Luck",
       probability: 7,
       icon: "🍀",
@@ -91,8 +91,8 @@ const SpinWheel: React.FC = () => {
     },
     {
       coins: 50,
-      color: "from-red-400 to-pink-500",
-      bgColor: "#EF4444",
+      color: "from-rose-400 to-rose-600",
+      bgColor: "#F43F5E",
       label: "JACKPOT!",
       probability: 3,
       icon: "🎰",
@@ -172,7 +172,7 @@ const SpinWheel: React.FC = () => {
       coins: 0,
       message: "Better luck next time! 🍀",
       requiresAd: false,
-      color: "#6B7280",
+      color: "#F59E0B",
       icon: "🔄",
     };
   };
@@ -258,16 +258,16 @@ const SpinWheel: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 w-full">
-      {/* Fixed Header with Prominent Back Button */}
-      <div className="sticky top-0 z-50 bg-black/60 backdrop-blur-lg border-b border-white/20">
+    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 w-full">
+      {/* Fixed Header with Prominent Back Button - matching home page style */}
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 shadow-lg">
         <div className="flex items-center justify-between px-4 py-4 max-w-sm mx-auto">
           <button
             onClick={() => {
               console.log("Back button clicked - navigating to home");
               navigate("/");
             }}
-            className="flex items-center justify-center w-12 h-12 text-white hover:text-yellow-300 transition-all duration-300 bg-white/30 hover:bg-white/50 backdrop-blur-sm rounded-full touch-manipulation active:scale-95 border-2 border-white/40 shadow-lg"
+            className="flex items-center justify-center w-12 h-12 text-white hover:text-peach-100 transition-all duration-300 bg-white/30 hover:bg-white/50 backdrop-blur-sm rounded-full touch-manipulation active:scale-95 border-2 border-white/40 shadow-lg"
             title="Go back"
           >
             <ArrowLeft
@@ -276,9 +276,9 @@ const SpinWheel: React.FC = () => {
             />
           </button>
 
-          <h1 className="text-white font-bold text-xl">Spin & Win</h1>
+          <h1 className="text-white font-bold text-xl drop-shadow-lg">Spin & Win</h1>
 
-          <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-4 py-2 shadow-lg">
+          <div className="flex items-center gap-2 bg-gradient-to-r from-coral-400 to-peach-500 rounded-full px-4 py-2 shadow-lg border border-white/30">
             <Coins className="h-5 w-5 text-white" />
             <span className="font-bold text-white">{coins}</span>
           </div>
@@ -287,19 +287,19 @@ const SpinWheel: React.FC = () => {
 
       {/* Main Content Container */}
       <div className="max-w-sm mx-auto relative min-h-screen">
-        {/* Animated Background */}
+        {/* Animated Background matching home page */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full animate-pulse"></div>
+          <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-peach-200/20 to-coral-200/20 rounded-full animate-pulse"></div>
           <div
-            className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-pink-500/20 to-red-500/20 rounded-full animate-pulse"
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blush-200/20 to-cream-200/20 rounded-full animate-pulse"
             style={{ animationDelay: "1s" }}
           ></div>
 
-          {/* Floating particles */}
+          {/* Floating romantic particles */}
           {particles.map((particle) => (
             <div
               key={particle.id}
-              className="absolute w-2 h-2 bg-white rounded-full opacity-60 animate-ping"
+              className="absolute w-2 h-2 bg-coral-400 rounded-full opacity-60 animate-ping"
               style={{
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
@@ -316,11 +316,11 @@ const SpinWheel: React.FC = () => {
             <div className="flex justify-center mb-4">
               <div className="relative">
                 <div className="text-6xl animate-bounce">🎰</div>
-                <div className="absolute -top-2 -right-2 text-2xl animate-ping">
+                <div className="absolute -top-2 -right-2 text-2xl animate-ping text-coral-400">
                   ✨
                 </div>
                 <div
-                  className="absolute -bottom-2 -left-2 text-xl animate-ping"
+                  className="absolute -bottom-2 -left-2 text-xl animate-ping text-peach-400"
                   style={{ animationDelay: "0.5s" }}
                 >
                   ⭐
@@ -328,25 +328,25 @@ const SpinWheel: React.FC = () => {
               </div>
             </div>
 
-            <h1 className="text-3xl font-extrabold text-white mb-2 drop-shadow-lg">
+            <h1 className="text-3xl font-extrabold bg-gradient-to-r from-coral-600 to-peach-600 bg-clip-text text-transparent mb-2 drop-shadow-lg">
               Spin & Win Fortune!
             </h1>
 
-            <p className="text-white/90 font-medium text-lg drop-shadow-md">
+            <p className="text-blush-600 font-medium text-lg drop-shadow-md">
               🎲 Test your luck and win rewards! 🎲
             </p>
 
             {/* Daily Spin Counter */}
-            <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-2xl px-6 py-4 border border-white/30">
+            <div className="mt-6 bg-white/80 backdrop-blur-lg rounded-2xl px-6 py-4 border border-peach-200 shadow-lg">
               <div className="flex items-center gap-3 justify-center">
-                <div className="bg-white/30 p-2 rounded-full">
+                <div className="bg-gradient-to-r from-coral-400 to-peach-400 p-2 rounded-full">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
                 <div className="text-center">
-                  <div className="text-white font-bold text-lg">
+                  <div className="text-coral-700 font-bold text-lg">
                     Daily Spins: {spinsToday}/{maxSpinsPerDay}
                   </div>
-                  <div className="text-white/80 text-sm font-medium">
+                  <div className="text-blush-600 text-sm font-medium">
                     {maxSpinsPerDay - spinsToday} spins remaining
                   </div>
                 </div>
@@ -354,95 +354,139 @@ const SpinWheel: React.FC = () => {
             </div>
           </div>
 
-          {/* Wheel Section */}
+          {/* 3D Wheel Section */}
           <div className="flex flex-col justify-center items-center py-8">
             <div className="relative mb-8">
-              {/* Outer glow ring */}
-              <div className="absolute -inset-6 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full opacity-50 blur-xl animate-pulse"></div>
+              {/* Multiple layered outer glow rings for 3D effect */}
+              <div className="absolute -inset-8 bg-gradient-to-r from-coral-400 via-peach-400 to-blush-400 rounded-full opacity-30 blur-2xl animate-pulse"></div>
+              <div className="absolute -inset-6 bg-gradient-to-r from-peach-500 via-coral-500 to-rose-500 rounded-full opacity-40 blur-xl animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-coral-600 via-blush-600 to-peach-600 rounded-full opacity-50 blur-lg animate-pulse" style={{ animationDelay: "1s" }}></div>
 
-              {/* Wheel Container */}
+              {/* 3D Wheel Container with enhanced shadows and gradients */}
               <div
                 ref={wheelRef}
-                className="relative w-72 h-72 rounded-full border-8 border-white shadow-2xl overflow-hidden"
+                className="relative w-72 h-72 rounded-full shadow-2xl overflow-hidden transform-gpu"
                 style={{
                   background: `conic-gradient(
                     from 0deg,
-                    #10B981 0deg 72deg,
-                    #6B7280 72deg 144deg,
-                    #F59E0B 144deg 216deg,
-                    #64748B 216deg 288deg,
-                    #EF4444 288deg 360deg
+                    #FB923C 0deg 72deg,
+                    #F59E0B 72deg 144deg,
+                    #F97316 144deg 216deg,
+                    #EC4899 216deg 288deg,
+                    #F43F5E 288deg 360deg
                   )`,
+                  boxShadow: `
+                    0 0 0 8px rgba(255, 255, 255, 0.8),
+                    0 0 0 12px rgba(251, 146, 60, 0.3),
+                    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                    inset 0 2px 4px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 4px 0 rgba(0, 0, 0, 0.1)
+                  `,
+                  transform: 'perspective(1000px) rotateX(5deg)',
                 }}
               >
-                {/* Segment dividers */}
+                {/* Enhanced 3D inner shadow ring */}
+                <div 
+                  className="absolute inset-2 rounded-full"
+                  style={{
+                    boxShadow: `
+                      inset 0 0 20px rgba(0, 0, 0, 0.2),
+                      inset 0 4px 8px rgba(255, 255, 255, 0.3),
+                      inset 0 -4px 8px rgba(0, 0, 0, 0.2)
+                    `
+                  }}
+                ></div>
+
+                {/* Segment dividers with 3D effect */}
                 {[0, 72, 144, 216, 288].map((angle, index) => (
                   <div
                     key={index}
-                    className="absolute w-full h-0.5 bg-white/50 origin-left top-1/2"
+                    className="absolute w-full h-1 bg-gradient-to-r from-transparent via-white/70 to-transparent origin-left top-1/2"
                     style={{
                       transform: `rotate(${angle}deg)`,
                       transformOrigin: "50% 50%",
+                      boxShadow: '0 0 4px rgba(255, 255, 255, 0.5)',
                     }}
                   />
                 ))}
 
-                {/* Center circle */}
+                {/* Enhanced 3D center circle */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white rounded-full w-20 h-20 flex items-center justify-center shadow-xl border-4 border-yellow-400">
+                  <div 
+                    className="bg-gradient-to-br from-white via-cream-50 to-peach-50 rounded-full w-20 h-20 flex items-center justify-center shadow-2xl border-4 border-gradient-to-r from-coral-400 to-peach-400"
+                    style={{
+                      boxShadow: `
+                        0 8px 16px rgba(0, 0, 0, 0.2),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.6),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+                        0 0 0 3px rgba(251, 146, 60, 0.3)
+                      `,
+                      transform: 'translateZ(10px)',
+                    }}
+                  >
                     <div className="text-center">
-                      <div className="text-lg font-bold text-purple-600 animate-pulse">
+                      <div className="text-lg font-bold bg-gradient-to-r from-coral-600 to-peach-600 bg-clip-text text-transparent animate-pulse">
                         SPIN
                       </div>
-                      <div className="text-xs font-bold text-gray-600">
+                      <div className="text-xs font-bold text-blush-600">
                         WIN!
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Segment labels */}
+                {/* Enhanced segment labels with 3D shadows */}
                 <div className="absolute top-6 left-1/2 transform -translate-x-1/2 text-center">
-                  <div className="text-2xl">💎</div>
-                  <div className="text-white font-bold text-sm drop-shadow-lg">
+                  <div className="text-2xl drop-shadow-lg">💎</div>
+                  <div className="text-white font-bold text-sm drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                     10
                   </div>
                 </div>
 
                 <div className="absolute right-6 top-1/2 transform -translate-y-1/2 text-center">
-                  <div className="text-2xl">🔄</div>
-                  <div className="text-white font-bold text-sm drop-shadow-lg">
+                  <div className="text-2xl drop-shadow-lg">🔄</div>
+                  <div className="text-white font-bold text-sm drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                     Try
                   </div>
                 </div>
 
                 <div className="absolute bottom-10 right-10 text-center">
-                  <div className="text-2xl">⭐</div>
-                  <div className="text-white font-bold text-sm drop-shadow-lg">
+                  <div className="text-2xl drop-shadow-lg">⭐</div>
+                  <div className="text-white font-bold text-sm drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                     20
                   </div>
                 </div>
 
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-center">
-                  <div className="text-2xl">🍀</div>
-                  <div className="text-white font-bold text-sm drop-shadow-lg">
+                  <div className="text-2xl drop-shadow-lg">🍀</div>
+                  <div className="text-white font-bold text-sm drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                     Luck
                   </div>
                 </div>
 
                 <div className="absolute bottom-10 left-10 text-center">
-                  <div className="text-3xl animate-pulse">🎰</div>
-                  <div className="text-white font-bold text-sm drop-shadow-lg">
+                  <div className="text-3xl animate-pulse drop-shadow-lg">🎰</div>
+                  <div className="text-white font-bold text-sm drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
                     50!
                   </div>
                 </div>
               </div>
 
-              {/* Pointer */}
+              {/* Enhanced 3D Pointer */}
               <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
                 <div className="relative">
-                  <div className="w-0 h-0 border-l-6 border-r-6 border-b-12 border-l-transparent border-r-transparent border-b-yellow-400 drop-shadow-2xl"></div>
-                  <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-yellow-400 rounded-full shadow-lg"></div>
+                  <div 
+                    className="w-0 h-0 border-l-6 border-r-6 border-b-12 border-l-transparent border-r-transparent border-b-gradient-to-b from-coral-400 to-peach-500 drop-shadow-2xl"
+                    style={{
+                      filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(251,146,60,0.5))',
+                    }}
+                  ></div>
+                  <div 
+                    className="absolute top-3 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gradient-to-br from-coral-400 to-peach-500 rounded-full shadow-lg"
+                    style={{
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5)',
+                    }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -452,15 +496,15 @@ const SpinWheel: React.FC = () => {
           <div className="pb-8">
             {hasSpunToday ? (
               <div className="space-y-4">
-                <div className="bg-white/20 backdrop-blur-lg text-white font-bold py-6 px-8 rounded-2xl shadow-lg border border-white/30 text-center">
+                <div className="bg-white/80 backdrop-blur-lg text-coral-700 font-bold py-6 px-8 rounded-2xl shadow-lg border border-peach-200 text-center">
                   <div className="text-xl mb-2">🎯 Daily Limit Reached!</div>
-                  <div className="text-sm opacity-90">
+                  <div className="text-sm opacity-90 text-blush-600">
                     Come back tomorrow for more spins!
                   </div>
                 </div>
                 <button
                   onClick={resetDaily}
-                  className="w-full text-sm text-white/70 underline hover:text-white transition-colors"
+                  className="w-full text-sm text-coral-600 underline hover:text-coral-700 transition-colors"
                 >
                   🔧 Reset for testing
                 </button>
@@ -472,7 +516,7 @@ const SpinWheel: React.FC = () => {
                 className={`w-full py-6 rounded-2xl font-extrabold text-xl shadow-2xl transition-all duration-300 transform border-4 touch-manipulation ${
                   isSpinning
                     ? "bg-gray-400 cursor-not-allowed border-gray-500 scale-95"
-                    : "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 hover:shadow-3xl hover:scale-105 border-white active:scale-95"
+                    : "bg-gradient-to-r from-coral-500 via-peach-500 to-blush-500 hover:from-coral-600 hover:via-peach-600 hover:to-blush-600 hover:shadow-3xl hover:scale-105 border-white active:scale-95 text-white"
                 }`}
               >
                 {isSpinning ? (
@@ -490,11 +534,11 @@ const SpinWheel: React.FC = () => {
             )}
 
             {/* Motivational message */}
-            <div className="text-center mt-6 bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
-              <div className="text-white font-bold text-lg mb-2">
+            <div className="text-center mt-6 bg-white/60 backdrop-blur-lg rounded-2xl p-4 border border-peach-200 shadow-lg">
+              <div className="text-coral-700 font-bold text-lg mb-2">
                 🎪 Every spin is a chance to win! 🎪
               </div>
-              <div className="text-white/80 text-sm">
+              <div className="text-blush-600 text-sm">
                 Watch ads to claim your rewards! 📺✨
               </div>
             </div>
@@ -512,7 +556,7 @@ const SpinWheel: React.FC = () => {
                 {[...Array(30)].map((_, i) => (
                   <div
                     key={i}
-                    className="absolute w-3 h-3 bg-yellow-400 animate-bounce opacity-80 rounded-full"
+                    className="absolute w-3 h-3 bg-coral-400 animate-bounce opacity-80 rounded-full"
                     style={{
                       left: `${Math.random() * 100}%`,
                       top: `${Math.random() * 100}%`,
@@ -560,12 +604,12 @@ const SpinWheel: React.FC = () => {
                 <h2 className="text-2xl font-extrabold mb-4">
                   {result.coins > 0 ? (
                     <div className="space-y-2">
-                      <div className="text-3xl bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                      <div className="text-3xl bg-gradient-to-r from-coral-400 to-peach-500 bg-clip-text text-transparent">
                         🎊 WINNER! 🎊
                       </div>
                       <div className="text-lg text-gray-700">
                         You won{" "}
-                        <span className="text-green-600 font-extrabold">
+                        <span className="text-coral-600 font-extrabold">
                           {result.coins} coins!
                         </span>
                       </div>
@@ -585,22 +629,22 @@ const SpinWheel: React.FC = () => {
                 <div className="space-y-4">
                   {result.requiresAd && result.coins > 0 ? (
                     <div className="space-y-4">
-                      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-2xl p-4">
+                      <div className="bg-gradient-to-r from-peach-50 to-coral-50 border-2 border-peach-200 rounded-2xl p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <Play className="h-6 w-6 text-blue-600" />
-                          <p className="text-blue-800 font-bold">
+                          <Play className="h-6 w-6 text-coral-600" />
+                          <p className="text-coral-800 font-bold">
                             🎬 Watch a quick ad to claim your {result.coins}{" "}
                             coins!
                           </p>
                         </div>
-                        <p className="text-blue-600 text-sm">
+                        <p className="text-coral-600 text-sm">
                           Supporting ads keeps the app free! 💙
                         </p>
                       </div>
                       <div className="space-y-3">
                         <Button
                           onClick={handleClaimReward}
-                          className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 py-4 font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl"
+                          className="w-full bg-gradient-to-r from-coral-500 to-peach-600 hover:from-coral-600 hover:to-peach-700 py-4 font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl text-white"
                         >
                           <Play className="h-5 w-5 mr-2" />
                           Watch Ad & Claim! 🎉
@@ -616,21 +660,21 @@ const SpinWheel: React.FC = () => {
                     </div>
                   ) : result.coins === 0 ? (
                     <div className="space-y-4">
-                      <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-2xl p-4">
+                      <div className="bg-gradient-to-r from-cream-50 to-peach-50 border-2 border-cream-200 rounded-2xl p-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <Gift className="h-6 w-6 text-orange-600" />
-                          <p className="text-orange-800 font-bold">
+                          <Gift className="h-6 w-6 text-peach-600" />
+                          <p className="text-peach-800 font-bold">
                             🎁 Don't give up! Watch an ad and get 10 coins!
                           </p>
                         </div>
-                        <p className="text-orange-600 text-sm">
+                        <p className="text-peach-600 text-sm">
                           Turn your luck around! 🌟
                         </p>
                       </div>
                       <div className="space-y-3">
                         <Button
                           onClick={handleClaimReward}
-                          className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 py-4 font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl"
+                          className="w-full bg-gradient-to-r from-peach-500 to-coral-500 hover:from-peach-600 hover:to-coral-600 py-4 font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl text-white"
                         >
                           <Play className="h-5 w-5 mr-2" />
                           Watch Ad & Get 10 Coins! 🪙
@@ -647,7 +691,7 @@ const SpinWheel: React.FC = () => {
                   ) : (
                     <Button
                       onClick={() => setShowResult(false)}
-                      className="w-full py-4 font-bold text-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-2xl"
+                      className="w-full py-4 font-bold text-lg bg-gradient-to-r from-coral-500 to-peach-500 hover:from-coral-600 hover:to-peach-600 rounded-2xl text-white"
                     >
                       Try Again Tomorrow! 🌅
                     </Button>
