@@ -1,8 +1,40 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 0;
+  text-align: left;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* App Store Ready Responsive Layout */
+.app-container {
+  max-width: 100vw;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #fef9f0 0%, #fffbf0 50%, #fef7f7 100%);
+}
+
+/* Responsive touch targets for better UX */
+@media (max-width: 640px) {
+  button, .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  button, .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+@media (min-width: 1025px) {
+  button, .touch-target {
+    min-height: 52px;
+    min-width: 52px;
+  }
 }
 
 .card {
