@@ -18,7 +18,7 @@ export async function ensureUserDocumentExists(userId: string): Promise<void> {
         updatedAt: new Date(),
         onboardingComplete: false,
         username: "User",
-        gender: "other",
+        gender: "male",
         language: "en"
       });
       console.log("✅ User document created for:", userId);

@@ -89,7 +89,7 @@ export default function GenderFilter({
 
                 <Button
                   variant="ghost"
-                  className={`w-full h-auto p-6 rounded-3xl transition-all duration-500 border-3 relative overflow-hidden group ${
+                  className={`w-full h-auto p-4 sm:p-5 rounded-3xl transition-all duration-500 border-2 relative overflow-hidden group ${
                     isSelected
                       ? `bg-gradient-to-r ${option.color} text-white shadow-2xl border-white/50 animate-pulse-glow`
                       : `${option.bgColor} border-gray-200 hover:border-gray-300 hover:shadow-xl group-hover:shadow-2xl`
@@ -101,17 +101,17 @@ export default function GenderFilter({
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 animate-shimmer"></div>
                   )}
 
-                  <div className="flex items-center gap-6 w-full relative z-10">
+                  <div className="flex items-center gap-3 w-full relative z-10">
                     {/* Ultra Large Avatar/Emoji with Advanced Animations */}
                     <div className="relative flex-shrink-0">
                       {/* Outer Glow Ring */}
                       {isSelected && (
-                        <div className="absolute -inset-4 bg-gradient-to-r from-rose-400/20 via-pink-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
+                        <div className="absolute -inset-3 bg-gradient-to-r from-rose-400/20 via-pink-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
                       )}
 
                       {/* Main Avatar */}
                       <div
-                        className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl transition-all duration-700 relative ${
+                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-3xl sm:text-4xl transition-all duration-700 relative ${
                           isSelected
                             ? "bg-white/25 backdrop-blur-md shadow-2xl animate-bounce scale-110"
                             : "bg-white/90 group-hover:bg-white shadow-xl group-hover:shadow-2xl group-hover:scale-105"
@@ -127,35 +127,22 @@ export default function GenderFilter({
                       {/* Multiple Animated Rings for Selected */}
                       {isSelected && (
                         <>
-                          <div className="absolute -inset-4 border-2 border-white/30 rounded-full animate-ping"></div>
+                          <div className="absolute -inset-3 border-2 border-white/30 rounded-full animate-ping"></div>
                           <div
-                            className="absolute -inset-3 border-2 border-white/50 rounded-full animate-pulse"
+                            className="absolute -inset-2 border-2 border-white/50 rounded-full animate-pulse"
                             style={{ animationDelay: "0.5s" }}
-                          ></div>
-                          <div
-                            className="absolute -inset-2 border-3 border-white/70 rounded-full animate-pulse"
-                            style={{ animationDelay: "1s" }}
                           ></div>
                         </>
                       )}
 
-                      {/* Hover Ring with Gradient */}
-                      <div
-                        className={`absolute -inset-3 border-2 rounded-full transition-all duration-500 ${
-                          isSelected
-                            ? "border-transparent"
-                            : "border-transparent group-hover:border-gradient-to-r group-hover:from-gray-300 group-hover:to-gray-400"
-                        }`}
-                      ></div>
-
                       {/* Sparkle Effects for Selected */}
                       {isSelected && (
                         <>
-                          <div className="absolute -top-2 -right-2 text-yellow-300 text-lg animate-bounce">
+                          <div className="absolute -top-1 -right-1 text-yellow-300 text-sm animate-bounce">
                             ✨
                           </div>
                           <div
-                            className="absolute -bottom-2 -left-2 text-pink-300 text-sm animate-pulse"
+                            className="absolute -bottom-1 -left-1 text-pink-300 text-xs animate-pulse"
                             style={{ animationDelay: "0.3s" }}
                           >
                             ⭐
@@ -165,9 +152,9 @@ export default function GenderFilter({
                     </div>
 
                     {/* Enhanced Content */}
-                    <div className="text-left flex-1">
+                    <div className="text-left flex-1 min-w-0 pr-2">
                       <div
-                        className={`text-xl font-bold mb-2 transition-all duration-300 ${
+                        className={`text-base sm:text-lg font-bold mb-1 transition-all duration-300 leading-tight ${
                           isSelected
                             ? "text-white drop-shadow-lg"
                             : "text-gray-800 group-hover:text-gray-900"
@@ -176,7 +163,7 @@ export default function GenderFilter({
                         {option.label}
                       </div>
                       <div
-                        className={`text-sm font-medium transition-all duration-300 ${
+                        className={`text-xs sm:text-sm font-medium transition-all duration-300 leading-tight break-words ${
                           isSelected
                             ? "text-white/90"
                             : "text-gray-600 group-hover:text-gray-700"
@@ -186,24 +173,7 @@ export default function GenderFilter({
                       </div>
                     </div>
 
-                    {/* Lock Icon with Animation */}
-                    {isLocked && (
-                      <div className="p-3 bg-yellow-100 rounded-full shadow-lg animate-bounce">
-                        <Crown className="h-6 w-6 text-yellow-600" />
-                      </div>
-                    )}
 
-                    {/* Enhanced Selection Indicator */}
-                    {isSelected && (
-                      <div className="flex flex-col items-center gap-2">
-                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
-                          <div className="w-4 h-4 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full animate-pulse"></div>
-                        </div>
-                        <div className="text-white text-xs font-bold">
-                          Selected
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </Button>
               </div>

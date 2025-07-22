@@ -208,10 +208,10 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-passion-600 mb-4">Please log in first</h2>
-          <Button onClick={() => navigate("/onboarding")} className="bg-passion-600 text-white">
+          <h2 className="text-xl font-bold text-coral-600 mb-4">Please log in first</h2>
+          <Button onClick={() => navigate("/onboarding")} className="bg-coral-600 text-white">
             Go to Login
           </Button>
         </div>
@@ -221,19 +221,19 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-passion-500 mx-auto mb-4"></div>
-          <p className="text-passion-600 font-medium">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral-500 mx-auto mb-4"></div>
+          <p className="text-coral-600 font-medium">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20">
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 text-white p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 text-white p-6 shadow-xl relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5"></div>
         <div className="relative z-10 flex items-center gap-4">
           <button
@@ -244,46 +244,13 @@ export default function ProfilePage() {
           </button>
           <div>
             <h1 className="text-2xl font-bold">{t('profile.title')}</h1>
-            <p className="text-sm text-indigo-100">Manage your account and preferences</p>
+            <p className="text-sm text-peach-100">Manage your account and preferences</p>
           </div>
         </div>
       </div>
 
       <div className="max-w-md mx-auto p-6 space-y-6">
-        {/* Premium Status Card */}
-        {isPremium ? (
-          <Card className="romantic-card border-2 border-marigold-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-marigold-500 to-bollywood-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.active')}</h2>
-              </div>
-              <p className="text-marigold-100">{t('profile.premium.enjoying')}</p>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="romantic-card border-2 border-purple-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.upgrade')}</h2>
-              </div>
-              <p className="text-purple-100 mb-4">{t('profile.premium.unlock')}</p>
-              <div className="space-y-2 text-sm">
-                <p>{t('profile.premium.features.gender')}</p>
-                <p>{t('profile.premium.features.voice')}</p>
-                <p>{t('profile.premium.features.unlimited')}</p>
-              </div>
-              <Button
-                onClick={() => setShowPremiumPaywall(true)}
-                className="mt-4 bg-white text-purple-600 hover:bg-gray-100 font-bold"
-              >
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade Now
-              </Button>
-            </CardHeader>
-          </Card>
-        )}
+
 
         {/* Profile Card */}
         <Card className="romantic-card shadow-xl">
@@ -303,7 +270,7 @@ export default function ProfilePage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute bottom-1 right-1 bg-passion-500 hover:bg-passion-600 text-white rounded-full shadow-lg"
+                className="absolute bottom-1 right-1 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingImage}
               >
@@ -339,21 +306,21 @@ export default function ProfilePage() {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="border-b border-passion-300 focus:outline-none focus:border-passion-500 px-2 text-lg text-center bg-transparent"
+                    className="border-b border-coral-300 focus:outline-none focus:border-coral-500 px-2 text-lg text-center bg-transparent"
                     autoFocus
                     maxLength={20}
                   />
-                  <Button size="sm" onClick={handleNameSave} className="bg-passion-500 text-white">
+                  <Button size="sm" onClick={handleNameSave} className="bg-coral-500 text-white">
                     Save
                   </Button>
                 </div>
               ) : (
                 <div className="flex items-center justify-center gap-2">
-                  <h2 className="text-xl font-semibold text-passion-800">
+                  <h2 className="text-xl font-semibold text-coral-800">
                     {name}
                   </h2>
                   <Button variant="ghost" size="icon" onClick={handleNameEdit}>
-                    <Pencil size={16} className="text-passion-600" />
+                    <Pencil size={16} className="text-coral-600" />
                   </Button>
                 </div>
               )}
@@ -452,7 +419,7 @@ export default function ProfilePage() {
         {/* Settings Card */}
         <Card className="romantic-card shadow-xl">
           <CardHeader>
-            <h3 className="text-lg font-bold text-passion-800 text-center flex items-center justify-center gap-2">
+            <h3 className="text-lg font-bold text-coral-800 text-center flex items-center justify-center gap-2">
               <Settings className="h-5 w-5" />
               {t('profile.settings')}
             </h3>
@@ -461,7 +428,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('privacy')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Shield className="h-5 w-5 mr-3 text-blue-600" />
               <div>
@@ -473,7 +440,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('notifications')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Bell className="h-5 w-5 mr-3 text-purple-600" />
               <div>
@@ -485,7 +452,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('account')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <User className="h-5 w-5 mr-3 text-red-600" />
               <div>
@@ -497,7 +464,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => setShowLanguageSelector(true)}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Globe className="h-5 w-5 mr-3 text-green-600" />
               <div>
@@ -509,7 +476,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => navigate('/storage-debug')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Database className="h-5 w-5 mr-3 text-indigo-600" />
               <div>
@@ -521,7 +488,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => navigate('/ad-testing')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <TestTube className="h-5 w-5 mr-3 text-green-600" />
               <div>
@@ -533,7 +500,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => setShowHelpModal(true)}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <HelpCircle className="h-5 w-5 mr-3 text-orange-600" />
               <div>
@@ -543,6 +510,44 @@ export default function ProfilePage() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Premium Upgrade Card - Only for non-premium users */}
+        {!isPremium && (
+          <Card className="romantic-card border-2 border-coral-300 shadow-xl">
+            <CardHeader className="text-center bg-gradient-to-r from-coral-500 to-peach-600 text-white rounded-t-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Crown className="h-6 w-6 text-yellow-300" />
+                <h2 className="text-xl font-bold">{t('profile.premium.upgrade')}</h2>
+              </div>
+              <p className="text-coral-100 mb-4">{t('profile.premium.unlock')}</p>
+              <div className="space-y-2 text-sm">
+                <p>{t('profile.premium.features.gender')}</p>
+                <p>{t('profile.premium.features.voice')}</p>
+                <p>{t('profile.premium.features.unlimited')}</p>
+              </div>
+              <Button
+                onClick={() => setShowPremiumPaywall(true)}
+                className="mt-4 bg-white text-coral-600 hover:bg-gray-100 font-bold"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade Now
+              </Button>
+            </CardHeader>
+          </Card>
+        )}
+
+        {/* Premium Status Card - Only for premium users */}
+        {isPremium && (
+          <Card className="romantic-card border-2 border-cream-300 shadow-xl">
+            <CardHeader className="text-center bg-gradient-to-r from-cream-500 to-peach-600 text-white rounded-t-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Crown className="h-6 w-6 text-yellow-300" />
+                <h2 className="text-xl font-bold">{t('profile.premium.active')}</h2>
+              </div>
+              <p className="text-cream-100">{t('profile.premium.enjoying')}</p>
+            </CardHeader>
+          </Card>
+        )}
 
         {/* Banner Ad at Bottom - Only for non-premium users */}
         {!isPremium && (
