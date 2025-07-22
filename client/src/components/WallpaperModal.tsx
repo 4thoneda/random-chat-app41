@@ -422,22 +422,52 @@ export default function WallpaperModal({
             {filteredWallpapers.map((wallpaper) => {
               const IconComponent = wallpaper.icon;
               const isSelected = currentWallpaper?.id === wallpaper.id;
+              const isPremiumWallpaper = wallpaper.isPremium;
+              const canUse = !isPremiumWallpaper || isPremium;
 
               return (
                 <div
                   key={wallpaper.id}
-                  onClick={() => onSelectWallpaper(wallpaper)}
-                  className={`cursor-pointer rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all transform hover:scale-105 ${
-                    isSelected ? "ring-4 ring-violet-500" : ""
-                  }`}
+                  onClick={() => canUse && onSelectWallpaper(wallpaper)}
+                  className={`rounded-xl overflow-hidden shadow-md transition-all transform ${
+                    canUse
+                      ? "cursor-pointer hover:shadow-lg hover:scale-105"
+                      : "cursor-not-allowed opacity-75"
+                  } ${isSelected ? "ring-4 ring-violet-500" : ""}`}
                 >
-                  <div
-                    className={`bg-gradient-to-br ${wallpaper.gradient} h-20 flex items-center justify-center relative`}
-                  >
-                    <IconComponent
-                      size={24}
-                      className="text-white/90 drop-shadow-lg"
-                    />
+                  <div className="h-20 flex items-center justify-center relative overflow-hidden">
+                    {isPremiumWallpaper ? (
+                      <div
+                        className="w-full h-full bg-cover bg-center relative"
+                        style={{
+                          backgroundImage: `url(${wallpaper.imageUrl})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      >
+                        {!canUse && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <Lock size={20} className="text-white drop-shadow-lg" />
+                          </div>
+                        )}
+                        {isPremiumWallpaper && (
+                          <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded text-xs font-bold text-white shadow-lg">
+                            ✨
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className={`bg-gradient-to-br ${wallpaper.gradient} w-full h-full flex items-center justify-center relative`}
+                      >
+                        {IconComponent && (
+                          <IconComponent
+                            size={24}
+                            className="text-white/90 drop-shadow-lg"
+                          />
+                        )}
+                      </div>
+                    )}
                     {isSelected && (
                       <div className="absolute top-2 right-2 w-4 h-4 bg-violet-600 rounded-full flex items-center justify-center">
                         <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -445,8 +475,15 @@ export default function WallpaperModal({
                     )}
                   </div>
                   <div className="p-3 bg-white">
-                    <p className="text-xs font-medium text-gray-800 text-center leading-tight">
+                    <p className={`text-xs font-medium text-center leading-tight ${
+                      isPremiumWallpaper ? "text-violet-700" : "text-gray-800"
+                    }`}>
                       {wallpaper.name}
+                      {isPremiumWallpaper && !isPremium && (
+                        <span className="block text-xs text-orange-600 font-semibold mt-1">
+                          Premium
+                        </span>
+                      )}
                     </p>
                   </div>
                 </div>
