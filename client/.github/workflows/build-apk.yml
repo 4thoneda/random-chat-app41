@@ -5,7 +5,7 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: '17'
         
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
@@ -47,24 +47,25 @@ jobs:
       working-directory: ./client/android
       run: chmod +x gradlew
       
-    - name: Build Debug APK
+    - name: Build APK
       working-directory: ./client/android
       run: ./gradlew assembleDebug
       
-    - name: Upload APK artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: ajnabicam-debug-apk
         path: client/android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
         
-    - name: Build Release APK (if tagged)
-      if: startsWith(github.ref, 'refs/tags/')
-      working-directory: ./client/android
-      run: ./gradlew assembleRelease
-      
-    - name: Upload Release APK
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/upload-artifact@v4
+    - name: Create Release
+      if: github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
       with:
-        name: ajnabicam-release-apk
-        path: client/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        tag_name: v${{ github.run_number }}
+        name: AjnabiCam v${{ github.run_number }}
+        files: client/android/app/build/outputs/apk/debug/app-debug.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
