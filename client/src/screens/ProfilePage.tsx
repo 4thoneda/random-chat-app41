@@ -263,7 +263,7 @@ export default function ProfilePage() {
                     "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
                   }
                   alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                  className="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full object-cover border-4 border-white shadow-lg"
                 />
               </div>
               
