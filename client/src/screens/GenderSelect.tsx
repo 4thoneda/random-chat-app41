@@ -24,7 +24,7 @@ export default function GenderSelect() {
 
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          if (userData.gender && userData.gender !== 'other') {
+          if (userData.gender && (userData.gender === 'male' || userData.gender === 'female')) {
             // Gender already selected, redirect to home
             navigate("/");
             return;
