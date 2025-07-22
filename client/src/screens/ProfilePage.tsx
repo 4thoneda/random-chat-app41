@@ -316,11 +316,11 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <div className="flex items-center justify-center gap-2">
-                  <h2 className="text-xl font-semibold text-passion-800">
+                  <h2 className="text-xl font-semibold text-coral-800">
                     {name}
                   </h2>
                   <Button variant="ghost" size="icon" onClick={handleNameEdit}>
-                    <Pencil size={16} className="text-passion-600" />
+                    <Pencil size={16} className="text-coral-600" />
                   </Button>
                 </div>
               )}
