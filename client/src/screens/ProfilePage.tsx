@@ -511,6 +511,44 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
+        {/* Premium Upgrade Card - Only for non-premium users */}
+        {!isPremium && (
+          <Card className="romantic-card border-2 border-coral-300 shadow-xl">
+            <CardHeader className="text-center bg-gradient-to-r from-coral-500 to-peach-600 text-white rounded-t-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Crown className="h-6 w-6 text-yellow-300" />
+                <h2 className="text-xl font-bold">{t('profile.premium.upgrade')}</h2>
+              </div>
+              <p className="text-coral-100 mb-4">{t('profile.premium.unlock')}</p>
+              <div className="space-y-2 text-sm">
+                <p>{t('profile.premium.features.gender')}</p>
+                <p>{t('profile.premium.features.voice')}</p>
+                <p>{t('profile.premium.features.unlimited')}</p>
+              </div>
+              <Button
+                onClick={() => setShowPremiumPaywall(true)}
+                className="mt-4 bg-white text-coral-600 hover:bg-gray-100 font-bold"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade Now
+              </Button>
+            </CardHeader>
+          </Card>
+        )}
+
+        {/* Premium Status Card - Only for premium users */}
+        {isPremium && (
+          <Card className="romantic-card border-2 border-cream-300 shadow-xl">
+            <CardHeader className="text-center bg-gradient-to-r from-cream-500 to-peach-600 text-white rounded-t-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Crown className="h-6 w-6 text-yellow-300" />
+                <h2 className="text-xl font-bold">{t('profile.premium.active')}</h2>
+              </div>
+              <p className="text-cream-100">{t('profile.premium.enjoying')}</p>
+            </CardHeader>
+          </Card>
+        )}
+
         {/* Banner Ad at Bottom - Only for non-premium users */}
         {!isPremium && (
           <div className="mt-6">
