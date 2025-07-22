@@ -89,7 +89,7 @@ export default function GenderFilter({
 
                 <Button
                   variant="ghost"
-                  className={`w-full h-auto p-6 rounded-3xl transition-all duration-500 border-3 relative overflow-hidden group ${
+                  className={`w-full h-auto p-4 sm:p-5 rounded-3xl transition-all duration-500 border-2 relative overflow-hidden group ${
                     isSelected
                       ? `bg-gradient-to-r ${option.color} text-white shadow-2xl border-white/50 animate-pulse-glow`
                       : `${option.bgColor} border-gray-200 hover:border-gray-300 hover:shadow-xl group-hover:shadow-2xl`
