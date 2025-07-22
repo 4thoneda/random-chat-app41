@@ -25,8 +25,10 @@ import {
   Smile,
   BookOpen,
   Bird,
+  Lock,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { usePremium } from "../context/PremiumProvider";
 
 const wallpaperThemes = [
   // Romantic themes
