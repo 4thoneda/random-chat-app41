@@ -123,7 +123,7 @@ export async function startUserSession(userId: string): Promise<string> {
     
     // Log to Firebase Analytics if available
     if (analytics) {
-      setUserId(userId);
+      setUserId(analytics, userId);
       logEvent(analytics, 'session_start', {
         session_id: sessionId,
         device_type: deviceType,
