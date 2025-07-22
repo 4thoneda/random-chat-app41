@@ -262,6 +262,80 @@ const wallpaperThemes = [
   },
 ];
 
+// Premium wallpapers with beautiful real images
+const premiumWallpapers = [
+  {
+    id: 101,
+    name: "Romantic Sunset",
+    imageUrl: "https://images.pexels.com/photos/10214705/pexels-photo-10214705.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 102,
+    name: "Ocean Dreams",
+    imageUrl: "https://images.pexels.com/photos/33092762/pexels-photo-33092762.jpeg",
+    emotion: "calm",
+    isPremium: true,
+  },
+  {
+    id: 103,
+    name: "Mountain Vista",
+    imageUrl: "https://images.pexels.com/photos/33108457/pexels-photo-33108457.jpeg",
+    emotion: "nature",
+    isPremium: true,
+  },
+  {
+    id: 104,
+    name: "Flower Paradise",
+    imageUrl: "https://images.pexels.com/photos/158756/flowers-plants-korea-nature-158756.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 105,
+    name: "Starry Night",
+    imageUrl: "https://images.pexels.com/photos/813269/pexels-photo-813269.jpeg",
+    emotion: "mysterious",
+    isPremium: true,
+  },
+  {
+    id: 106,
+    name: "City Lights",
+    imageUrl: "https://images.pexels.com/photos/2093323/pexels-photo-2093323.jpeg",
+    emotion: "energetic",
+    isPremium: true,
+  },
+  {
+    id: 107,
+    name: "Autumn Serenity",
+    imageUrl: "https://images.pexels.com/photos/3764004/pexels-photo-3764004.jpeg",
+    emotion: "cozy",
+    isPremium: true,
+  },
+  {
+    id: 108,
+    name: "Tropical Waterfall",
+    imageUrl: "https://images.pexels.com/photos/33089538/pexels-photo-33089538.png",
+    emotion: "nature",
+    isPremium: true,
+  },
+  {
+    id: 109,
+    name: "Cherry Blossoms",
+    imageUrl: "https://images.pexels.com/photos/32654433/pexels-photo-32654433.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 110,
+    name: "Aurora Lights",
+    imageUrl: "https://images.pexels.com/photos/23995635/pexels-photo-23995635.jpeg",
+    emotion: "mysterious",
+    isPremium: true,
+  },
+];
+
 interface WallpaperModalProps {
   isOpen: boolean;
   onClose: () => void;
