@@ -367,7 +367,7 @@ const PersonalChat = ({
         </button>
 
         <input
-          className="flex-1 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 text-sm sm:text-base lg:text-lg rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200"
+          className="flex-1 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 text-base sm:text-base lg:text-lg rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200 touch-action-manipulation"
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
