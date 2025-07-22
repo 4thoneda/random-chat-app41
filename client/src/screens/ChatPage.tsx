@@ -293,9 +293,9 @@ const PersonalChat = ({
         <div className="relative z-30">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20 relative z-30"
+            className="text-white hover:scale-110 transition-all duration-200 p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20 relative z-30"
           >
-            <MoreVertical size={20} />
+            <MoreVertical className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
           </button>
 
           {showMenu && (
