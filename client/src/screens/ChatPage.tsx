@@ -249,7 +249,7 @@ const PersonalChat = ({
 
   return (
     <div
-      className="max-w-md mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-20"
+      className={`max-w-md mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-20 ${getWallpaperClass()}`}
       style={getWallpaperStyle()}
     >
       {/* Enhanced Header */}
