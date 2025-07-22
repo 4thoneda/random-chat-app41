@@ -101,17 +101,17 @@ export default function GenderFilter({
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 animate-shimmer"></div>
                   )}
 
-                  <div className="flex items-center gap-6 w-full relative z-10">
+                  <div className="flex items-center gap-3 w-full relative z-10">
                     {/* Ultra Large Avatar/Emoji with Advanced Animations */}
                     <div className="relative flex-shrink-0">
                       {/* Outer Glow Ring */}
                       {isSelected && (
-                        <div className="absolute -inset-4 bg-gradient-to-r from-rose-400/20 via-pink-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
+                        <div className="absolute -inset-3 bg-gradient-to-r from-rose-400/20 via-pink-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
                       )}
 
                       {/* Main Avatar */}
                       <div
-                        className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl transition-all duration-700 relative ${
+                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-3xl sm:text-4xl transition-all duration-700 relative ${
                           isSelected
                             ? "bg-white/25 backdrop-blur-md shadow-2xl animate-bounce scale-110"
                             : "bg-white/90 group-hover:bg-white shadow-xl group-hover:shadow-2xl group-hover:scale-105"
