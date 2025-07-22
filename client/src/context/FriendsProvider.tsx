@@ -1,4 +1,22 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { usePremium } from "./PremiumProvider";
+import {
+  getUserFriends,
+  listenToFriends,
+  sendFriendRequest,
+  removeFriend as removeFirestoreFriend,
+  updateFriendOnlineStatus,
+  getPendingFriendRequests,
+  acceptFriendRequest,
+  rejectFriendRequest,
+  listenToFriendRequests,
+  getFriendsStats,
+  type Friend as FirestoreFriend,
+  type FriendRequest,
+  type FriendsStats
+} from "../lib/friendsFirestore";
 
 interface Friend {
   id: string;
@@ -7,16 +25,26 @@ interface Friend {
   isOnline: boolean;
   lastSeen?: Date;
   addedAt: Date;
+  isFavorite?: boolean;
+  nickname?: string;
 }
 
 interface FriendsContextType {
   friends: Friend[];
-  addFriend: (friend: Omit<Friend, 'addedAt'>) => boolean;
-  removeFriend: (friendId: string) => void;
+  friendRequests: FriendRequest[];
+  friendsStats: FriendsStats;
+  loading: boolean;
+  addFriend: (friendId: string, friendName: string, friendAvatar?: string) => Promise<boolean>;
+  removeFriend: (friendId: string) => Promise<boolean>;
   updateFriendStatus: (friendId: string, isOnline: boolean) => void;
+  sendFriendRequestToUser: (toUserId: string, toUserName: string, message?: string) => Promise<boolean>;
+  acceptRequest: (requestId: string) => Promise<boolean>;
+  rejectRequest: (requestId: string) => Promise<boolean>;
+  toggleFriendFavorite: (friendId: string) => Promise<boolean>;
   canAddMoreFriends: boolean;
   maxFreeLimit: number;
   getFriendById: (friendId: string) => Friend | undefined;
+  refreshFriendsData: () => Promise<void>;
 }
 
 const FriendsContext = createContext<FriendsContextType | null>(null);
