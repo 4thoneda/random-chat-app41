@@ -250,40 +250,7 @@ export default function ProfilePage() {
       </div>
 
       <div className="max-w-md mx-auto p-6 space-y-6">
-        {/* Premium Status Card */}
-        {isPremium ? (
-          <Card className="romantic-card border-2 border-marigold-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-marigold-500 to-bollywood-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.active')}</h2>
-              </div>
-              <p className="text-marigold-100">{t('profile.premium.enjoying')}</p>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="romantic-card border-2 border-purple-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.upgrade')}</h2>
-              </div>
-              <p className="text-purple-100 mb-4">{t('profile.premium.unlock')}</p>
-              <div className="space-y-2 text-sm">
-                <p>{t('profile.premium.features.gender')}</p>
-                <p>{t('profile.premium.features.voice')}</p>
-                <p>{t('profile.premium.features.unlimited')}</p>
-              </div>
-              <Button
-                onClick={() => setShowPremiumPaywall(true)}
-                className="mt-4 bg-white text-purple-600 hover:bg-gray-100 font-bold"
-              >
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade Now
-              </Button>
-            </CardHeader>
-          </Card>
-        )}
+
 
         {/* Profile Card */}
         <Card className="romantic-card shadow-xl">
