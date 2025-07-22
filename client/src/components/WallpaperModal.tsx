@@ -458,7 +458,7 @@ export default function WallpaperModal({
                       </div>
                     ) : (
                       <div
-                        className={`bg-gradient-to-br ${wallpaper.gradient} w-full h-full flex items-center justify-center relative`}
+                        className={`bg-gradient-to-br ${'gradient' in wallpaper ? wallpaper.gradient : ''} w-full h-full flex items-center justify-center relative`}
                       >
                         {IconComponent && (
                           <IconComponent
