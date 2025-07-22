@@ -420,9 +420,9 @@ export default function WallpaperModal({
         <div className="max-h-96 lg:max-h-[500px] xl:max-h-[600px] overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
             {filteredWallpapers.map((wallpaper) => {
-              const IconComponent = wallpaper.icon;
+              const IconComponent = 'icon' in wallpaper ? wallpaper.icon : null;
               const isSelected = currentWallpaper?.id === wallpaper.id;
-              const isPremiumWallpaper = wallpaper.isPremium;
+              const isPremiumWallpaper = 'isPremium' in wallpaper ? wallpaper.isPremium : false;
               const canUse = !isPremiumWallpaper || isPremium;
 
               return (
