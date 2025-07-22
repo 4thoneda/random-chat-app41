@@ -84,7 +84,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="app-container">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingScreen />} />
