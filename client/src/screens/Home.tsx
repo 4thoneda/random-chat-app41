@@ -314,7 +314,7 @@ export default function Home() {
                 }}
               >
                 {adUnitIds.map((adUnitId, index) => (
-                  <div key={index} className="w-full flex-shrink-0 relative">
+                  <div key={index} className="w-full flex-shrink-0">
                     <div className="h-24 sm:h-32 lg:h-40 w-full">
                       <BannerAd
                         size="responsive"
@@ -323,9 +323,6 @@ export default function Home() {
                         style={{ minHeight: '96px' }}
                         key={`ad-${adUnitId}-${index}`}
                       />
-                    </div>
-                    <div className="absolute bottom-1 sm:bottom-2 left-2 sm:left-4 text-gray-600">
-                      <p className="text-xs opacity-90 bg-white/80 px-2 py-1 rounded">Advertisement {index + 1}</p>
                     </div>
                   </div>
                 ))}
