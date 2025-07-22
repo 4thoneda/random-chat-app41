@@ -193,4 +193,13 @@ const PORT = process.env.PORT || 8000;
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+}).on('error', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    console.log(`Port ${PORT} is busy, trying port ${Number(PORT) + 1}`);
+    server.listen(Number(PORT) + 1, () => {
+      console.log(`Server running on port ${Number(PORT) + 1}`);
+    });
+  } else {
+    console.error('Server error:', err);
+  }
 });

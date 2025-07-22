@@ -38,10 +38,11 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       if (import.meta.env.VITE_API_SERVER_URL) {
         socketUrl = import.meta.env.VITE_API_SERVER_URL;
       } else if (window.location.hostname === "localhost") {
+        // Try multiple ports in case 8000 is busy
         socketUrl = "http://localhost:8000";
       } else {
         // For production or other environments
-        socketUrl = `http://${window.location.hostname}:80`;
+        socketUrl = `http://${window.location.hostname}:8000`;
       }
 
       const newSocket = io(socketUrl, {
@@ -65,10 +66,37 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
       newSocket.on("connect_error", (error) => {
         console.error("Socket connection error:", error);
-        console.log("Falling back to mock matching mode");
-        setIsUsingMockMode(true);
-        // Start bot simulation for better testing
-        mockMatching.startBotSimulation();
+        
+        // Try alternative port if localhost
+        if (window.location.hostname === "localhost" && socketUrl.includes(":8000")) {
+          console.log("Trying alternative port 8001...");
+          const altSocket = io("http://localhost:8001", {
+            transports: ["websocket", "polling"],
+            secure: false,
+            timeout: 20000,
+            forceNew: true,
+            reconnection: true,
+            reconnectionAttempts: 3,
+            reconnectionDelay: 1000,
+          });
+          
+          altSocket.on("connect", () => {
+            console.log("Connected to alternative port:", altSocket.id);
+            setSocket(altSocket);
+            setIsUsingMockMode(false);
+          });
+          
+          altSocket.on("connect_error", () => {
+            console.log("Alternative port also failed, falling back to mock matching mode");
+            setIsUsingMockMode(true);
+            mockMatching.startBotSimulation();
+            altSocket.close();
+          });
+        } else {
+          console.log("Falling back to mock matching mode");
+          setIsUsingMockMode(true);
+          mockMatching.startBotSimulation();
+        }
       });
 
       newSocket.on("reconnect", (attemptNumber) => {
