@@ -48,6 +48,46 @@ html, body {
   }
 }
 
+/* Landscape mode optimizations for tablets and phones */
+@media (orientation: landscape) and (max-height: 600px) {
+  .landscape-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .landscape-compact .chat-header {
+    padding: 1rem;
+  }
+
+  .landscape-compact .chat-input {
+    padding: 0.75rem;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .crisp-edges {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* App Store Ready Touch Interactions */
+.touch-action-manipulation {
+  touch-action: manipulation;
+}
+
+/* Prevent zoom on inputs for iOS */
+@media screen and (max-width: 767px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 /* Splash Screen Animations */
 @keyframes fade-in {
   from {
