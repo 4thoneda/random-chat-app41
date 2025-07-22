@@ -208,10 +208,10 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-passion-600 mb-4">Please log in first</h2>
-          <Button onClick={() => navigate("/onboarding")} className="bg-passion-600 text-white">
+          <h2 className="text-xl font-bold text-coral-600 mb-4">Please log in first</h2>
+          <Button onClick={() => navigate("/onboarding")} className="bg-coral-600 text-white">
             Go to Login
           </Button>
         </div>
