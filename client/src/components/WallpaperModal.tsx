@@ -379,8 +379,8 @@ export default function WallpaperModal({
       : allWallpapers.filter((w) => w.emotion === selectedCategory);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md sm:max-w-lg lg:max-w-2xl xl:max-w-4xl w-full max-h-[80vh] lg:max-h-[85vh] xl:max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 relative">
           <div className="flex items-center justify-between">
