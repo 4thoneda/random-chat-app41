@@ -329,20 +329,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Ad Carousel Dots */}
-            <div className="absolute bottom-1 right-4 flex gap-1">
-              {adUnitIds.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentAdIndex(index)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    currentAdIndex === index
-                      ? "bg-blue-600 w-4"
-                      : "bg-gray-400 w-1.5"
-                  }`}
-                />
-              ))}
-            </div>
+
           </div>
         )}
 
