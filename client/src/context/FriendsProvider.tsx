@@ -63,32 +63,73 @@ interface FriendsProviderProps {
 
 export const FriendsProvider = ({ children }: FriendsProviderProps) => {
   const [friends, setFriends] = useState<Friend[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [friendsStats, setFriendsStats] = useState<FriendsStats>({
+    totalFriends: 0,
+    onlineFriends: 0,
+    pendingRequests: 0,
+    sentRequests: 0,
+    mutualConnections: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserName, setCurrentUserName] = useState<string>("User");
+
+  const { isPremium } = usePremium();
   const maxFreeLimit = 3;
 
-  // Load friends from localStorage on mount
+  // Monitor auth state
   useEffect(() => {
-    const savedFriends = localStorage.getItem("ajnabicam_friends");
-    if (savedFriends) {
-      try {
-        const parsedFriends = JSON.parse(savedFriends).map((friend: any) => ({
-          ...friend,
-          addedAt: new Date(friend.addedAt),
-          lastSeen: friend.lastSeen ? new Date(friend.lastSeen) : undefined
-        }));
-        setFriends(parsedFriends);
-      } catch (error) {
-        console.error("Error loading friends:", error);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUserId(user.uid);
+        setCurrentUserName(user.displayName || `User${Math.floor(Math.random() * 1000)}`);
+      } else {
+        setCurrentUserId(null);
+        setCurrentUserName("User");
         setFriends([]);
+        setFriendRequests([]);
+        setLoading(false);
       }
-    }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  // Save friends to localStorage whenever friends change
+  // Set up real-time friends listener
   useEffect(() => {
-    if (friends.length >= 0) {
-      localStorage.setItem("ajnabicam_friends", JSON.stringify(friends));
-    }
-  }, [friends]);
+    if (!currentUserId) return;
+
+    setLoading(true);
+
+    const unsubscribeFriends = listenToFriends(currentUserId, (firestoreFriends) => {
+      const convertedFriends: Friend[] = firestoreFriends.map(f => ({
+        id: f.friendId,
+        name: f.friendName,
+        avatar: f.friendAvatar || '',
+        isOnline: f.isOnline,
+        lastSeen: f.lastInteraction?.toDate(),
+        addedAt: f.addedAt.toDate(),
+        isFavorite: f.isFavorite,
+        nickname: f.nickname
+      }));
+
+      setFriends(convertedFriends);
+      setLoading(false);
+    });
+
+    const unsubscribeRequests = listenToFriendRequests(currentUserId, (requests) => {
+      setFriendRequests(requests);
+    });
+
+    // Load friends stats
+    refreshFriendsData();
+
+    return () => {
+      unsubscribeFriends();
+      unsubscribeRequests();
+    };
+  }, [currentUserId]);
 
   const addFriend = (newFriend: Omit<Friend, 'addedAt'>): boolean => {
     // Check if user has premium
