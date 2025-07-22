@@ -249,7 +249,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-6 space-y-6">
+      <div className="max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-8 lg:space-y-10">
 
 
         {/* Profile Card */}
