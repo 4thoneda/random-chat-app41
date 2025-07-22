@@ -120,7 +120,7 @@ export default function ProfilePage() {
         updatedAt: new Date()
       });
 
-      console.log("Profile image uploaded successfully");
+      console.log("Profile image uploaded successfully!!");
     } catch (error) {
       console.error("Error uploading profile image:", error);
       alert("Failed to upload image. Please try again.");
