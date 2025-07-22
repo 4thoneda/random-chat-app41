@@ -4,7 +4,7 @@
   "description": "Connect with strangers worldwide through random video chat. Meet new people, make friends, and have fun conversations.",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "theme_color": "#ec4899",
   "background_color": "#ffffff",
   "categories": ["social", "entertainment", "communication"],
