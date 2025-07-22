@@ -218,44 +218,67 @@ const PersonalChat = ({
     }
   };
 
+  const getWallpaperStyle = () => {
+    if (!currentWallpaper) {
+      return {};
+    }
+
+    if ('imageUrl' in currentWallpaper && currentWallpaper.imageUrl) {
+      return {
+        backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${currentWallpaper.imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      };
+    }
+
+    return {};
+  };
+
   const getWallpaperClass = () => {
     if (!currentWallpaper) {
       return "bg-gradient-to-br from-slate-50 via-white to-rose-50";
     }
-    return `bg-gradient-to-br ${currentWallpaper.gradient}`;
+
+    if ('imageUrl' in currentWallpaper && currentWallpaper.imageUrl) {
+      return "";
+    }
+
+    return `bg-gradient-to-br ${'gradient' in currentWallpaper ? currentWallpaper.gradient : ''}`;
   };
 
   return (
     <div
-      className={`max-w-md mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-20 ${getWallpaperClass()}`}
+      className={`w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-16 sm:pb-20 lg:pb-24 ${getWallpaperClass()}`}
+      style={getWallpaperStyle()}
     >
       {/* Enhanced Header */}
-      <div className="p-4 bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 flex items-center shadow-lg relative overflow-hidden">
+      <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 flex items-center shadow-lg relative">
         <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>
 
         <button
           onClick={onBack}
-          className="mr-3 text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20"
+          className="mr-3 text-white hover:scale-110 transition-all duration-200 p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20"
           aria-label="Go back"
         >
-          <ArrowLeft size={24} />
+          <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
         </button>
         <img
           src={chat.avatar}
           alt={`${chat.name} avatar`}
-          className="w-12 h-12 rounded-full object-cover mr-3 border-3 border-white/50 shadow-lg backdrop-blur-sm"
+          className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full object-cover mr-3 sm:mr-4 lg:mr-6 border-3 border-white/50 shadow-lg backdrop-blur-sm"
         />
         <div className="flex-1 relative z-10">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white text-lg">{chat.name}</span>
+            <span className="font-bold text-white text-lg sm:text-xl lg:text-2xl">{chat.name}</span>
             {chat.isFriend && (
-              <span className="bg-emerald-400/20 backdrop-blur-sm text-emerald-100 text-xs px-2 py-1 rounded-full font-semibold border border-emerald-300/30">
+              <span className="bg-emerald-400/20 backdrop-blur-sm text-emerald-100 text-xs sm:text-sm px-2 py-1 rounded-full font-semibold border border-emerald-300/30">
                 Friend
               </span>
             )}
           </div>
-          <span className="text-indigo-100 text-xs">
+          <span className="text-indigo-100 text-xs sm:text-sm lg:text-base">
             {chat.isFriend && chat.time === "Online" ? (
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
@@ -267,33 +290,25 @@ const PersonalChat = ({
           </span>
         </div>
 
-        <div className="relative">
+        <div className="relative z-30">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20"
+            className="text-white hover:scale-110 transition-all duration-200 p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20 relative z-30"
           >
-            <MoreVertical size={20} />
+            <MoreVertical className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 top-12 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20 min-w-48">
+            <div className="absolute right-0 top-12 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 min-w-52" style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
               <button
                 onClick={() => {
                   setShowWallpaperModal(true);
                   setShowMenu(false);
                 }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 w-full text-left transition-colors"
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 w-full text-left transition-colors border-0 bg-transparent"
               >
-                <Palette size={18} className="text-violet-600" />
-                <span className="font-medium">Set Wallpaper</span>
-              </button>
-              <div className="border-t border-gray-100"></div>
-              <button
-                onClick={() => setShowMenu(false)}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 w-full text-left transition-colors"
-              >
-                <X size={18} className="text-gray-400" />
-                <span className="font-medium">Close</span>
+                <Palette size={20} className="text-rose-600" />
+                <span className="font-semibold text-gray-800">Set Wallpaper</span>
               </button>
             </div>
           )}
@@ -301,7 +316,7 @@ const PersonalChat = ({
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
         {messages.map((msg, idx) =>
           msg.photoUrl ? (
             <PhotoMessage
@@ -343,27 +358,27 @@ const PersonalChat = ({
       </div>
 
       {/* Enhanced Input */}
-      <div className="p-4 bg-white/90 backdrop-blur-sm flex items-center border-t border-gray-100 shadow-lg">
+      <div className="p-4 sm:p-6 lg:p-8 bg-white/90 backdrop-blur-sm flex items-center border-t border-gray-100 shadow-lg">
         <button
           onClick={() => setShowPhotoInput(true)}
-          className="mr-3 p-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+          className="mr-3 sm:mr-4 lg:mr-6 p-3 sm:p-4 lg:p-5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
         >
-          <Camera size={18} className="text-gray-600" />
+          <Camera className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-600" />
         </button>
 
         <input
-          className="flex-1 px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200"
+          className="flex-1 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 text-base sm:text-base lg:text-lg rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200 touch-action-manipulation"
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
         />
         <Button
-          className="ml-3 px-6 py-3 bg-gradient-to-r from-passion-600 to-romance-600 hover:from-passion-700 hover:to-romance-700 text-white rounded-2xl font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+          className="ml-3 sm:ml-4 lg:ml-6 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-passion-600 to-romance-600 hover:from-passion-700 hover:to-romance-700 text-white rounded-2xl font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
           onClick={handleSend}
           disabled={!input.trim()}
         >
-          <Send size={16} />
+          <Send className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
         </Button>
       </div>
 

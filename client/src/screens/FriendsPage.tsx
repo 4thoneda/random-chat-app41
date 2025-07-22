@@ -77,7 +77,7 @@ const FriendsPage: React.FC = () => {
       <Helmet>
         <title>AjnabiCam - Friends</title>
       </Helmet>
-      <main className="flex flex-col items-center min-h-screen w-full max-w-md mx-auto bg-white px-2 py-4 relative pb-20">
+      <main className="flex flex-col items-center min-h-screen w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto bg-white px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative pb-20 sm:pb-24 lg:pb-28">
         {/* Header */}
         <div className="w-full flex items-center p-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xl rounded-t-2xl shadow-lg">
           <button 

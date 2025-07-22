@@ -25,8 +25,10 @@ import {
   Smile,
   BookOpen,
   Bird,
+  Lock,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { usePremium } from "../context/PremiumProvider";
 
 const wallpaperThemes = [
   // Romantic themes
@@ -260,11 +262,85 @@ const wallpaperThemes = [
   },
 ];
 
+// Premium wallpapers with beautiful real images
+const premiumWallpapers = [
+  {
+    id: 101,
+    name: "Romantic Sunset",
+    imageUrl: "https://images.pexels.com/photos/10214705/pexels-photo-10214705.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 102,
+    name: "Ocean Dreams",
+    imageUrl: "https://images.pexels.com/photos/33092762/pexels-photo-33092762.jpeg",
+    emotion: "calm",
+    isPremium: true,
+  },
+  {
+    id: 103,
+    name: "Mountain Vista",
+    imageUrl: "https://images.pexels.com/photos/33108457/pexels-photo-33108457.jpeg",
+    emotion: "nature",
+    isPremium: true,
+  },
+  {
+    id: 104,
+    name: "Flower Paradise",
+    imageUrl: "https://images.pexels.com/photos/158756/flowers-plants-korea-nature-158756.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 105,
+    name: "Starry Night",
+    imageUrl: "https://images.pexels.com/photos/813269/pexels-photo-813269.jpeg",
+    emotion: "mysterious",
+    isPremium: true,
+  },
+  {
+    id: 106,
+    name: "City Lights",
+    imageUrl: "https://images.pexels.com/photos/2093323/pexels-photo-2093323.jpeg",
+    emotion: "energetic",
+    isPremium: true,
+  },
+  {
+    id: 107,
+    name: "Autumn Serenity",
+    imageUrl: "https://images.pexels.com/photos/3764004/pexels-photo-3764004.jpeg",
+    emotion: "cozy",
+    isPremium: true,
+  },
+  {
+    id: 108,
+    name: "Tropical Waterfall",
+    imageUrl: "https://images.pexels.com/photos/33089538/pexels-photo-33089538.png",
+    emotion: "nature",
+    isPremium: true,
+  },
+  {
+    id: 109,
+    name: "Cherry Blossoms",
+    imageUrl: "https://images.pexels.com/photos/32654433/pexels-photo-32654433.jpeg",
+    emotion: "romantic",
+    isPremium: true,
+  },
+  {
+    id: 110,
+    name: "Aurora Lights",
+    imageUrl: "https://images.pexels.com/photos/23995635/pexels-photo-23995635.jpeg",
+    emotion: "mysterious",
+    isPremium: true,
+  },
+];
+
 interface WallpaperModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectWallpaper: (wallpaper: (typeof wallpaperThemes)[0]) => void;
-  currentWallpaper?: (typeof wallpaperThemes)[0];
+  onSelectWallpaper: (wallpaper: any) => void;
+  currentWallpaper?: any;
 }
 
 export default function WallpaperModal({
@@ -274,11 +350,13 @@ export default function WallpaperModal({
   currentWallpaper,
 }: WallpaperModalProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { isPremium } = usePremium();
 
   if (!isOpen) return null;
 
   const categories = [
     { key: "all", name: "All Themes" },
+    { key: "premium", name: "✨ Premium" },
     { key: "romantic", name: "Romantic" },
     { key: "happy", name: "Happy" },
     { key: "calm", name: "Calm" },
@@ -291,26 +369,30 @@ export default function WallpaperModal({
     { key: "spiritual", name: "Spiritual" },
   ];
 
+  const allWallpapers = [...wallpaperThemes, ...(isPremium || selectedCategory === "premium" ? premiumWallpapers : [])];
+
   const filteredWallpapers =
     selectedCategory === "all"
-      ? wallpaperThemes
-      : wallpaperThemes.filter((w) => w.emotion === selectedCategory);
+      ? allWallpapers
+      : selectedCategory === "premium"
+      ? premiumWallpapers
+      : allWallpapers.filter((w) => w.emotion === selectedCategory);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md sm:max-w-lg lg:max-w-2xl xl:max-w-4xl w-full max-h-[80vh] lg:max-h-[85vh] xl:max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 relative">
+        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-6 sm:p-8 lg:p-10 relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Choose Wallpaper</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">Choose Wallpaper</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-white/20 transition-colors"
+              className="p-2 sm:p-3 lg:p-4 rounded-full hover:bg-white/20 transition-colors"
             >
-              <X size={20} />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
             </button>
           </div>
-          <p className="text-purple-100 text-sm mt-1">
+          <p className="text-purple-100 text-sm sm:text-base lg:text-lg mt-1">
             Set a unique mood for this chat
           </p>
         </div>
@@ -335,27 +417,57 @@ export default function WallpaperModal({
         </div>
 
         {/* Wallpaper Grid */}
-        <div className="max-h-96 overflow-y-auto p-4">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="max-h-96 lg:max-h-[500px] xl:max-h-[600px] overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
             {filteredWallpapers.map((wallpaper) => {
-              const IconComponent = wallpaper.icon;
+              const IconComponent = 'icon' in wallpaper ? wallpaper.icon : null;
               const isSelected = currentWallpaper?.id === wallpaper.id;
+              const isPremiumWallpaper = 'isPremium' in wallpaper ? wallpaper.isPremium : false;
+              const canUse = !isPremiumWallpaper || isPremium;
 
               return (
                 <div
                   key={wallpaper.id}
-                  onClick={() => onSelectWallpaper(wallpaper)}
-                  className={`cursor-pointer rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all transform hover:scale-105 ${
-                    isSelected ? "ring-4 ring-violet-500" : ""
-                  }`}
+                  onClick={() => canUse && onSelectWallpaper(wallpaper)}
+                  className={`rounded-xl overflow-hidden shadow-md transition-all transform ${
+                    canUse
+                      ? "cursor-pointer hover:shadow-lg hover:scale-105"
+                      : "cursor-not-allowed opacity-75"
+                  } ${isSelected ? "ring-4 ring-violet-500" : ""}`}
                 >
-                  <div
-                    className={`bg-gradient-to-br ${wallpaper.gradient} h-20 flex items-center justify-center relative`}
-                  >
-                    <IconComponent
-                      size={24}
-                      className="text-white/90 drop-shadow-lg"
-                    />
+                  <div className="h-20 sm:h-24 lg:h-28 xl:h-32 flex items-center justify-center relative overflow-hidden">
+                    {isPremiumWallpaper ? (
+                      <div
+                        className="w-full h-full bg-cover bg-center relative"
+                        style={{
+                          backgroundImage: `url(${'imageUrl' in wallpaper ? wallpaper.imageUrl : ''})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      >
+                        {!canUse && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                            <Lock size={20} className="text-white drop-shadow-lg" />
+                          </div>
+                        )}
+                        {isPremiumWallpaper && (
+                          <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded text-xs font-bold text-white shadow-lg">
+                            ✨
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        className={`bg-gradient-to-br ${'gradient' in wallpaper ? wallpaper.gradient : ''} w-full h-full flex items-center justify-center relative`}
+                      >
+                        {IconComponent && (
+                          <IconComponent
+                            size={24}
+                            className="text-white/90 drop-shadow-lg"
+                          />
+                        )}
+                      </div>
+                    )}
                     {isSelected && (
                       <div className="absolute top-2 right-2 w-4 h-4 bg-violet-600 rounded-full flex items-center justify-center">
                         <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -363,8 +475,15 @@ export default function WallpaperModal({
                     )}
                   </div>
                   <div className="p-3 bg-white">
-                    <p className="text-xs font-medium text-gray-800 text-center leading-tight">
+                    <p className={`text-xs font-medium text-center leading-tight ${
+                      isPremiumWallpaper ? "text-violet-700" : "text-gray-800"
+                    }`}>
                       {wallpaper.name}
+                      {isPremiumWallpaper && !isPremium && (
+                        <span className="block text-xs text-orange-600 font-semibold mt-1">
+                          Premium
+                        </span>
+                      )}
                     </p>
                   </div>
                 </div>

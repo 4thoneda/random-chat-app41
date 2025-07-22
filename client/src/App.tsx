@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAnalytics } from "./hooks/useAnalytics";
 
 import VideoChat from "./screens/VideoChat";
 import SplashScreen from "./components/SplashScreen";
@@ -33,6 +34,9 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [authInitialized, setAuthInitialized] = useState(false);
   const navigate = useNavigate();
+
+  // Initialize analytics
+  useAnalytics();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -84,7 +88,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="app-container">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingScreen />} />

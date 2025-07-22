@@ -249,7 +249,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-6 space-y-6">
+      <div className="max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-8 lg:space-y-10">
 
 
         {/* Profile Card */}
@@ -263,7 +263,7 @@ export default function ProfilePage() {
                     "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
                   }
                   alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                  className="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full object-cover border-4 border-white shadow-lg"
                 />
               </div>
               
