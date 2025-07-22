@@ -267,18 +267,18 @@ const PersonalChat = ({
         <img
           src={chat.avatar}
           alt={`${chat.name} avatar`}
-          className="w-12 h-12 rounded-full object-cover mr-3 border-3 border-white/50 shadow-lg backdrop-blur-sm"
+          className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full object-cover mr-3 sm:mr-4 lg:mr-6 border-3 border-white/50 shadow-lg backdrop-blur-sm"
         />
         <div className="flex-1 relative z-10">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white text-lg">{chat.name}</span>
+            <span className="font-bold text-white text-lg sm:text-xl lg:text-2xl">{chat.name}</span>
             {chat.isFriend && (
-              <span className="bg-emerald-400/20 backdrop-blur-sm text-emerald-100 text-xs px-2 py-1 rounded-full font-semibold border border-emerald-300/30">
+              <span className="bg-emerald-400/20 backdrop-blur-sm text-emerald-100 text-xs sm:text-sm px-2 py-1 rounded-full font-semibold border border-emerald-300/30">
                 Friend
               </span>
             )}
           </div>
-          <span className="text-indigo-100 text-xs">
+          <span className="text-indigo-100 text-xs sm:text-sm lg:text-base">
             {chat.isFriend && chat.time === "Online" ? (
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
