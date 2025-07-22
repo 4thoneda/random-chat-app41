@@ -223,7 +223,7 @@ const PersonalChat = ({
       return {};
     }
 
-    if (currentWallpaper.imageUrl) {
+    if ('imageUrl' in currentWallpaper && currentWallpaper.imageUrl) {
       return {
         backgroundImage: `linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url(${currentWallpaper.imageUrl})`,
         backgroundSize: 'cover',
