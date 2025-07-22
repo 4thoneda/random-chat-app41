@@ -267,25 +267,25 @@ const PersonalChat = ({
           </span>
         </div>
 
-        <div className="relative">
+        <div className="relative z-30">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20"
+            className="text-white hover:scale-110 transition-all duration-200 p-2 rounded-full hover:bg-white/20 relative z-30"
           >
             <MoreVertical size={20} />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 top-12 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-20 min-w-48">
+            <div className="absolute right-0 top-12 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 min-w-52" style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
               <button
                 onClick={() => {
                   setShowWallpaperModal(true);
                   setShowMenu(false);
                 }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 w-full text-left transition-colors"
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 w-full text-left transition-colors border-0 bg-transparent"
               >
-                <Palette size={18} className="text-violet-600" />
-                <span className="font-medium">Set Wallpaper</span>
+                <Palette size={20} className="text-rose-600" />
+                <span className="font-semibold text-gray-800">Set Wallpaper</span>
               </button>
               <div className="border-t border-gray-100"></div>
               <button
