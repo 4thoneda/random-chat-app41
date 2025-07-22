@@ -165,7 +165,6 @@ export default function OnboardingScreen() {
   const genderOptions = [
     { value: 'male', label: t('onboarding.gender.male'), emoji: '👨' },
     { value: 'female', label: t('onboarding.gender.female'), emoji: '👩' },
-    { value: 'other', label: t('onboarding.gender.other'), emoji: '🧑' },
   ];
 
   const currentLanguage = languages.find(lang => lang.code === language);
