@@ -358,27 +358,27 @@ const PersonalChat = ({
       </div>
 
       {/* Enhanced Input */}
-      <div className="p-4 bg-white/90 backdrop-blur-sm flex items-center border-t border-gray-100 shadow-lg">
+      <div className="p-4 sm:p-6 lg:p-8 bg-white/90 backdrop-blur-sm flex items-center border-t border-gray-100 shadow-lg">
         <button
           onClick={() => setShowPhotoInput(true)}
-          className="mr-3 p-3 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+          className="mr-3 sm:mr-4 lg:mr-6 p-3 sm:p-4 lg:p-5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
         >
-          <Camera size={18} className="text-gray-600" />
+          <Camera className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-600" />
         </button>
 
         <input
-          className="flex-1 px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200"
+          className="flex-1 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 text-sm sm:text-base lg:text-lg rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-gray-50/50 backdrop-blur-sm transition-all duration-200"
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
         />
         <Button
-          className="ml-3 px-6 py-3 bg-gradient-to-r from-passion-600 to-romance-600 hover:from-passion-700 hover:to-romance-700 text-white rounded-2xl font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+          className="ml-3 sm:ml-4 lg:ml-6 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-gradient-to-r from-passion-600 to-romance-600 hover:from-passion-700 hover:to-romance-700 text-white rounded-2xl font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
           onClick={handleSend}
           disabled={!input.trim()}
         >
-          <Send size={16} />
+          <Send className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
         </Button>
       </div>
 
