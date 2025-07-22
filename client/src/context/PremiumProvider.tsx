@@ -1,11 +1,15 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { getUserProfile, updatePremiumStatus } from "../lib/firestoreUtils";
 
 interface PremiumContextType {
   isPremium: boolean;
   premiumExpiry: Date | null;
-  setPremium: (premium: boolean, expiry?: Date) => void;
+  loading: boolean;
+  setPremium: (premium: boolean, expiry?: Date) => Promise<boolean>;
   checkPremiumStatus: () => boolean;
+  syncPremiumStatus: () => Promise<void>;
 }
 
 const PremiumContext = createContext<PremiumContextType | null>(null);
