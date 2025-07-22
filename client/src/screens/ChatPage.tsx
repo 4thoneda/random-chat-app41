@@ -240,11 +240,11 @@ const PersonalChat = ({
       return "bg-gradient-to-br from-slate-50 via-white to-rose-50";
     }
 
-    if (currentWallpaper.imageUrl) {
+    if ('imageUrl' in currentWallpaper && currentWallpaper.imageUrl) {
       return "";
     }
 
-    return `bg-gradient-to-br ${currentWallpaper.gradient}`;
+    return `bg-gradient-to-br ${'gradient' in currentWallpaper ? currentWallpaper.gradient : ''}`;
   };
 
   return (
