@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "AjnabiCam Server",
   "main": "dist/index.js",
-  "main": "node_modules/expo/AppEntry.js"
-  "scripts": {
+  "scripts": 
     "start": "node dist/index.js",
     "start:dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
