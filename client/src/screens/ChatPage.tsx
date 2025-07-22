@@ -249,7 +249,7 @@ const PersonalChat = ({
 
   return (
     <div
-      className={`max-w-md mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-20 ${getWallpaperClass()}`}
+      className={`w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto h-screen shadow-xl overflow-hidden flex flex-col relative pb-16 sm:pb-20 lg:pb-24 ${getWallpaperClass()}`}
       style={getWallpaperStyle()}
     >
       {/* Enhanced Header */}
