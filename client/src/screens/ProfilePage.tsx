@@ -428,7 +428,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('privacy')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Shield className="h-5 w-5 mr-3 text-blue-600" />
               <div>
@@ -440,7 +440,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('notifications')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Bell className="h-5 w-5 mr-3 text-purple-600" />
               <div>
@@ -452,7 +452,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => handleSettingsClick('account')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <User className="h-5 w-5 mr-3 text-red-600" />
               <div>
@@ -464,7 +464,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => setShowLanguageSelector(true)}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Globe className="h-5 w-5 mr-3 text-green-600" />
               <div>
@@ -476,7 +476,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => navigate('/storage-debug')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <Database className="h-5 w-5 mr-3 text-indigo-600" />
               <div>
@@ -488,7 +488,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => navigate('/ad-testing')}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <TestTube className="h-5 w-5 mr-3 text-green-600" />
               <div>
@@ -500,7 +500,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => setShowHelpModal(true)}
               variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-passion-200 hover:bg-passion-50"
+              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
             >
               <HelpCircle className="h-5 w-5 mr-3 text-orange-600" />
               <div>
