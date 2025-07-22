@@ -440,7 +440,7 @@ export default function WallpaperModal({
                       <div
                         className="w-full h-full bg-cover bg-center relative"
                         style={{
-                          backgroundImage: `url(${wallpaper.imageUrl})`,
+                          backgroundImage: `url(${'imageUrl' in wallpaper ? wallpaper.imageUrl : ''})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
