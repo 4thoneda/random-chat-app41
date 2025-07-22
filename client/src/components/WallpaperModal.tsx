@@ -435,7 +435,7 @@ export default function WallpaperModal({
                       : "cursor-not-allowed opacity-75"
                   } ${isSelected ? "ring-4 ring-violet-500" : ""}`}
                 >
-                  <div className="h-20 flex items-center justify-center relative overflow-hidden">
+                  <div className="h-20 sm:h-24 lg:h-28 xl:h-32 flex items-center justify-center relative overflow-hidden">
                     {isPremiumWallpaper ? (
                       <div
                         className="w-full h-full bg-cover bg-center relative"
