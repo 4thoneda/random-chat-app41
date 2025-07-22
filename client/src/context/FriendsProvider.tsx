@@ -224,12 +224,20 @@ export const FriendsProvider = ({ children }: FriendsProviderProps) => {
     <FriendsContext.Provider
       value={{
         friends,
+        friendRequests,
+        friendsStats,
+        loading,
         addFriend,
         removeFriend,
         updateFriendStatus,
+        sendFriendRequestToUser,
+        acceptRequest,
+        rejectRequest,
+        toggleFriendFavorite,
         canAddMoreFriends,
         maxFreeLimit,
         getFriendById,
+        refreshFriendsData,
       }}
     >
       {children}
