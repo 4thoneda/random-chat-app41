@@ -1,19 +1,20 @@
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  onSnapshot, 
-  updateDoc, 
-  serverTimestamp, 
+import {
+  collection,
+  doc,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+  updateDoc,
+  serverTimestamp,
   Timestamp,
   getDoc,
   getDocs,
   setDoc,
-  arrayUnion
+  arrayUnion,
+  increment
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
