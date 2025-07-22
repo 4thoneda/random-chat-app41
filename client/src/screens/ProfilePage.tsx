@@ -419,7 +419,7 @@ export default function ProfilePage() {
         {/* Settings Card */}
         <Card className="romantic-card shadow-xl">
           <CardHeader>
-            <h3 className="text-lg font-bold text-passion-800 text-center flex items-center justify-center gap-2">
+            <h3 className="text-lg font-bold text-coral-800 text-center flex items-center justify-center gap-2">
               <Settings className="h-5 w-5" />
               {t('profile.settings')}
             </h3>
