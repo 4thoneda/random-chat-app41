@@ -5,10 +5,10 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
     
     steps:
@@ -20,52 +20,51 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: client/package-lock.json
         
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '17'
+        java-version: '11'
         
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
     - name: Install dependencies
-      run: |
-        npm install
-        cd client && npm install
-        
+      working-directory: ./client
+      run: npm ci
+      
     - name: Build web app
-      run: |
-        cd client
-        npm run build
-        
+      working-directory: ./client
+      run: npm run build
+      
     - name: Sync Capacitor
-      run: |
-        cd client
-        npx cap sync android
-        
-    - name: Build APK
-      run: |
-        cd client/android
-        chmod +x gradlew
-        ./gradlew assembleDebug
-        
-    - name: Upload APK
+      working-directory: ./client
+      run: npx cap sync android
+      
+    - name: Make gradlew executable
+      working-directory: ./client/android
+      run: chmod +x gradlew
+      
+    - name: Build Debug APK
+      working-directory: ./client/android
+      run: ./gradlew assembleDebug
+      
+    - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: ajnabicam-debug-apk
         path: client/android/app/build/outputs/apk/debug/app-debug.apk
-        retention-days: 30
         
-    - name: Create Release (if on main branch)
-      if: github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
+    - name: Build Release APK (if tagged)
+      if: startsWith(github.ref, 'refs/tags/')
+      working-directory: ./client/android
+      run: ./gradlew assembleRelease
+      
+    - name: Upload Release APK
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/upload-artifact@v4
       with:
-        tag_name: v1.0.${{ github.run_number }}
-        name: AjnabiCam APK v1.0.${{ github.run_number }}
-        files: client/android/app/build/outputs/apk/debug/app-debug.apk
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: ajnabicam-release-apk
+        path: client/android/app/build/outputs/apk/release/app-release-unsigned.apk
