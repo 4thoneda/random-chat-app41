@@ -231,9 +231,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20">
       {/* Header with Back Button */}
-      <div className="bg-gradient-to-r from-passion-600 via-romance-600 to-royal-600 text-white p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 text-white p-6 shadow-xl relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5"></div>
         <div className="relative z-10 flex items-center gap-4">
           <button
@@ -244,7 +244,7 @@ export default function ProfilePage() {
           </button>
           <div>
             <h1 className="text-2xl font-bold">{t('profile.title')}</h1>
-            <p className="text-sm text-indigo-100">Manage your account and preferences</p>
+            <p className="text-sm text-peach-100">Manage your account and preferences</p>
           </div>
         </div>
       </div>
