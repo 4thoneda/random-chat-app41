@@ -815,12 +815,11 @@ export default function VideoChat() {
 
         if (myStayResponse === true && wantToStay === true) {
           // Both want to stay connected - add as friends
-          const success = addFriend({
-            id: from,
-            name: partnerName,
-            avatar: `https://images.pexels.com/photos/${Math.floor(Math.random() * 1000000)}/pexels-photo.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop`,
-            isOnline: true,
-          });
+          const success = await addFriend(
+            from,
+            partnerName,
+            `https://images.pexels.com/photos/${Math.floor(Math.random() * 1000000)}/pexels-photo.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop`
+          );
 
           if (success) {
             alert(
