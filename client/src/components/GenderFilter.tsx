@@ -173,24 +173,7 @@ export default function GenderFilter({
                       </div>
                     </div>
 
-                    {/* Lock Icon with Animation */}
-                    {isLocked && (
-                      <div className="p-1.5 bg-yellow-100 rounded-full shadow-md animate-bounce flex-shrink-0">
-                        <Crown className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-600" />
-                      </div>
-                    )}
 
-                    {/* Enhanced Selection Indicator */}
-                    {isSelected && (
-                      <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-                        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full flex items-center justify-center shadow-md">
-                          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full animate-pulse"></div>
-                        </div>
-                        <div className="text-white text-xs font-bold hidden sm:block">
-                          Selected
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </Button>
               </div>
