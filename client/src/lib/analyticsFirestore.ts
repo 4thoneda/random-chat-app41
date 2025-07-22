@@ -462,8 +462,8 @@ function getBrowserInfo(): string {
  */
 export function setAnalyticsUserProperties(userId: string, properties: { [key: string]: any }): void {
   if (analytics) {
-    setUserId(userId);
-    setUserProperties(properties);
+    setUserId(analytics, userId);
+    setUserProperties(analytics, properties);
   }
 }
 
