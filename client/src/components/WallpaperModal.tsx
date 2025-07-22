@@ -356,6 +356,7 @@ export default function WallpaperModal({
 
   const categories = [
     { key: "all", name: "All Themes" },
+    { key: "premium", name: "✨ Premium" },
     { key: "romantic", name: "Romantic" },
     { key: "happy", name: "Happy" },
     { key: "calm", name: "Calm" },
@@ -368,10 +369,14 @@ export default function WallpaperModal({
     { key: "spiritual", name: "Spiritual" },
   ];
 
+  const allWallpapers = [...wallpaperThemes, ...(isPremium || selectedCategory === "premium" ? premiumWallpapers : [])];
+
   const filteredWallpapers =
     selectedCategory === "all"
-      ? wallpaperThemes
-      : wallpaperThemes.filter((w) => w.emotion === selectedCategory);
+      ? allWallpapers
+      : selectedCategory === "premium"
+      ? premiumWallpapers
+      : allWallpapers.filter((w) => w.emotion === selectedCategory);
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
