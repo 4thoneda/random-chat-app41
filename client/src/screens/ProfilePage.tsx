@@ -61,7 +61,7 @@ export default function ProfilePage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [settingType, setSettingType] = useState<'privacy' | 'notifications' | 'account' | 'general' | null>(null);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const [showPremiumPaywall, setShowPremiumPaywall] = useState(false);
+  // const [showPremiumPaywall, setShowPremiumPaywall] = useState(false); // Now using separate page
   const [referralCount, setReferralCount] = useState(0);
   const [profileCompletion, setProfileCompletion] = useState(35);
 
