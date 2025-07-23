@@ -241,3 +241,82 @@ button {
   .ultra-premium-theme .btn-premium:hover:before {
     left: 100%;
   }
+
+  /* ULTRA+ Enhanced Components */
+  .ultra-premium-app .card,
+  .ultra-premium-app .bg-white {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(168, 85, 247, 0.1);
+  }
+
+  .ultra-premium-app .card:hover {
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* ULTRA+ Button Enhancements */
+  .ultra-premium-app button:not(.btn-premium) {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ultra-premium-app button:not(.btn-premium):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+  }
+
+  /* ULTRA+ Input Enhancements */
+  .ultra-premium-app input,
+  .ultra-premium-app textarea {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    backdrop-filter: blur(5px);
+  }
+
+  .ultra-premium-app input:focus,
+  .ultra-premium-app textarea:focus {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  }
+
+  /* ULTRA+ Navigation Enhancements */
+  .ultra-premium-app nav,
+  .ultra-premium-app .bottom-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(168, 85, 247, 0.1);
+  }
+
+  /* ULTRA+ Text Enhancements */
+  .ultra-premium-app h1,
+  .ultra-premium-app h2,
+  .ultra-premium-app h3 {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* ULTRA+ Scroll Enhancements */
+  .ultra-premium-app::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .ultra-premium-app::-webkit-scrollbar-track {
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 4px;
+  }
+
+  .ultra-premium-app::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-radius: 4px;
+  }
+
+  .ultra-premium-app::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #9333ea, #db2777);
+  }
