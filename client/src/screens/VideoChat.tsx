@@ -924,6 +924,8 @@ export default function VideoChat() {
       socket?.off("peer:nego:final", handleNegotiationFinal);
       socket?.off("partnerDisconnected", userDisConnected);
       socket?.off("partner:premium:status");
+      socket?.off("premium:reaction");
+      socket?.off("partner:last_seen");
     };
   }, [
     handleIncommingAnswer,
