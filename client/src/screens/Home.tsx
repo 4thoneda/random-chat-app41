@@ -245,9 +245,22 @@ export default function Home() {
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg">
                   <Heart className="h-5 w-5 text-white" />
                 </div>
-                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">
-                  {t("app.name")}
-                </h1>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">
+                      {t("app.name")}
+                    </h1>
+                    {isUltraPremium() && (
+                      <PremiumBadge plan="ultra-quarterly" size="sm" />
+                    )}
+                    {isProMonthly() && (
+                      <PremiumBadge plan="pro-monthly" size="sm" />
+                    )}
+                    {isPremium && !isUltraPremium() && !isProMonthly() && (
+                      <PremiumBadge plan="weekly" size="sm" />
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Right: Settings & Coins */}
