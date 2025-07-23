@@ -9,13 +9,17 @@ interface ChatTimerProps {
   partnerPremium: boolean;
   onTimeUp: () => void;
   onUpgrade: () => void;
+  onFriendRequestTime?: () => void;
+  isFriendCall?: boolean;
 }
 
-export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade }: ChatTimerProps) {
+export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false }: ChatTimerProps) {
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes for premium, 15 for free
   const [isActive, setIsActive] = useState(false);
+  const [friendRequestTriggered, setFriendRequestTriggered] = useState(false);
   const hasPremiumAccess = isPremium || partnerPremium;
   const maxTime = hasPremiumAccess ? 30 * 60 : 15 * 60; // 30 min for premium, 15 min for free
+  const friendRequestTime = 7 * 60; // 7 minutes for friend request
 
   useEffect(() => {
     if (isConnected) {
@@ -26,9 +30,11 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
         setIsActive(true);
         setTimeLeft(30 * 60); // 30 minutes for premium users
       }
+      setFriendRequestTriggered(false); // Reset friend request trigger
     } else {
       setIsActive(false);
       setTimeLeft(hasPremiumAccess ? 30 * 60 : 15 * 60); // Reset timer when disconnected
+      setFriendRequestTriggered(false);
     }
   }, [isConnected, hasPremiumAccess]);
 
@@ -38,6 +44,14 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((time) => {
+          // Check if we've reached the 7-minute mark for friend request (only for non-friend calls)
+          if (!isFriendCall && !friendRequestTriggered && time <= (maxTime - friendRequestTime)) {
+            setFriendRequestTriggered(true);
+            if (onFriendRequestTime) {
+              onFriendRequestTime();
+            }
+          }
+
           if (time <= 1) {
             setIsActive(false);
             onTimeUp();
@@ -51,7 +65,7 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, timeLeft, onTimeUp]);
+  }, [isActive, timeLeft, onTimeUp, onFriendRequestTime, isFriendCall, friendRequestTriggered, maxTime, friendRequestTime]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -75,7 +89,7 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-600" />
             <span className="font-medium text-gray-800 dark:text-white">
-              Chat Time
+              {isFriendCall ? "Friend Call" : "Chat Time"}
             </span>
           </div>
           
@@ -107,7 +121,7 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
           />
         </div>
         
-        {!hasPremiumAccess && timeLeft < 300 && (
+        {!isFriendCall && !hasPremiumAccess && timeLeft < 300 && (
           <div className="mt-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg text-center">
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
               ⏰ Continue this amazing conversation! Get Premium for 30-minute calls.
@@ -122,11 +136,22 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
             </Button>
           </div>
         )}
+
+        {!isFriendCall && friendRequestTriggered && timeLeft > 0 && (
+          <div className="mt-3 p-3 bg-gradient-to-r from-romance-50 to-passion-50 dark:from-romance-900/20 dark:to-passion-900/20 rounded-lg text-center border border-romance-200">
+            <p className="text-sm text-romance-700 dark:text-romance-300 mb-1">
+              💕 7 minutes are up! Time to decide...
+            </p>
+            <p className="text-xs text-romance-600 dark:text-romance-400">
+              Would you like to become friends with this person?
+            </p>
+          </div>
+        )}
         
         {hasPremiumAccess && (
           <div className="mt-2 p-2 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg text-center">
             <p className="text-sm text-green-600 dark:text-green-400">
-              ✨ {isPremium ? "You have" : "Your partner has"} Premium - Enjoy 30-minute calls! 💕
+              ✨ {isPremium ? "You have" : "Your partner has"} Premium - Enjoy {isFriendCall ? "unlimited" : "30-minute"} calls! 💕
             </p>
           </div>
         )}
