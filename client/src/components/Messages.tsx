@@ -341,17 +341,17 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
 
                 {/* Message Input */}
                 <div className="flex gap-2">
-                    <Input 
+                    <Input
                         ref={inputRef}
-                        placeholder={isSecretMode ? "Secret message..." : "Type a message..."} 
-                        value={message} 
-                        onChange={(e) => setMessage(e.target.value)} 
+                        placeholder={isSecretMode ? "Secret message..." : "Type a message..."}
+                        value={message}
+                        onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                         aria-label="Message input"
                         disabled={!remoteChatToken}
                         className={`flex-1 ${
-                            isSecretMode 
-                                ? 'border-purple-300 focus:ring-purple-400 bg-purple-50' 
+                            isSecretMode
+                                ? 'border-purple-300 focus:ring-purple-400 bg-purple-50'
                                 : 'bg-gray-50'
                         }`}
                     />
