@@ -406,22 +406,7 @@ export default function ProfilePage() {
 
           <Card
             className="bg-white/80 backdrop-blur-sm shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => {
-              if (isPremium) {
-                // Show likes for premium users
-                alert('💕 You have 12 likes! Premium users can see all likes. (Feature coming soon)');
-              } else {
-                // Show payment options for non-premium
-                const shouldPay = window.confirm('💝 You have likes waiting! Options:\n\n1. Pay 10 coins to see 1 like\n2. Upgrade to Premium to see all likes\n\nPay 10 coins now?');
-                if (shouldPay) {
-                  if (coins >= 10) {
-                    alert('✨ You paid 10 coins! Sarah from Mumbai liked your profile! (Feature coming soon)');
-                  } else {
-                    alert('💰 Not enough coins! You have ' + coins + ' coins. Get more coins or upgrade to Premium!');
-                  }
-                }
-              }
-            }}
+            onClick={handleShowLikes}
           >
             <CardContent className="p-4 text-center">
               <div className="w-10 h-10 bg-pink-100 flex items-center justify-center mx-auto mb-2 relative">
