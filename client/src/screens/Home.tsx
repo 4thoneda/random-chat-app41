@@ -30,6 +30,7 @@ import { useCoin } from "../context/CoinProvider";
 import { useLanguage } from "../context/LanguageProvider";
 import BannerAd from "../components/BannerAd";
 import RewardedAdButton from "../components/RewardedAdButton";
+import PremiumBadge from "../components/PremiumBadge";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
