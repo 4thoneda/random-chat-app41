@@ -46,6 +46,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
         setCurrentUserId(null);
         setIsPremium(false);
         setPremiumExpiry(null);
+        setPremiumPlan(null);
         setLoading(false);
       }
     });
