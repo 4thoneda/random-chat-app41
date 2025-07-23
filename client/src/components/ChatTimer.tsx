@@ -156,7 +156,14 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
           </div>
         )}
         
-        {hasPremiumAccess && (
+        {isUltraPremium && (
+          <div className="mt-2 p-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg text-center">
+            <p className="text-sm text-purple-600 dark:text-purple-400">
+              💎 ULTRA+ Premium - Enjoy unlimited calls with no time limits! 💕
+            </p>
+          </div>
+        )}
+        {!isUltraPremium && hasPremiumAccess && (
           <div className="mt-2 p-2 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg text-center">
             <p className="text-sm text-green-600 dark:text-green-400">
               ✨ {isPremium ? "You have" : "Your partner has"} Premium - Enjoy {isFriendCall ? "unlimited" : "30-minute"} calls! 💕
