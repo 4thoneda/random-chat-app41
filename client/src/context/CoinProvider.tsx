@@ -13,6 +13,7 @@ interface CoinContextType {
   claimDailyBonus: () => Promise<boolean>;
   completeChat: () => Promise<void>;
   checkStreakBonus: () => Promise<void>;
+  requestFriendship: (partnerName: string) => Promise<{ success: boolean; needsAds?: boolean; }>;
   adsWatchedToday: number;
   maxAdsPerDay: number;
   canClaimDailyBonus: boolean;
@@ -20,6 +21,8 @@ interface CoinContextType {
   hasCompletedOnboarding: boolean;
   isLoading: boolean;
   currentUser: string | null;
+  pendingAds: number;
+  setPendingAds: (count: number) => void;
 }
 
 const CoinContext = createContext<CoinContextType | null>(null);
@@ -44,7 +47,8 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
-  
+  const [pendingAds, setPendingAds] = useState(0);
+
   const maxAdsPerDay = 3;
   const auth = getAuth(firebaseApp);
 
@@ -83,14 +87,20 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
     return () => unsubscribe();
   }, [currentUser]);
 
-  // Initialize local storage data (ads, daily bonus, streak)
+  // Initialize local storage data (ads, daily bonus, streak, pending ads)
   useEffect(() => {
     const lastDailyBonus = localStorage.getItem("ajnabicam_last_daily_bonus");
     const adsToday = localStorage.getItem("ajnabicam_ads_today");
     const adsDate = localStorage.getItem("ajnabicam_ads_date");
     const streakData = localStorage.getItem("ajnabicam_streak_data");
-    
+    const storedPendingAds = localStorage.getItem("ajnabicam_pending_ads");
+
     const today = new Date().toDateString();
+
+    // Load pending ads
+    if (storedPendingAds) {
+      setPendingAds(parseInt(storedPendingAds));
+    }
     
     // Check daily bonus eligibility
     if (lastDailyBonus !== today) {
@@ -276,6 +286,28 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
     }
   };
 
+  const requestFriendship = async (partnerName: string): Promise<{ success: boolean; needsAds?: boolean; }> => {
+    const friendshipCost = 20;
+
+    if (coins >= friendshipCost) {
+      // User has enough coins, deduct them
+      const success = await deductCoins(friendshipCost);
+      return { success };
+    } else {
+      // User doesn't have enough coins, they need to watch ads
+      const newPendingAds = pendingAds + 2;
+      setPendingAds(newPendingAds);
+      localStorage.setItem("ajnabicam_pending_ads", newPendingAds.toString());
+
+      return { success: true, needsAds: true };
+    }
+  };
+
+  const updatePendingAds = (count: number) => {
+    setPendingAds(count);
+    localStorage.setItem("ajnabicam_pending_ads", count.toString());
+  };
+
   return (
     <CoinContext.Provider
       value={{
@@ -287,6 +319,7 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
         claimDailyBonus,
         completeChat,
         checkStreakBonus,
+        requestFriendship,
         adsWatchedToday,
         maxAdsPerDay,
         canClaimDailyBonus,
@@ -294,6 +327,8 @@ export const CoinProvider = ({ children }: CoinProviderProps) => {
         hasCompletedOnboarding,
         isLoading,
         currentUser,
+        pendingAds,
+        setPendingAds: updatePendingAds,
       }}
     >
       {children}

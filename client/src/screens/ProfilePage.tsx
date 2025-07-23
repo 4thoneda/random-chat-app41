@@ -1,28 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { 
-  Pencil, 
   Camera, 
   ArrowLeft, 
-  Copy, 
-  Share2, 
-  Crown, 
-  Settings, 
-  Shield, 
-  Bell, 
-  User, 
-  Globe, 
-  Database,
-  HelpCircle,
-  Plus,
-  X,
-  Star,
-  Edit3,
-  Check,
-  Info
+  MapPin, 
+  Briefcase, 
+  Eye, 
+  Star, 
+  Edit3, 
+  Settings,
+  Crown,
+  Heart,
+  Users,
+  MessageCircle,
+  Calendar,
+  Coffee,
+  Music,
+  Book,
+  Plane,
+  Camera as CameraIcon,
+  Plus
 } from "lucide-react";
 import {
   doc,
@@ -30,70 +29,63 @@ import {
   setDoc,
   updateDoc,
   onSnapshot,
+  increment
 } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import { uploadProfileImage } from "../lib/storageUtils";
-import { getUserId } from "../lib/userUtils";
 import { usePremium } from "../context/PremiumProvider";
-import { useLanguage } from "../context/LanguageProvider";
+import { useCoin } from "../context/CoinProvider";
 import BottomNavBar from "../components/BottomNavBar";
-import BannerAd from "../components/BannerAd";
-import LanguageSelector from "../components/LanguageSelector";
-import SettingsModal from "../components/SettingsModal";
-import HelpSupportModal from "../components/HelpSupportModal";
-// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
-import { TestTube } from "lucide-react";
+import WhoLikedMeModal from "../components/WhoLikedMeModal";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [name, setName] = useState("V");
-  const [age, setAge] = useState(22);
-  const [editingName, setEditingName] = useState(false);
-  const [bio, setBio] = useState("");
-  const [editingBio, setEditingBio] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [additionalImages, setAdditionalImages] = useState<string[]>([]);
-  const [referralCode, setReferralCode] = useState("");
+  const [name, setName] = useState("Love");
+  const [age, setAge] = useState(25);
+  const [location, setLocation] = useState("Beverly Hills, CA");
+  const [profession, setProfession] = useState("Model & Influencer");
+  const [bio, setBio] = useState("Life is an adventure, let's explore it together! ✨");
+  const [interests, setInterests] = useState(["Often", "Sociale drinker", "Never", "Pisces"]);
+  const [profileImage, setProfileImage] = useState<string | null>("https://cdn.builder.io/api/v1/image/assets%2Fe142673ab78f4d70a642f0b5825a4793%2F9ca3a7221ed04dfaaa8b4de10c2f495e?format=webp&width=800");
+  const [profileViews, setProfileViews] = useState(247);
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [settingType, setSettingType] = useState<'privacy' | 'notifications' | 'account' | 'general' | null>(null);
-  const [showHelpModal, setShowHelpModal] = useState(false);
-  // const [showPremiumPaywall, setShowPremiumPaywall] = useState(false); // Now using separate page
-  const [referralCount, setReferralCount] = useState(0);
-  const [profileCompletion, setProfileCompletion] = useState(35);
 
-  const { isPremium, setPremium } = usePremium();
-  const { t } = useLanguage();
+  const { isPremium } = usePremium();
+  const { coins } = useCoin();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const additionalImageInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
-
-  // Premium features data
-  const premiumFeatures = [
-    { name: "Get exclusive photo insights", premium: true, free: false },
-    { name: "Fast track your likes", premium: true, free: false },
-    { name: "Stand out every day", premium: true, free: false },
-    { name: "Unlimited likes", premium: true, free: false },
-    { name: "See who liked you", premium: true, free: false },
-    { name: "Advanced filters", premium: true, free: false },
-    { name: "Incognito mode", premium: true, free: false },
-    { name: "Travel mode", premium: true, free: false },
-    { name: "2 Compliments a week", premium: true, free: false },
-    { name: "10 SuperSwipes a week", premium: true, free: false },
-    { name: "2 Spotlights a week", premium: true, free: false },
-    { name: "Unlimited Extends", premium: true, free: false },
-    { name: "Unlimited Rematch", premium: true, free: false },
-    { name: "Unlimited Backtrack", premium: true, free: false },
-  ];
-
-  const tabs = [
-    { id: 'pay', label: 'Pay plan', active: true },
-    { id: 'dating', label: 'Dating advice', active: false },
-    { id: 'photo', label: 'Photo insights', active: false },
-  ];
+  const [showLikesModal, setShowLikesModal] = useState(false);
+  const [likesData, setLikesData] = useState([
+    {
+      id: '1',
+      name: 'Sarah',
+      age: 24,
+      location: 'Mumbai, India',
+      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '2 hours ago',
+      isRevealed: false
+    },
+    {
+      id: '2',
+      name: 'Priya',
+      age: 22,
+      location: 'Delhi, India',
+      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '1 day ago',
+      isRevealed: false
+    },
+    {
+      id: '3',
+      name: 'Anjali',
+      age: 26,
+      location: 'Bangalore, India',
+      avatar: 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '3 days ago',
+      isRevealed: false
+    }
+  ]);
 
   useEffect(() => {
     if (!user) return;
@@ -104,22 +96,16 @@ export default function ProfilePage() {
     const unsubscribe = onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setName(data.username || data.name || "V");
-        setAge(data.age || 22);
-        setBio(data.bio || "");
-        setProfileImage(data.profileImage || null);
-        setAdditionalImages(data.additionalImages || []);
-        setReferralCode(data.referralCode || generateReferralCode(user.uid));
-        setReferralCount(data.referralCount || 0);
-        
-        // Calculate profile completion
-        let completion = 0;
-        if (data.username) completion += 20;
-        if (data.profileImage) completion += 30;
-        if (data.bio) completion += 25;
-        if (data.age) completion += 15;
-        if (data.additionalImages?.length > 0) completion += 10;
-        setProfileCompletion(completion);
+        setName(data.username || data.name || "Love");
+        setAge(data.age || 25);
+        setLocation(data.location || "Beverly Hills, CA");
+        setProfession(data.profession || "Model & Influencer");
+        setBio(data.bio || "Life is an adventure, let's explore it together! ✨");
+        setInterests(data.interests || ["Often", "Sociale drinker", "Never", "Pisces"]);
+        if (data.profileImage) {
+          setProfileImage(data.profileImage);
+        }
+        setProfileViews(data.profileViews || Math.floor(Math.random() * 300) + 100);
       }
       setLoading(false);
     });
@@ -127,9 +113,21 @@ export default function ProfilePage() {
     return () => unsubscribe();
   }, [user]);
 
-  const generateReferralCode = (uid: string) => {
-    return uid.slice(0, 6).toUpperCase();
-  };
+  // Increment profile views for the current user (simulate views)
+  useEffect(() => {
+    if (user) {
+      const timer = setTimeout(() => {
+        const userRef = doc(db, "users", user.uid);
+        updateDoc(userRef, {
+          profileViews: increment(1)
+        }).catch(() => {
+          // Silently fail if document doesn't exist
+        });
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -154,7 +152,7 @@ export default function ProfilePage() {
         updatedAt: new Date()
       });
 
-      console.log("Profile image uploaded successfully!!");
+      console.log("Profile image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading profile image:", error);
       alert("Failed to upload image. Please try again.");
@@ -164,26 +162,26 @@ export default function ProfilePage() {
     }
   };
 
-  const handlePremiumPurchase = (plan: string) => {
-    const now = new Date();
-    const expiry = new Date(now);
-    if (plan === "weekly") {
-      expiry.setDate(now.getDate() + 7);
-    } else {
-      expiry.setMonth(now.getMonth() + 1);
-    }
+  const handleRevealLike = (likeId: string) => {
+    setLikesData(prev => prev.map(like =>
+      like.id === likeId ? { ...like, isRevealed: true } : like
+    ));
+  };
 
-    setPremium(true, expiry);
-    // setShowPremiumPaywall(false); // Now handled in PremiumPage
-    alert(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
+  const handleShowLikes = () => {
+    if (isPremium) {
+      // Premium users can see all likes immediately
+      setLikesData(prev => prev.map(like => ({ ...like, isRevealed: true })));
+    }
+    setShowLikesModal(true);
   };
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-bold text-gray-600 mb-4">Please log in first</h2>
-          <Button onClick={() => navigate("/onboarding")} className="bg-blue-600 text-white">
+          <Button onClick={() => navigate("/onboarding")} className="bg-romance-500 text-white">
             Go to Login
           </Button>
         </div>
@@ -193,9 +191,9 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-romance-500 mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium">Loading profile...</p>
         </div>
       </div>
@@ -203,246 +201,295 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-6 left-6 w-12 h-12 bg-gradient-to-br from-sindoor-300 to-henna-400 opacity-20 animate-pulse"></div>
+        <div className="absolute top-20 right-4 w-10 h-10 bg-gradient-to-br from-royal-300 to-gulmohar-400 opacity-30 animate-bounce"></div>
+        <div className="absolute bottom-32 left-4 w-8 h-8 bg-gradient-to-br from-jasmine-300 to-sindoor-400 opacity-25 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-48 right-8 w-6 h-6 bg-gradient-to-br from-passion-400 to-royal-400 opacity-20 animate-bounce" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-white px-6 py-4 flex items-center justify-between border-b border-gray-100">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <ArrowLeft size={24} className="text-gray-700" />
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-        </div>
+      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 px-4 py-3 flex items-center justify-between border-b border-peach-200 sticky top-0 z-10 shadow-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15 backdrop-blur-sm"></div>
         <button
-          onClick={() => navigate('/profile')}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          onClick={() => navigate(-1)}
+          className="relative z-10 p-2 hover:bg-white/20 transition-colors"
         >
-          <Settings size={24} className="text-gray-700" />
+          <ArrowLeft size={24} className="text-white" />
+        </button>
+
+        <h1 className="relative z-10 text-lg font-semibold text-white drop-shadow-lg">Profile</h1>
+
+        <button
+          onClick={() => navigate('/premium')}
+          className="relative z-10 p-2 hover:bg-white/20 transition-colors"
+        >
+          <Settings size={24} className="text-white" />
         </button>
       </div>
 
-      <div className="max-w-md mx-auto">
-        {/* Profile Section */}
-        <div className="bg-white px-6 py-6">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200">
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-400 to-purple-500">
-                    <span className="text-white text-2xl font-bold">{name.charAt(0)}</span>
+      <div className="max-w-sm mx-auto px-4 py-6">
+        {/* Profile Image Section */}
+        <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden mb-6 relative">
+          <div className="relative h-[50vh] overflow-hidden">
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-romance-200 via-passion-200 to-royal-200 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl font-bold">{name.charAt(0)}</span>
                   </div>
+                  <p className="text-white/80">Tap to add photo</p>
+                </div>
+              </div>
+            )}
+
+            {/* Upload overlay */}
+            {uploadingImage && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+                  <p className="text-sm">Uploading... {uploadProgress}%</p>
+                </div>
+              </div>
+            )}
+
+            {/* Camera button */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute top-4 right-4 bg-black/20 backdrop-blur-sm p-2 rounded-full hover:bg-black/30 transition-colors"
+              disabled={uploadingImage}
+            >
+              <Camera size={18} className="text-white" />
+            </button>
+
+            {/* Profile Views Badge - Only for Premium Users */}
+            {isPremium && (
+              <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm px-3 py-1 flex items-center gap-2">
+                <Eye size={14} className="text-white" />
+                <span className="text-white text-sm font-medium">{profileViews.toLocaleString()}</span>
+              </div>
+            )}
+
+            {/* Premium Badge */}
+            {isPremium && (
+              <div className="absolute top-14 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 px-2 py-1 rounded-full flex items-center gap-1">
+                <Crown className="w-3 h-3 text-yellow-800" />
+                <span className="text-yellow-800 text-xs font-bold">PREMIUM</span>
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </div>
+        </Card>
+
+        {/* User Information Section */}
+        <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0 mb-6 relative z-10">
+          <CardContent className="p-6">
+            {/* Name and Age */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-gray-900 text-3xl font-bold mb-1">{name}, {age}</h2>
+                <div className="flex items-center gap-2 text-gray-600 mb-3">
+                  <MapPin size={16} />
+                  <span className="text-sm">{location}</span>
+                </div>
+              </div>
+
+              <button className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors">
+                <Edit3 size={16} className="text-gray-600" />
+              </button>
+            </div>
+
+            {/* Bio */}
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bio}</p>
+
+            {/* Profession */}
+            <div className="flex items-center gap-2 text-gray-600 mb-4">
+              <Briefcase size={16} />
+              <span className="text-sm font-medium">{profession}</span>
+            </div>
+
+            {/* Interest Tags */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {interests.map((interest, index) => (
+                <span
+                  key={index}
+                  className="bg-gray-100 px-3 py-1 text-gray-700 text-xs font-medium"
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                onClick={() => {
+                  // Edit profile functionality
+                  alert('Edit profile feature coming soon!');
+                }}
+                className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 border-0"
+              >
+                <Edit3 className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+
+              <Button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'My Profile',
+                      text: `Check out my profile on AjnabiCam!`,
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Profile link copied to clipboard!');
+                  }
+                }}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-3 border-0"
+              >
+                <Users className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Profile Stats Cards */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              {isPremium ? (
+                <>
+                  <div className="w-10 h-10 bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                    <Eye className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="text-lg font-bold text-blue-700">{profileViews}</div>
+                  <div className="text-xs text-blue-600">Views</div>
+                </>
+              ) : (
+                <>
+                  <div className="w-10 h-10 bg-gray-200 flex items-center justify-center mx-auto mb-2 relative">
+                    <Eye className="w-5 h-5 text-gray-400" />
+                    <Crown className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1" />
+                  </div>
+                  <div className="text-lg font-bold text-gray-400">***</div>
+                  <div className="text-xs text-gray-400">Premium</div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-green-100 flex items-center justify-center mx-auto mb-2">
+                <Users className="w-5 h-5 text-green-600" />
+              </div>
+              <div className="text-lg font-bold text-gray-800">23</div>
+              <div className="text-xs text-gray-500">Friends</div>
+            </CardContent>
+          </Card>
+
+          <Card
+            className="bg-white/80 backdrop-blur-sm shadow-sm border-0 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={handleShowLikes}
+          >
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-pink-100 flex items-center justify-center mx-auto mb-2 relative">
+                <Heart className="w-5 h-5 text-pink-600" />
+                {!isPremium && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                 )}
               </div>
-              
-              {/* Profile completion percentage */}
-              <div className="absolute -bottom-2 -right-2 bg-black text-white text-xs px-2 py-1 rounded-full font-medium">
-                {profileCompletion}%
+              <div className="text-lg font-bold text-pink-700">
+                {isPremium ? likesData.length : '?'}
               </div>
-              
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 right-0 bg-white border-2 border-gray-200 rounded-full p-1 hover:bg-gray-50 transition-colors"
-                disabled={uploadingImage}
-              >
-                <Camera size={12} className="text-gray-600" />
-              </button>
-              
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-            </div>
-            
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-gray-900">{name}, {age}</h2>
-              <button className="mt-2 px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                Complete profile
-              </button>
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex gap-1 mb-6">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`flex-1 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  tab.active
-                    ? 'bg-black text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Feature Cards */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-yellow-100 rounded-2xl p-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-                <Star className="w-5 h-5 text-yellow-800" />
+              <div className="text-xs text-pink-600">
+                {isPremium ? 'Likes' : 'Tap to See'}
               </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Spotlight</h3>
-                <p className="text-sm text-gray-600">Stand out</p>
-              </div>
-            </div>
-            
-            <div className="bg-yellow-100 rounded-2xl p-4 flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-                <Star className="w-5 h-5 text-yellow-800" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">SuperSwipe</h3>
-                <p className="text-sm text-gray-600">Get noticed</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Premium Card */}
-          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl p-6 text-center mb-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Premium+</h3>
-            <p className="text-gray-800 mb-4 text-sm leading-relaxed">
-              Get the VIP treatment, and enjoy better ways to connect with incredible people.
-            </p>
-            <button
-              onClick={() => navigate("/premium")}
-              className="bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
-            >
-              Explore Premium+
-            </button>
-          </div>
-
-          {/* Features Comparison */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900">What you get:</h3>
-              <div className="flex gap-8">
-                <span className="text-sm font-semibold text-gray-900">Premium+</span>
-                <span className="text-sm font-semibold text-gray-400">Premium</span>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              {premiumFeatures.slice(0, 3).map((feature, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-900 text-sm">{feature.name}</span>
-                    <Info className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <div className="flex gap-8">
-                    <div className="w-6 flex justify-center">
-                      {feature.premium && <Check className="w-5 h-5 text-green-600" />}
-                    </div>
-                    <div className="w-6 flex justify-center">
-                      {feature.free && <Check className="w-5 h-5 text-green-600" />}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* All Features List (when not premium) */}
-        {!isPremium && (
-          <div className="bg-white px-6 py-6 border-t border-gray-100">
-            <div className="space-y-4">
-              {premiumFeatures.map((feature, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-900 text-sm">{feature.name}</span>
-                    <Info className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <div className="flex gap-8">
-                    <div className="w-6 flex justify-center">
-                      {feature.premium && <Check className="w-5 h-5 text-green-600" />}
-                    </div>
-                    <div className="w-6 flex justify-center">
-                      {feature.free ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <X className="w-5 h-5 text-gray-300" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Secondary Stats Row */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                <Star className="w-5 h-5 text-yellow-600" />
+              </div>
+              <div className="text-lg font-bold text-yellow-700">{coins}</div>
+              <div className="text-xs text-yellow-600">Coins</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                <MessageCircle className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="text-lg font-bold text-purple-700">156</div>
+              <div className="text-xs text-purple-600">Chats</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Additional Actions */}
+        <div className="space-y-3">
+          <Button
+            onClick={() => navigate('/premium')}
+            className="w-full bg-gradient-to-r from-peach-400 to-coral-500 hover:from-peach-500 hover:to-coral-600 text-white font-semibold py-4 shadow-lg"
+          >
+            <Crown className="w-5 h-5 mr-2" />
+            Upgrade to Premium
+          </Button>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              onClick={() => navigate('/chat')}
+              variant="outline"
+              className="py-3 rounded-xl border-gray-200 hover:bg-gray-50"
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Messages
+            </Button>
+            
+            <Button
+              onClick={() => navigate('/')}
+              variant="outline" 
+              className="py-3 rounded-xl border-gray-200 hover:bg-gray-50"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Discover
+            </Button>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-        <div className="max-w-md mx-auto px-6 py-3">
-          <div className="flex justify-around">
-            <button className="flex flex-col items-center gap-1">
-              <div className="w-6 h-6 bg-black rounded-full"></div>
-              <span className="text-xs font-medium text-gray-900">Profile</span>
-            </button>
-            <button 
-              onClick={() => navigate('/')}
-              className="flex flex-col items-center gap-1"
-            >
-              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-              <span className="text-xs text-gray-500">Discover</span>
-            </button>
-            <button 
-              onClick={() => navigate('/friends')}
-              className="flex flex-col items-center gap-1"
-            >
-              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-              <span className="text-xs text-gray-500">People</span>
-            </button>
-            <button 
-              onClick={() => navigate('/chat')}
-              className="flex flex-col items-center gap-1"
-            >
-              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-              <span className="text-xs text-gray-500">Liked You</span>
-            </button>
-            <button 
-              onClick={() => navigate('/chat')}
-              className="flex flex-col items-center gap-1"
-            >
-              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
-              <span className="text-xs text-gray-500">Chats</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <BottomNavBar />
 
-      {/* Modals */}
-      <LanguageSelector
-        isOpen={showLanguageSelector}
-        onClose={() => setShowLanguageSelector(false)}
+      {/* Who Liked Me Modal */}
+      <WhoLikedMeModal
+        isOpen={showLikesModal}
+        onClose={() => setShowLikesModal(false)}
+        likes={likesData}
+        onRevealLike={handleRevealLike}
       />
-
-      <SettingsModal
-        isOpen={showSettingsModal}
-        onClose={() => setShowSettingsModal(false)}
-        settingType={settingType}
-      />
-
-      <HelpSupportModal
-        isOpen={showHelpModal}
-        onClose={() => setShowHelpModal(false)}
-      />
-
-      {/* PremiumPaywall now moved to separate /premium page */}
     </div>
   );
 }
