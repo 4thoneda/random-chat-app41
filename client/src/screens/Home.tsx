@@ -77,7 +77,7 @@ export default function Home() {
   const { t } = useLanguage();
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
   const [showTreasureChest, setShowTreasureChest] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState(12847);
