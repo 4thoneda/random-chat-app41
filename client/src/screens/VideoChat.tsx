@@ -57,7 +57,7 @@ interface NegotiationDone {
 
 export default function VideoChat() {
   const { socket, mockMatching, isUsingMockMode } = useSocket();
-  const { isPremium, setPremium, isUltraPremium } = usePremium();
+  const { isPremium, setPremium, isUltraPremium, isProMonthly } = usePremium();
   const { coins, isLoading: coinsLoading } = useCoin();
   const { addFriend, canAddMoreFriends, friends } = useFriends();
   
