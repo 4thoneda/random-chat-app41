@@ -9,6 +9,7 @@ import { ArrowLeft, Mic, Crown } from "lucide-react";
 
 export default function VoicePage() {
   const navigate = useNavigate();
+  const { isUltraPremium } = usePremium();
 
   const handleBackClick = () => {
     navigate(-1);
