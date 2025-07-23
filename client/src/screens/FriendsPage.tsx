@@ -53,7 +53,7 @@ const FriendsPage: React.FC = () => {
     }
     
     setPremium(true, expiry);
-    setShowPaywall(false);
+    // setShowPaywall(false); // Now handled in PremiumPage
     alert(`🎉 Welcome to Premium! You can now add unlimited friends!`);
   };
 
