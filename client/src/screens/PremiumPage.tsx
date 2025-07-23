@@ -161,12 +161,15 @@ export default function PremiumPage({ onPurchase }: PremiumPageProps) {
       description: "Show off your exclusive status",
       color: "text-passion-500"
     },
-    {
-      icon: Star,
-      title: "Priority Matching",
-      description: "Get connected to premium users faster",
-      color: "text-royal-500"
-    }
+          {
+        color: "text-royal-500"
+      }, // ← comma added here
+      {
+        icon: Camera,
+        title: "Face Filters",
+        description: "Apply Instagram-style filters to your partner's video (ULTRA+ only)",
+      },
+
     {
       icon: Camera,
       title: "Face Filters",
