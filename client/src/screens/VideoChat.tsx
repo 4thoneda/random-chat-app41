@@ -1169,19 +1169,7 @@ export default function VideoChat() {
             </div>
           )}
 
-          {/* My stream as PiP */}
-          {myStream && !isVoiceOnly && (
-            <div className="absolute bottom-4 right-4 w-20 h-32 bg-gradient-to-br from-peach-200/90 via-cream-100/90 to-coral-200/90 backdrop-blur-sm rounded-xl shadow-lg border-2 border-peach-300/50 z-30 flex items-center justify-center">
-              <ReactPlayer
-                className="w-full h-full object-cover rounded-xl"
-                url={myStream}
-                playing
-                muted
-                width="100%"
-                height="100%"
-              />
-            </div>
-          )}
+
 
           {/* Friend indicator overlay */}
           {isFriendCall && remoteStream && (
