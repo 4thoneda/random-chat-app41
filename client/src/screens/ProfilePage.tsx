@@ -170,18 +170,18 @@ export default function ProfilePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15 backdrop-blur-sm"></div>
         <button
           onClick={() => navigate(-1)}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          className="relative z-10 p-2 hover:bg-white/20 transition-colors"
         >
-          <ArrowLeft size={24} className="text-gray-700" />
+          <ArrowLeft size={24} className="text-white" />
         </button>
-        
-        <h1 className="text-lg font-semibold text-gray-900">Profile</h1>
-        
+
+        <h1 className="relative z-10 text-lg font-semibold text-white drop-shadow-lg">Profile</h1>
+
         <button
           onClick={() => navigate('/premium')}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          className="relative z-10 p-2 hover:bg-white/20 transition-colors"
         >
-          <Settings size={24} className="text-gray-700" />
+          <Settings size={24} className="text-white" />
         </button>
       </div>
 
