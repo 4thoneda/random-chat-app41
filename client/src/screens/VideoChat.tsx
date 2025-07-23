@@ -383,7 +383,7 @@ export default function VideoChat() {
   // Premium feature: Switch to voice-only mode during call
   const toggleVoiceOnlyMode = useCallback(async () => {
     if (!isPremium) {
-      setShowPaywall(true);
+      navigate("/premium");
       return;
     }
 
