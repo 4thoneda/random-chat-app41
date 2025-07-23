@@ -99,7 +99,7 @@ export default function VoicePage() {
           </div>
         </div>
         
-        <BottomNavBar />
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
     </>
   );
