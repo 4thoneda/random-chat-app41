@@ -14,7 +14,7 @@ interface ChatTimerProps {
   isUltraPremium?: boolean;
 }
 
-export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false }: ChatTimerProps) {
+export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false, isUltraPremium = false }: ChatTimerProps) {
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes for premium, 15 for free
   const [isActive, setIsActive] = useState(false);
   const [friendRequestTriggered, setFriendRequestTriggered] = useState(false);
