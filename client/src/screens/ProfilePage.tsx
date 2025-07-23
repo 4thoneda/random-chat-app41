@@ -162,6 +162,20 @@ export default function ProfilePage() {
     }
   };
 
+  const handleRevealLike = (likeId: string) => {
+    setLikesData(prev => prev.map(like =>
+      like.id === likeId ? { ...like, isRevealed: true } : like
+    ));
+  };
+
+  const handleShowLikes = () => {
+    if (isPremium) {
+      // Premium users can see all likes immediately
+      setLikesData(prev => prev.map(like => ({ ...like, isRevealed: true })));
+    }
+    setShowLikesModal(true);
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
