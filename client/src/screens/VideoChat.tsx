@@ -1315,7 +1315,7 @@ export default function VideoChat() {
           {/* My video label */}
           <div className="absolute top-3 left-3 bg-coral-500 px-2 py-1 rounded-full z-30">
             <span className="text-white text-xs font-bold">
-              📷 You
+              {isUltraPremium() ? "👑 ULTRA+" : "📷 You"}
             </span>
           </div>
 
