@@ -71,10 +71,12 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
         if (userIsPremium && expiryDate && expiryDate > now) {
           setIsPremium(true);
           setPremiumExpiry(expiryDate);
+          setPremiumPlan(userPremiumPlan || null);
 
           // Sync with localStorage for offline access
           localStorage.setItem("premium_status", "true");
           localStorage.setItem("premium_expiry", expiryDate.toISOString());
+          localStorage.setItem("ajnabicam_premium_plan", userPremiumPlan || "");
         } else if (userIsPremium && (!expiryDate || expiryDate <= now)) {
           // Premium expired, update Firestore
           await updatePremiumStatus(userIdToUse, false);
