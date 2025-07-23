@@ -22,7 +22,7 @@ import {
   User,
 } from "lucide-react";
 import GenderFilter from "../components/GenderFilter";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import TreasureChest from "../components/TreasureChest";
 import BottomNavBar from "../components/BottomNavBar";
 import { usePremium } from "../context/PremiumProvider";
