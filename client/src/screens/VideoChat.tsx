@@ -266,7 +266,7 @@ export default function VideoChat() {
         // Check if user can add more friends
         if (!canAddMoreFriends) {
           setShowStayConnected(false);
-          setShowPaywall(true);
+          navigate("/premium");
           return;
         }
 
