@@ -11,6 +11,7 @@ interface ChatTimerProps {
   onUpgrade: () => void;
   onFriendRequestTime?: () => void;
   isFriendCall?: boolean;
+  isUltraPremium?: boolean;
 }
 
 export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false }: ChatTimerProps) {
