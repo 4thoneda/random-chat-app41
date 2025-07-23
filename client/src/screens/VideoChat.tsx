@@ -1368,7 +1368,7 @@ export default function VideoChat() {
           setShowFaceFilters(false);
         }}
         currentFilter={currentFilter}
-        isUltraPremium={isUltraPremium}
+        isUltraPremium={isUltraPremiumState}
         onUpgrade={handleUpgrade}
       />
 
