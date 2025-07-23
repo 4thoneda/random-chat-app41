@@ -829,7 +829,7 @@ export default function VideoChat() {
             alert(
               `❌ Couldn't add ${partnerName} as friend. You've reached the free limit of 3 friends. Upgrade to Premium for unlimited friends!`,
             );
-            setShowPaywall(true);
+            navigate("/premium");
           }
 
           setShowStayConnected(false);
