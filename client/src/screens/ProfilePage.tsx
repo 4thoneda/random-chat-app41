@@ -416,7 +416,7 @@ export default function ProfilePage() {
                 )}
               </div>
               <div className="text-lg font-bold text-pink-700">
-                {isPremium ? '12' : '?'}
+                {isPremium ? likesData.length : '?'}
               </div>
               <div className="text-xs text-pink-600">
                 {isPremium ? 'Likes' : 'Tap to See'}
