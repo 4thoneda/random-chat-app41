@@ -281,8 +281,10 @@ export async function updatePremiumStatus(userId: string, isPremium: boolean, ex
 
     if (isPremium && expiryDate) {
       updates.premiumExpiry = Timestamp.fromDate(expiryDate);
+      updates.premiumPlan = plan || null;
     } else if (!isPremium) {
       updates.premiumExpiry = null;
+      updates.premiumPlan = null;
     }
 
     await updateDoc(userDocRef, updates);
