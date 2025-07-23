@@ -9,7 +9,7 @@ import ReactPlayer from "react-player";
 import { Button } from "../components/ui/button";
 import Messages from "../components/Messages";
 import ChatTimer from "../components/ChatTimer";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import TreasureChest from "../components/TreasureChest";
 import ReportUserModal from "../components/ReportUserModal";
 import BlockUserModal from "../components/BlockUserModal";
