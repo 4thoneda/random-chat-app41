@@ -1086,6 +1086,7 @@ export default function VideoChat() {
             partnerPremium={partnerPremium}
             onTimeUp={handleTimeUp}
             onUpgrade={handleUpgrade}
+            isUltraPremium={isUltraPremium()}
           />
         </div>
       )}
