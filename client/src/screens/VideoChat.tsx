@@ -35,6 +35,8 @@ import { useInterstitialAd } from "../hooks/useInterstitialAd";
 import { useFaceFilters } from "../hooks/useFaceFilters";
 import FaceFilterPanel from "../components/FaceFilterPanel";
 import PremiumBadge from "../components/PremiumBadge";
+import PremiumReactions from "../components/PremiumReactions";
+import LastSeenDisplay from "../components/LastSeenDisplay";
 import { FaceFilter } from "../lib/faceFilters";
 import "../css/VideoChat.css";
 
