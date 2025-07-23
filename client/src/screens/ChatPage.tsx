@@ -403,7 +403,7 @@ const PersonalChat = ({
       )}
 
       {/* Bottom Navigation */}
-      <BottomNavBar />
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
     </div>
   );
 };
@@ -626,7 +626,7 @@ const ChatPageContent = ({
       </div>
 
       {/* Bottom Navigation */}
-      <BottomNavBar />
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
     </div>
   );
 };
