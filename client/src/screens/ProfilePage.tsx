@@ -180,7 +180,7 @@ export default function ProfilePage() {
         {/* Main Profile Card */}
         <Card className="bg-white shadow-xl border-0 rounded-3xl overflow-hidden mb-6 relative">
           {/* Profile Image Section */}
-          <div className="relative h-[600px] overflow-hidden">
+          <div className="relative h-[50vh] overflow-hidden">
             {profileImage ? (
               <img
                 src={profileImage}
