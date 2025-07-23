@@ -303,8 +303,8 @@ export default function Home() {
           </div>
                 </header>
 
-        {/* Scrollable Banner Ads - Only for non-premium users */}
-        {!isPremium && (
+        {/* Scrollable Banner Ads - Only for non-ULTRA+ users */}
+        {!isUltraPremium() && (
           <div className="w-full relative bg-gray-100 rounded-lg overflow-hidden shadow-sm">
             <div className="overflow-hidden">
               <div
