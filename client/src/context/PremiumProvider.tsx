@@ -175,15 +175,26 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
     return isPremium;
   };
 
+  const isUltraPremium = (): boolean => {
+    return isPremium && premiumPlan === 'ultra-quarterly';
+  };
+
+  const isProMonthly = (): boolean => {
+    return isPremium && premiumPlan === 'pro-monthly';
+  };
+
   return (
     <PremiumContext.Provider
       value={{
         isPremium,
         premiumExpiry,
+        premiumPlan,
         loading,
         setPremium,
         checkPremiumStatus,
         syncPremiumStatus,
+        isUltraPremium,
+        isProMonthly,
       }}
     >
       {children}
