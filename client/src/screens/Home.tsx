@@ -471,6 +471,9 @@ export default function Home() {
 
       {/* PremiumPaywall now moved to separate /premium page */}
 
+      {/* Online Notifications for Premium Users */}
+      {(isUltraPremium() || isProMonthly()) && <OnlineNotificationManager />}
+
       <TreasureChest
         isOpen={showTreasureChest}
         onClose={() => setShowTreasureChest(false)}
