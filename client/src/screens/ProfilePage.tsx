@@ -174,7 +174,7 @@ export default function ProfilePage() {
     }
 
     setPremium(true, expiry);
-    setShowPremiumPaywall(false);
+    // setShowPremiumPaywall(false); // Now handled in PremiumPage
     alert(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
   };
 
