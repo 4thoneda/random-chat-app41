@@ -187,7 +187,7 @@ export default function ProfilePage() {
 
       <div className="max-w-sm mx-auto px-4 py-6">
         {/* Profile Image Section */}
-        <Card className="bg-white shadow-xl border-0 overflow-hidden mb-6 relative">
+        <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden mb-6 relative">
           <div className="relative h-[50vh] overflow-hidden">
             {profileImage ? (
               <img
