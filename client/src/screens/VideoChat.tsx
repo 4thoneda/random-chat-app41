@@ -1009,6 +1009,25 @@ export default function VideoChat() {
     }
   };
 
+  // Premium reactions handlers
+  const handleFlairSend = useCallback(() => {
+    if (!(isUltraPremium() || isProMonthly()) || !remoteChatToken) return;
+
+    socket?.emit("premium:reaction", {
+      type: "flair",
+      targetChatToken: remoteChatToken
+    });
+  }, [isUltraPremium, isProMonthly, remoteChatToken, socket]);
+
+  const handleSuperEmoji = useCallback(() => {
+    if (!(isUltraPremium() || isProMonthly()) || !remoteChatToken) return;
+
+    socket?.emit("premium:reaction", {
+      type: "super_emoji",
+      targetChatToken: remoteChatToken
+    });
+  }, [isUltraPremium, isProMonthly, remoteChatToken, socket]);
+
   useEffect(() => {
     const blocked = JSON.parse(
       localStorage.getItem("ajnabicam_blocked") || "[]",
