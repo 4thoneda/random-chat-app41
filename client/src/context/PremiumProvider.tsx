@@ -82,10 +82,12 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
           await updatePremiumStatus(userIdToUse, false);
           setIsPremium(false);
           setPremiumExpiry(null);
+          setPremiumPlan(null);
 
           // Clear localStorage
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         } else {
           setIsPremium(false);
           setPremiumExpiry(null);
