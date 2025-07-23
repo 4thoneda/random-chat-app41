@@ -1215,20 +1215,59 @@ export default function VideoChat() {
           )}
         </div>
 
-        {/* Voice only card */}
-        {myStream && isVoiceOnly && (
-          <div className="w-full h-24 rounded-3xl shadow-2xl bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden relative border border-rose-100 mt-4 flex flex-col items-center justify-center">
-            <div className="text-4xl mb-1">🎙️</div>
-            <p className="text-white text-sm font-semibold drop-shadow">
-              Your Voice
-            </p>
-            {isPremium && (
-              <div className="flex items-center gap-1 bg-yellow-400 px-2 py-1 rounded-full text-xs font-bold text-white mt-1">
-                <Crown className="h-3 w-3" /> PREMIUM
-              </div>
-            )}
+        {/* My Video - Lower Half */}
+        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-coral-100 via-peach-50 to-blush-100 overflow-hidden relative border-2 border-coral-200/50 flex items-center justify-center">
+          {myStream && !isVoiceOnly ? (
+            <ReactPlayer
+              className="w-full h-full object-cover"
+              url={myStream}
+              playing
+              muted
+              width="100%"
+              height="100%"
+            />
+          ) : myStream && isVoiceOnly ? (
+            <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-purple-400 to-pink-400">
+              <div className="text-5xl mb-2">🎙️</div>
+              <p className="text-white text-base font-semibold drop-shadow">
+                Your Voice
+              </p>
+              {isPremium && (
+                <div className="flex items-center gap-1 bg-yellow-400 px-2 py-1 rounded-full text-xs font-bold text-white mt-2">
+                  <Crown className="h-3 w-3" /> PREMIUM
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-coral-100 to-rose-100">
+              <ClipLoader color={loaderColor} size={30} />
+              <p className="text-gray-600 mt-2 text-xs font-medium">
+                Setting up your camera...
+              </p>
+            </div>
+          )}
+
+          {/* My video label */}
+          <div className="absolute top-3 left-3 bg-coral-500 px-2 py-1 rounded-full z-30">
+            <span className="text-white text-xs font-bold">
+              📷 You
+            </span>
           </div>
-        )}
+
+          {/* Camera status indicator */}
+          <div className="absolute top-3 right-3 z-30">
+            <div className={`p-1 rounded-full ${isCameraOn ? 'bg-green-500' : 'bg-red-500'}`}>
+              {isCameraOn ? <Video className="w-3 h-3 text-white" /> : <VideoOff className="w-3 h-3 text-white" />}
+            </div>
+          </div>
+
+          {/* Mic status indicator */}
+          <div className="absolute bottom-3 right-3 z-30">
+            <div className={`p-1 rounded-full ${isMicOn ? 'bg-green-500' : 'bg-red-500'}`}>
+              {isMicOn ? <Mic className="w-3 h-3 text-white" /> : <MicOff className="w-3 h-3 text-white" />}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Controls */}
