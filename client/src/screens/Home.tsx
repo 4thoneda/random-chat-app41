@@ -31,6 +31,7 @@ import { useLanguage } from "../context/LanguageProvider";
 import BannerAd from "../components/BannerAd";
 import RewardedAdButton from "../components/RewardedAdButton";
 import PremiumBadge from "../components/PremiumBadge";
+import { OnlineNotificationManager } from "../components/OnlineNotification";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
