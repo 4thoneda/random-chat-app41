@@ -282,6 +282,23 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                         </div>
                     </div>
                 ))}
+
+                {/* Typing indicator for premium users */}
+                {partnerTyping && (isUltraPremium() || isProMonthly()) && (
+                    <div className="mb-2">
+                        <div className="inline-block max-w-xs px-3 py-2 rounded-lg bg-gray-200 text-gray-600">
+                            <div className="flex items-center gap-2">
+                                <strong className="text-xs text-gray-500">Stranger</strong>
+                                <div className="flex gap-1">
+                                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                    <div className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div ref={messagesEndRef} />
             </div>
 
