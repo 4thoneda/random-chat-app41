@@ -199,7 +199,7 @@ export default function VideoChat() {
         expiry.setMonth(now.getMonth() + 1);
       }
 
-      setPremium(true, expiry);
+      setPremium(true, expiry, plan);
       // setShowPaywall(false); // Now handled in PremiumPage
 
       alert(
