@@ -1182,8 +1182,8 @@ export default function VideoChat() {
 
           {/* Face Filter Indicator */}
           {isFilterActive && remoteStream && (
-            <div className="absolute top-4 right-4 bg-purple-500 px-3 py-1 rounded-full z-30 flex items-center gap-2">
-              <span className="text-white text-sm font-bold">
+            <div className="absolute top-3 right-3 bg-purple-500 px-2 py-1 rounded-full z-30 flex items-center gap-1">
+              <span className="text-white text-xs font-bold">
                 {currentFilter?.icon} {currentFilter?.name}
               </span>
             </div>
