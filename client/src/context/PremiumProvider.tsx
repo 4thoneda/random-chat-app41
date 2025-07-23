@@ -127,7 +127,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
     }
   };
 
-  const setPremium = async (premium: boolean, expiry?: Date): Promise<boolean> => {
+  const setPremium = async (premium: boolean, expiry?: Date, plan?: string): Promise<boolean> => {
     if (!currentUserId) return false;
 
     try {
