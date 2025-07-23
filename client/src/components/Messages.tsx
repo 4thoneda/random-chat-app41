@@ -296,11 +296,7 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                 onUpgrade={handleUpgrade}
             />
 
-            <PremiumPaywall
-                isOpen={showPaywall}
-                onClose={() => setShowPaywall(false)}
-                onPurchase={handlePremiumPurchase}
-            />
+            {/* PremiumPaywall now moved to separate /premium page */}
         </div>
     );
 }
