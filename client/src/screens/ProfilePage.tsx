@@ -52,6 +52,7 @@ export default function ProfilePage() {
   const [additionalImages, setAdditionalImages] = useState<string[]>([]);
   const [referralCode, setReferralCode] = useState("");
   const [loading, setLoading] = useState(true);
+  const [age, setAge] = useState<number | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
@@ -77,6 +78,7 @@ export default function ProfilePage() {
       if (docSnap.exists()) {
         const data = docSnap.data();
         setName(data.username || data.name || "Mystery Person");
+        setAge(data.age || null);
         setBio(data.bio || "");
         setProfileImage(data.profileImage || null);
         setAdditionalImages(data.additionalImages || []);
@@ -330,106 +332,14 @@ export default function ProfilePage() {
         {/* Profile Card */}
         <Card className="romantic-card shadow-xl">
           <CardHeader className="text-center">
-            {/* Photo Gallery - Bumble Style */}
-            <div className="mb-6">
-              {/* Main Profile Photo */}
-              <div className="relative mx-auto mb-4">
-                <div className="jewelry-frame">
-                  <img
-                    src={
-                      profileImage ||
-                      "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
-                    }
-                    alt="Profile"
-                    className="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full object-cover border-4 border-white shadow-lg"
-                  />
-                </div>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute bottom-1 right-1 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploadingImage}
-                >
-                  <Camera size={16} />
-                </Button>
-                
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-
-                {uploadingImage && (
-                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <div className="text-xs mb-1">{Math.round(uploadProgress)}%</div>
-                      <div className="w-16 h-1 bg-white/30 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-white transition-all duration-300"
-                          style={{ width: `${uploadProgress}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Additional Photos Grid */}
-              <div className="flex justify-center gap-3 mb-4">
-                {/* Show existing additional images */}
-                {additionalImages.map((imageUrl, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={imageUrl}
-                      alt={`Additional photo ${index + 1}`}
-                      className="w-16 h-20 object-cover rounded-lg border-2 border-gray-200 shadow-md"
-                    />
-                    <Button
-                      size="sm"
-                      onClick={() => removeAdditionalImage(imageUrl)}
-                      className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </div>
-                ))}
-                
-                {/* Add more photos button */}
-                {additionalImages.length < 2 && (
-                  <div className="w-16 h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                    <input
-                      ref={additionalImageInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleAdditionalImageChange}
-                    />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => additionalImageInputRef.current?.click()}
-                      disabled={uploadingImage}
-                      className="w-full h-full p-0"
-                    >
-                      <Plus className="h-4 w-4 text-gray-400" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Name and Bio Section */}
+            {/* User Name */}
             <div className="text-center">
               {editingName ? (
                 <div className="flex items-center justify-center gap-2">
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="border-b border-coral-300 focus:outline-none focus:border-coral-500 px-2 text-lg text-center bg-transparent"
+                    className="border-b border-coral-300 focus:outline-none focus:border-coral-500 px-2 text-2xl text-center bg-transparent font-bold"
                     autoFocus
                     maxLength={20}
                   />
@@ -439,23 +349,35 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <div className="flex items-center justify-center gap-2">
-                  <h2 className="text-xl font-semibold text-coral-800">
+                  <h1 className="text-3xl font-bold text-coral-800">
                     {name}
-                  </h2>
+                  </h1>
                   <Button variant="ghost" size="icon" onClick={handleNameEdit}>
                     <Pencil size={16} className="text-coral-600" />
                   </Button>
                 </div>
               )}
-              
-              {/* Bio Section */}
-              <div className="mt-4">
+            </div>
+
+            {/* User Age */}
+            <div className="text-center mt-4">
+              {age ? (
+                <p className="text-xl text-gray-600 font-medium">{age} years old</p>
+              ) : (
+                <p className="text-lg text-gray-400 italic">Age not specified</p>
+              )}
+            </div>
+
+            {/* User Bio */}
+            <div className="text-center mt-6">
+              <h3 className="text-lg font-semibold text-coral-700 mb-2">About Me</h3>
+              <div>
                 {editingBio ? (
                   <div className="space-y-2">
                     <Textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      className="w-full text-center resize-none"
+                      className="w-full text-left resize-none"
                       rows={3}
                       maxLength={500}
                       placeholder="Tell people about yourself..."
@@ -471,24 +393,130 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-start justify-center gap-2">
-                    <div className="flex-1">
+                  <div className="relative">
+                    <div>
                       {bio ? (
-                        <p className="text-sm text-gray-600 leading-relaxed max-w-xs mx-auto">
+                        <p className="text-base text-gray-700 leading-relaxed text-left bg-gray-50 p-4 rounded-lg border">
                           {bio}
                         </p>
                       ) : (
-                        <p className="text-sm text-gray-400 italic">
+                        <p className="text-base text-gray-400 italic bg-gray-50 p-4 rounded-lg border">
                           Add a bio to tell people about yourself
                         </p>
                       )}
                     </div>
-                    <Button variant="ghost" size="icon" onClick={handleBioEdit}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleBioEdit}
+                      className="absolute top-2 right-2"
+                    >
                       <Edit3 size={14} className="text-coral-600" />
                     </Button>
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Photos Section */}
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-coral-700 mb-4">My Photos</h3>
+              
+              {/* Main Profile Photo */}
+              <div className="mb-6">
+                <div className="relative mx-auto w-fit">
+                  <div className="jewelry-frame">
+                    <img
+                      src={
+                        profileImage ||
+                        "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
+                      }
+                      alt="Profile"
+                      className="w-48 h-48 rounded-lg object-cover border-4 border-white shadow-lg"
+                    />
+                  </div>
+                  
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute bottom-2 right-2 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingImage}
+                  >
+                    <Camera size={16} />
+                  </Button>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+
+                  {uploadingImage && (
+                    <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <div className="text-sm mb-2">{Math.round(uploadProgress)}%</div>
+                        <div className="w-24 h-2 bg-white/30 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-white transition-all duration-300"
+                            style={{ width: `${uploadProgress}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <p className="text-sm text-gray-500 mt-2">Main Photo</p>
+              </div>
+
+              {/* Additional Photos - Vertical Stack */}
+              {additionalImages.length > 0 && (
+                <div className="space-y-4">
+                  {additionalImages.map((imageUrl, index) => (
+                    <div key={index} className="relative mx-auto w-fit group">
+                      <img
+                        src={imageUrl}
+                        alt={`Photo ${index + 2}`}
+                        className="w-48 h-48 object-cover rounded-lg border-2 border-gray-200 shadow-md"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => removeAdditionalImage(imageUrl)}
+                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <p className="text-sm text-gray-500 mt-2 text-center">Photo {index + 2}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Add More Photos Button */}
+              {additionalImages.length < 2 && (
+                <div className="mt-6">
+                  <div className="w-48 h-48 mx-auto border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+                    <input
+                      ref={additionalImageInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAdditionalImageChange}
+                    />
+                    <Button
+                      variant="ghost"
+                      onClick={() => additionalImageInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="w-full h-full flex flex-col items-center justify-center"
+                    >
+                      <Plus className="h-8 w-8 text-gray-400 mb-2" />
+                      <span className="text-sm text-gray-500">Add Photo</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </CardHeader>
         </Card>
