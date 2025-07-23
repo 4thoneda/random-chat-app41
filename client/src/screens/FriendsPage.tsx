@@ -40,7 +40,7 @@ const FriendsPage: React.FC = () => {
   };
 
   const handleUpgrade = () => {
-    setShowPaywall(true);
+    navigate('/premium');
   };
 
   const handlePremiumPurchase = (plan: string) => {
