@@ -1056,9 +1056,20 @@ export default function VideoChat() {
 
           <div className="flex-1 flex justify-center">
             <div className="text-center">
-              <span className="font-bold text-xl text-rose-600 tracking-wide block">
-                AjnabiCam
-              </span>
+              <div className="flex items-center justify-center gap-2">
+                <span className="font-bold text-xl text-rose-600 tracking-wide">
+                  AjnabiCam
+                </span>
+                {isUltraPremium() && (
+                  <PremiumBadge plan="ultra-quarterly" size="sm" />
+                )}
+                {isProMonthly() && (
+                  <PremiumBadge plan="pro-monthly" size="sm" />
+                )}
+                {isPremium && !isUltraPremium() && !isProMonthly() && (
+                  <PremiumBadge plan="weekly" size="sm" />
+                )}
+              </div>
               {isFriendCall && (
                 <span className="text-xs text-green-600 font-medium">
                   Friend Call
