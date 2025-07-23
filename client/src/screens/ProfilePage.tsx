@@ -325,7 +325,7 @@ export default function ProfilePage() {
         </Card>
 
         {/* Profile Stats Cards */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-2 gap-3 mb-6">
           <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
             <CardContent className="p-4 text-center">
               {isPremium ? (
