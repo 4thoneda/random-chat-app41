@@ -1146,7 +1146,7 @@ export default function VideoChat() {
                     : "��� Waiting for connection..."}
               </p>
               {isSearchingForMatch && (
-                <div className="mt-4 flex flex-col items-center">
+                <div className="mt-3 flex flex-col items-center">
                   <div className="flex space-x-1 mb-2">
                     <div
                       className="w-2 h-2 bg-rose-500 rounded-full animate-bounce"
