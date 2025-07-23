@@ -65,7 +65,7 @@ const stats = [
 export default function Home() {
   const { socket, isUsingMockMode } = useSocket();
   const navigate = useNavigate();
-  const { isPremium, setPremium } = usePremium();
+  const { isPremium, setPremium, isUltraPremium } = usePremium();
   const {
     coins,
     claimDailyBonus,
