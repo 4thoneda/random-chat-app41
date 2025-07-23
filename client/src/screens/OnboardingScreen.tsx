@@ -303,12 +303,13 @@ export default function OnboardingScreen() {
             </div>
             
             <div className="text-center">
-              <p className="text-xs text-gray-500 mb-2">
-                📸 Add up to 3 photos • First photo will be your main profile picture
-              </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                💡 Tip: Tap the star to set a photo as your main profile picture
-              </p>
+             <p className="text-xs text-gray-500 mb-2">
+  📸 Add up to 3 photos • First photo will be your main profile picture
+</p>
+<p className="text-xs text-gray-500 mt-2 text-center">
+  💡 Tip: Tap the star to set a photo as your main profile picture
+</p>
+
             </div>
           </div>
 
