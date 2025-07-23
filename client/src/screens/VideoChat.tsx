@@ -1191,13 +1191,13 @@ export default function VideoChat() {
               <Button
                 onClick={() => setShowFaceFilters(true)}
                 className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
-                  isUltraPremium
+                  isUltraPremiumState
                     ? isFilterActive
                       ? "bg-purple-500 hover:bg-purple-600 text-white"
                       : "bg-white/90 hover:bg-white text-purple-500"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
-                disabled={!isUltraPremium}
+                disabled={!isUltraPremiumState}
               >
                 <span className="text-base">🎭</span>
               </Button>
