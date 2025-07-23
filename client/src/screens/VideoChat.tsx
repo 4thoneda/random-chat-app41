@@ -255,8 +255,8 @@ export default function VideoChat() {
   }, [isFriendCall, handleSkip]);
 
   const handleUpgrade = useCallback(() => {
-    setShowPaywall(true);
-  }, []);
+    navigate("/premium");
+  }, [navigate]);
 
   const handleStayConnected = useCallback(
     (wantToStay: boolean) => {
@@ -1103,7 +1103,7 @@ export default function VideoChat() {
                   ? "🔍 Finding your perfect match..."
                   : isFriendCall
                     ? `📞 Calling ${partnerName}...`
-                    : "���� Waiting for connection..."}
+                    : "��� Waiting for connection..."}
               </p>
               {isSearchingForMatch && (
                 <div className="mt-4 flex flex-col items-center">
