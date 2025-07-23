@@ -20,6 +20,7 @@ import PersonalChat from "./screens/PersonalChat";
 import FriendsPage from "./screens/FriendsPage";
 import AIChatbotPage from "./screens/AIChatbotPage";
 import AdTestingPage from "./screens/AdTestingPage";
+import PremiumPage from "./screens/PremiumPage";
 import SpinWheel from "./components/SpinWheel";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
