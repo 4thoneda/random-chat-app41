@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BottomNavBar from '../components/BottomNavBar';
+import UltraBottomNavBar from '../components/UltraBottomNavBar';
+import UltraPremiumFriendsEnhancement from '../components/UltraPremiumFriendsEnhancement';
 // import PremiumPaywall from '../components/PremiumPaywall'; // Now using separate page
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
