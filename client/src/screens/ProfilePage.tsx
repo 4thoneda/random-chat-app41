@@ -16,9 +16,12 @@ import {
   Users,
   MessageCircle,
   Calendar,
-  Trophy,
-  Gift,
-  Sparkles
+  Coffee,
+  Music,
+  Book,
+  Plane,
+  Camera as CameraIcon,
+  Plus
 } from "lucide-react";
 import {
   doc,
@@ -36,19 +39,17 @@ import BottomNavBar from "../components/BottomNavBar";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [name, setName] = useState("Anonymous");
-  const [age, setAge] = useState(22);
-  const [location, setLocation] = useState("Mumbai, India");
-  const [profession, setProfession] = useState("Designer");
-  const [bio, setBio] = useState("Living life to the fullest! 🌟");
-  const [statusMessage, setStatusMessage] = useState("Ready to make new connections");
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [profileViews, setProfileViews] = useState(147);
+  const [name, setName] = useState("Love");
+  const [age, setAge] = useState(25);
+  const [location, setLocation] = useState("Beverly Hills, CA");
+  const [profession, setProfession] = useState("Model & Influencer");
+  const [bio, setBio] = useState("Life is an adventure, let's explore it together! ✨");
+  const [interests, setInterests] = useState(["Often", "Sociale drinker", "Never", "Pisces"]);
+  const [profileImage, setProfileImage] = useState<string | null>("https://cdn.builder.io/api/v1/image/assets%2Fe142673ab78f4d70a642f0b5825a4793%2F9ca3a7221ed04dfaaa8b4de10c2f495e?format=webp&width=800");
+  const [profileViews, setProfileViews] = useState(247);
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [editingField, setEditingField] = useState<string | null>(null);
-  const [tempValue, setTempValue] = useState("");
 
   const { isPremium } = usePremium();
   const { coins } = useCoin();
@@ -64,14 +65,16 @@ export default function ProfilePage() {
     const unsubscribe = onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setName(data.username || data.name || "Anonymous");
-        setAge(data.age || 22);
-        setLocation(data.location || "Mumbai, India");
-        setProfession(data.profession || "Designer");
-        setBio(data.bio || "Living life to the fullest! 🌟");
-        setStatusMessage(data.statusMessage || "Ready to make new connections");
-        setProfileImage(data.profileImage || null);
-        setProfileViews(data.profileViews || Math.floor(Math.random() * 200) + 50);
+        setName(data.username || data.name || "Love");
+        setAge(data.age || 25);
+        setLocation(data.location || "Beverly Hills, CA");
+        setProfession(data.profession || "Model & Influencer");
+        setBio(data.bio || "Life is an adventure, let's explore it together! ✨");
+        setInterests(data.interests || ["Often", "Sociale drinker", "Never", "Pisces"]);
+        if (data.profileImage) {
+          setProfileImage(data.profileImage);
+        }
+        setProfileViews(data.profileViews || Math.floor(Math.random() * 300) + 100);
       }
       setLoading(false);
     });
@@ -128,48 +131,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleEditField = (field: string, currentValue: string) => {
-    setEditingField(field);
-    setTempValue(currentValue);
-  };
-
-  const handleSaveField = async () => {
-    if (!user || !editingField) return;
-
-    const userRef = doc(db, "users", user.uid);
-    await updateDoc(userRef, {
-      [editingField]: tempValue,
-      updatedAt: new Date()
-    });
-
-    // Update local state
-    switch (editingField) {
-      case 'username':
-        setName(tempValue);
-        break;
-      case 'location':
-        setLocation(tempValue);
-        break;
-      case 'profession':
-        setProfession(tempValue);
-        break;
-      case 'bio':
-        setBio(tempValue);
-        break;
-      case 'statusMessage':
-        setStatusMessage(tempValue);
-        break;
-    }
-
-    setEditingField(null);
-    setTempValue("");
-  };
-
-  const handleCancelEdit = () => {
-    setEditingField(null);
-    setTempValue("");
-  };
-
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 flex items-center justify-center">
@@ -195,334 +156,210 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-passion-50 via-romance-25 to-bollywood-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-r from-romance-600 via-passion-600 to-royal-600 px-6 py-4 flex items-center justify-between shadow-xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-white/10"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-pink-300/20 via-transparent to-transparent"></div>
+      <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 sticky top-0 z-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <ArrowLeft size={24} className="text-gray-700" />
+        </button>
         
-        <div className="relative z-10 flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full hover:bg-white/20 transition-colors"
-          >
-            <ArrowLeft size={24} className="text-white" />
-          </button>
-          <h1 className="text-2xl font-bold text-white tracking-tight">My Profile</h1>
-        </div>
+        <h1 className="text-lg font-semibold text-gray-900">Profile</h1>
         
         <button
           onClick={() => navigate('/premium')}
-          className="relative z-10 p-2 rounded-full hover:bg-white/20 transition-colors"
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
         >
-          <Settings size={24} className="text-white" />
+          <Settings size={24} className="text-gray-700" />
         </button>
       </div>
 
-      <div className="max-w-md mx-auto px-4 -mt-4 relative z-10">
-        {/* Profile Photo Section */}
-        <Card className="bg-white/90 backdrop-blur-sm shadow-2xl border-0 rounded-3xl overflow-hidden mb-6">
-          <div className="relative">
-            {/* Large Profile Photo */}
-            <div className="w-full h-80 bg-gradient-to-br from-romance-100 to-passion-100 relative overflow-hidden">
-              {profileImage ? (
-                <img
-                  src={profileImage}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-romance-200 via-passion-200 to-royal-200">
-                  <div className="text-center">
-                    <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
-                      <span className="text-white text-4xl font-bold">{name.charAt(0)}</span>
-                    </div>
-                    <p className="text-white/80 text-sm">Tap to add photo</p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Upload overlay */}
-              {uploadingImage && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-                    <p className="text-sm">Uploading... {uploadProgress}%</p>
-                  </div>
-                </div>
-              )}
-              
-              {/* Camera button */}
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-colors"
-                disabled={uploadingImage}
-              >
-                <Camera size={20} className="text-romance-600" />
-              </button>
-              
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
+      <div className="max-w-sm mx-auto px-4 py-6">
+        {/* Main Profile Card */}
+        <Card className="bg-white shadow-xl border-0 rounded-3xl overflow-hidden mb-6 relative">
+          {/* Profile Image Section */}
+          <div className="relative h-[600px] overflow-hidden">
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
               />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-romance-200 via-passion-200 to-royal-200 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl font-bold">{name.charAt(0)}</span>
+                  </div>
+                  <p className="text-white/80">Tap to add photo</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Upload overlay */}
+            {uploadingImage && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+                  <p className="text-sm">Uploading... {uploadProgress}%</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Camera button */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute top-4 right-4 bg-black/20 backdrop-blur-sm p-2 rounded-full hover:bg-black/30 transition-colors"
+              disabled={uploadingImage}
+            >
+              <Camera size={18} className="text-white" />
+            </button>
+            
+            {/* Profile Views Badge */}
+            <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
+              <Eye size={14} className="text-white" />
+              <span className="text-white text-sm font-medium">{profileViews.toLocaleString()}</span>
             </div>
+            
+            {/* Premium Badge */}
+            {isPremium && (
+              <div className="absolute top-14 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 px-2 py-1 rounded-full flex items-center gap-1">
+                <Crown className="w-3 h-3 text-yellow-800" />
+                <span className="text-yellow-800 text-xs font-bold">PREMIUM</span>
+              </div>
+            )}
+            
+            {/* Profile Info Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 pt-16">
+              {/* Name and Age */}
+              <div className="flex items-end justify-between mb-4">
+                <div>
+                  <h2 className="text-white text-3xl font-bold mb-1">{name}, {age}</h2>
+                  <div className="flex items-center gap-2 text-white/90 mb-3">
+                    <MapPin size={16} />
+                    <span className="text-sm">{location}</span>
+                  </div>
+                </div>
+                
+                <button className="bg-white/20 backdrop-blur-sm p-2 rounded-full hover:bg-white/30 transition-colors">
+                  <Edit3 size={16} className="text-white" />
+                </button>
+              </div>
+
+              {/* Bio */}
+              <p className="text-white/90 text-sm leading-relaxed mb-4">{bio}</p>
+
+              {/* Profession */}
+              <div className="flex items-center gap-2 text-white/90 mb-4">
+                <Briefcase size={16} />
+                <span className="text-sm">{profession}</span>
+              </div>
+
+              {/* Interest Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {interests.map((interest, index) => (
+                  <span
+                    key={index}
+                    className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium"
+                  >
+                    {interest}
+                  </span>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => navigate('/video-chat')}
+                  className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 rounded-2xl border-0"
+                >
+                  <MessageCircle className="w-4 h-4 mr-2" />
+                  Start Chat
+                </Button>
+                
+                <Button
+                  onClick={() => navigate('/friends')}
+                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold px-4 py-3 rounded-2xl border-0"
+                >
+                  <Heart className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
           </div>
         </Card>
 
-        {/* User Details Card */}
-        <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-3xl mb-6">
-          <CardContent className="p-6">
-            {/* Name and Age */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex-1">
-                {editingField === 'username' ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="flex-1 text-2xl font-bold text-gray-800 bg-transparent border-b-2 border-romance-300 focus:outline-none focus:border-romance-500"
-                      autoFocus
-                    />
-                    <button onClick={handleSaveField} className="text-green-600 p-1">
-                      ✓
-                    </button>
-                    <button onClick={handleCancelEdit} className="text-red-500 p-1">
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-bold text-gray-800">{name}, {age}</h2>
-                    <button
-                      onClick={() => handleEditField('username', name)}
-                      className="text-romance-500 p-1 hover:bg-romance-50 rounded-full"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                  </div>
-                )}
+        {/* Quick Stats Cards */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Eye className="w-5 h-5 text-blue-600" />
               </div>
-              
-              {isPremium && (
-                <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 px-3 py-1 rounded-full flex items-center gap-1">
-                  <Crown className="w-4 h-4 text-yellow-800" />
-                  <span className="text-yellow-800 text-xs font-bold">PREMIUM</span>
-                </div>
-              )}
-            </div>
+              <div className="text-lg font-bold text-gray-800">{profileViews}</div>
+              <div className="text-xs text-gray-500">Views</div>
+            </CardContent>
+          </Card>
 
-            {/* Status Message */}
-            <div className="mb-4">
-              {editingField === 'statusMessage' ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    value={tempValue}
-                    onChange={(e) => setTempValue(e.target.value)}
-                    className="flex-1 text-romance-600 bg-transparent border-b-2 border-romance-300 focus:outline-none focus:border-romance-500"
-                    placeholder="What's on your mind?"
-                    autoFocus
-                  />
-                  <button onClick={handleSaveField} className="text-green-600 p-1">
-                    ✓
-                  </button>
-                  <button onClick={handleCancelEdit} className="text-red-500 p-1">
-                    ✕
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <p className="text-romance-600 italic">{statusMessage}</p>
-                  <button
-                    onClick={() => handleEditField('statusMessage', statusMessage)}
-                    className="text-romance-500 p-1 hover:bg-romance-50 rounded-full"
-                  >
-                    <Edit3 size={14} />
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-romance-100 rounded-full flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-romance-600" />
+          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Users className="w-5 h-5 text-green-600" />
               </div>
-              <div className="flex-1">
-                {editingField === 'location' ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="flex-1 text-gray-700 bg-transparent border-b-2 border-romance-300 focus:outline-none focus:border-romance-500"
-                      autoFocus
-                    />
-                    <button onClick={handleSaveField} className="text-green-600 p-1">
-                      ✓
-                    </button>
-                    <button onClick={handleCancelEdit} className="text-red-500 p-1">
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-700 font-medium">{location}</span>
-                    <button
-                      onClick={() => handleEditField('location', location)}
-                      className="text-romance-500 p-1 hover:bg-romance-50 rounded-full"
-                    >
-                      <Edit3 size={14} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+              <div className="text-lg font-bold text-gray-800">23</div>
+              <div className="text-xs text-gray-500">Friends</div>
+            </CardContent>
+          </Card>
 
-            {/* Profession */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-passion-100 rounded-full flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-passion-600" />
+          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Star className="w-5 h-5 text-yellow-600" />
               </div>
-              <div className="flex-1">
-                {editingField === 'profession' ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="flex-1 text-gray-700 bg-transparent border-b-2 border-romance-300 focus:outline-none focus:border-romance-500"
-                      autoFocus
-                    />
-                    <button onClick={handleSaveField} className="text-green-600 p-1">
-                      ✓
-                    </button>
-                    <button onClick={handleCancelEdit} className="text-red-500 p-1">
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-700 font-medium">{profession}</span>
-                    <button
-                      onClick={() => handleEditField('profession', profession)}
-                      className="text-romance-500 p-1 hover:bg-romance-50 rounded-full"
-                    >
-                      <Edit3 size={14} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+              <div className="text-lg font-bold text-gray-800">{coins}</div>
+              <div className="text-xs text-gray-500">Coins</div>
+            </CardContent>
+          </Card>
+        </div>
 
-            {/* Bio */}
-            <div className="bg-gradient-to-r from-romance-50 to-passion-50 rounded-2xl p-4">
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">About Me</h3>
-              {editingField === 'bio' ? (
-                <div className="space-y-2">
-                  <textarea
-                    value={tempValue}
-                    onChange={(e) => setTempValue(e.target.value)}
-                    className="w-full text-gray-700 bg-transparent border-2 border-romance-300 rounded-lg p-2 focus:outline-none focus:border-romance-500 resize-none"
-                    rows={3}
-                    placeholder="Tell people about yourself..."
-                    autoFocus
-                  />
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={handleSaveField}
-                      className="bg-green-500 text-white px-3 py-1 rounded-full text-sm"
-                    >
-                      Save
-                    </button>
-                    <button 
-                      onClick={handleCancelEdit}
-                      className="bg-gray-400 text-white px-3 py-1 rounded-full text-sm"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-start gap-2">
-                  <p className="text-gray-700 leading-relaxed flex-1">{bio}</p>
-                  <button
-                    onClick={() => handleEditField('bio', bio)}
-                    className="text-romance-500 p-1 hover:bg-romance-100 rounded-full"
-                  >
-                    <Edit3 size={14} />
-                  </button>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Profile Stats Card */}
-        <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 rounded-3xl mb-6">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-500" />
-              Profile Stats
-            </h3>
-            
-            <div className="grid grid-cols-2 gap-4">
-              {/* Profile Views */}
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Eye className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-2xl font-bold text-blue-700">{profileViews.toLocaleString()}</div>
-                <div className="text-sm text-blue-600">Profile Views</div>
-              </div>
-
-              {/* Coins */}
-              <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Gift className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-2xl font-bold text-yellow-700">{coins}</div>
-                <div className="text-sm text-yellow-600">Coins</div>
-              </div>
-
-              {/* Friends */}
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-2xl font-bold text-green-700">23</div>
-                <div className="text-sm text-green-600">Friends</div>
-              </div>
-
-              {/* Chats */}
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 text-center">
-                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <MessageCircle className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-2xl font-bold text-purple-700">156</div>
-                <div className="text-sm text-purple-600">Chats</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <Button 
+        {/* Additional Actions */}
+        <div className="space-y-3">
+          <Button
             onClick={() => navigate('/premium')}
-            className="bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 rounded-2xl"
+            className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-yellow-900 font-semibold py-4 rounded-2xl"
           >
-            <Sparkles className="w-4 h-4 mr-2" />
-            Upgrade
+            <Crown className="w-5 h-5 mr-2" />
+            Upgrade to Premium
           </Button>
           
-          <Button 
-            onClick={() => navigate('/friends')}
-            className="bg-gradient-to-r from-royal-500 to-purple-500 hover:from-royal-600 hover:to-purple-600 text-white font-semibold py-3 rounded-2xl"
-          >
-            <Heart className="w-4 h-4 mr-2" />
-            Find Friends
-          </Button>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              onClick={() => navigate('/chat')}
+              variant="outline"
+              className="py-3 rounded-xl border-gray-200 hover:bg-gray-50"
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              Messages
+            </Button>
+            
+            <Button
+              onClick={() => navigate('/')}
+              variant="outline" 
+              className="py-3 rounded-xl border-gray-200 hover:bg-gray-50"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Discover
+            </Button>
+          </div>
         </div>
       </div>
 
