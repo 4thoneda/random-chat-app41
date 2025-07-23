@@ -272,7 +272,7 @@ export default function ProfilePage() {
               {interests.map((interest, index) => (
                 <span
                   key={index}
-                  className="bg-gray-100 px-3 py-1 rounded-full text-gray-700 text-xs font-medium"
+                  className="bg-gray-100 px-3 py-1 text-gray-700 text-xs font-medium"
                 >
                   {interest}
                 </span>
