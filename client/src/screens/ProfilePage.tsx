@@ -315,7 +315,7 @@ export default function ProfilePage() {
 
         {/* Profile Stats Cards */}
         <div className="grid grid-cols-3 gap-3 mb-6">
-          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+          <Card className="bg-white shadow-sm border-0">
             <CardContent className="p-4 text-center">
               <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <Eye className="w-5 h-5 text-blue-600" />
@@ -325,7 +325,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+          <Card className="bg-white shadow-sm border-0">
             <CardContent className="p-4 text-center">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <Users className="w-5 h-5 text-green-600" />
@@ -335,7 +335,7 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white shadow-sm border-0 rounded-2xl">
+          <Card className="bg-white shadow-sm border-0">
             <CardContent className="p-4 text-center">
               <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
                 <Star className="w-5 h-5 text-yellow-600" />
