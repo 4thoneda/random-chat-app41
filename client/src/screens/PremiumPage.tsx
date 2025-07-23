@@ -82,7 +82,7 @@ export default function PremiumPage({ onPurchase }: PremiumPageProps) {
     // Store the premium plan type for feature access
     localStorage.setItem('ajnabicam_premium_plan', plan);
     
-    setPremium(true, expiry);
+    setPremium(true, expiry, plan);
     
     if (onPurchase) {
       onPurchase(plan);

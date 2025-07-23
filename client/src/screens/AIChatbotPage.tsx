@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BottomNavBar from '../components/BottomNavBar';
+import UltraBottomNavBar from '../components/UltraBottomNavBar';
+import { usePremium } from '../context/PremiumProvider';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { ArrowLeft, Bot, Send, Sparkles } from 'lucide-react';
 
 const AIChatbotPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isUltraPremium } = usePremium();
   const [messages, setMessages] = useState<Array<{ text: string; isUser: boolean; timestamp: Date }>>([
     {
       text: "Hello! I'm your AI assistant. How can I help you today? 💕",
@@ -195,7 +198,8 @@ const AIChatbotPage: React.FC = () => {
           </div>
         </div>
         
-        <BottomNavBar />
+        {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
     </>
   );

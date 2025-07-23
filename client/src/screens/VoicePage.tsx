@@ -2,11 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BottomNavBar from "../components/BottomNavBar";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
+import { usePremium } from "../context/PremiumProvider";
 import { Button } from "../components/ui/button";
 import { ArrowLeft, Mic, Crown } from "lucide-react";
 
 export default function VoicePage() {
   const navigate = useNavigate();
+  const { isUltraPremium } = usePremium();
 
   const handleBackClick = () => {
     navigate(-1);
@@ -96,7 +99,7 @@ export default function VoicePage() {
           </div>
         </div>
         
-        <BottomNavBar />
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
     </>
   );

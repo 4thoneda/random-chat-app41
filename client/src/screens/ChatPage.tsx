@@ -17,6 +17,7 @@ import {
   Camera,
 } from "lucide-react";
 import BottomNavBar from "../components/BottomNavBar";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 import { useFriends } from "../context/FriendsProvider";
 import { usePremium } from "../context/PremiumProvider";
 import WallpaperModal from "../components/WallpaperModal";
@@ -402,7 +403,7 @@ const PersonalChat = ({
       )}
 
       {/* Bottom Navigation */}
-      <BottomNavBar />
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
     </div>
   );
 };
@@ -421,7 +422,7 @@ const ChatPageContent = ({
     null,
   );
   const navigate = useNavigate();
-  const { isPremium } = usePremium();
+  const { isPremium, isUltraPremium } = usePremium();
 
   const handleLongPress = (chatId: number) => {
     setLongPressedChatId(chatId);
@@ -625,7 +626,7 @@ const ChatPageContent = ({
       </div>
 
       {/* Bottom Navigation */}
-      <BottomNavBar />
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
     </div>
   );
 };

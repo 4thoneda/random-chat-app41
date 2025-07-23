@@ -30,6 +30,10 @@ import { useCoin } from "../context/CoinProvider";
 import { useLanguage } from "../context/LanguageProvider";
 import BannerAd from "../components/BannerAd";
 import RewardedAdButton from "../components/RewardedAdButton";
+import PremiumBadge from "../components/PremiumBadge";
+import { OnlineNotificationManager } from "../components/OnlineNotification";
+import UltraHomeEnhancements from "../components/UltraHomeEnhancements";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
@@ -65,7 +69,7 @@ const stats = [
 export default function Home() {
   const { socket, isUsingMockMode } = useSocket();
   const navigate = useNavigate();
-  const { isPremium, setPremium } = usePremium();
+  const { isPremium, setPremium, isUltraPremium, isProMonthly, premiumPlan } = usePremium();
   const {
     coins,
     claimDailyBonus,
@@ -244,9 +248,25 @@ export default function Home() {
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg">
                   <Heart className="h-5 w-5 text-white" />
                 </div>
-                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">
-                  {t("app.name")}
-                </h1>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">
+                      {t("app.name")}
+                    </h1>
+                    {isUltraPremium() && (
+                      <div className="flex items-center gap-1">
+                        <PremiumBadge plan="ultra-quarterly" size="sm" />
+                        <div className="text-yellow-300 animate-pulse">✨</div>
+                      </div>
+                    )}
+                    {isProMonthly() && (
+                      <PremiumBadge plan="pro-monthly" size="sm" />
+                    )}
+                    {isPremium && !isUltraPremium() && !isProMonthly() && (
+                      <PremiumBadge plan="weekly" size="sm" />
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Right: Settings & Coins */}
@@ -303,8 +323,8 @@ export default function Home() {
           </div>
                 </header>
 
-        {/* Scrollable Banner Ads - Only for non-premium users */}
-        {!isPremium && (
+        {/* Scrollable Banner Ads - Only for non-ULTRA+ users */}
+        {!isUltraPremium() && (
           <div className="w-full relative bg-gray-100 rounded-lg overflow-hidden shadow-sm">
             <div className="overflow-hidden">
               <div
@@ -451,10 +471,59 @@ export default function Home() {
           </div>
         </button>
 
-        <BottomNavBar />
+        {/* Debug: Test ULTRA+ Features */}
+        {!isUltraPremium() && (
+          <div className="px-4 mb-4">
+            <Button
+              onClick={() => {
+                const expiry = new Date();
+                expiry.setMonth(expiry.getMonth() + 3);
+                setPremium(true, expiry, 'ultra-quarterly');
+                alert('🎉 ULTRA+ activated! Experience the luxury!');
+                window.location.reload();
+              }}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg shadow-md transition-colors text-center"
+            >
+              <Crown className="h-4 w-4 mr-2" />
+              🧪 Try ULTRA+ Experience (Test Mode)
+            </Button>
+          </div>
+        )}
+
+        {/* ULTRA+ Home Enhancements */}
+        {isUltraPremium() && (
+          <div className="px-4 mb-6">
+            <UltraHomeEnhancements
+              isUltraPremium={true}
+              onQuickMatch={() => {
+                setIsConnecting(true);
+                navigate("/video-chat", {
+                  state: { genderFilter: "all", voiceOnly: false, isSearching: true }
+                });
+              }}
+              onPremiumSearch={() => {
+                // Premium search with VIP matching
+                setIsConnecting(true);
+                navigate("/video-chat", {
+                  state: { genderFilter: "premium", voiceOnly: false, isSearching: true }
+                });
+              }}
+              onAnalytics={() => {
+                // Open premium analytics dashboard
+                console.log("Opening ULTRA+ Analytics Dashboard");
+              }}
+            />
+          </div>
+        )}
+
+        {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
 
       {/* PremiumPaywall now moved to separate /premium page */}
+
+      {/* Online Notifications for Premium Users */}
+      {(isUltraPremium() || isProMonthly()) && <OnlineNotificationManager />}
 
       <TreasureChest
         isOpen={showTreasureChest}

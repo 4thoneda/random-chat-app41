@@ -24,6 +24,7 @@ import PremiumPage from "./screens/PremiumPage";
 import SpinWheel from "./components/SpinWheel";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import AppStartupCheck from "./components/AppStartupCheck";
+import UltraAppWrapper from "./components/UltraAppWrapper";
 
 import { useNavigate } from "react-router-dom";
 
@@ -91,33 +92,35 @@ function App() {
 
   return (
     <AppStartupCheck>
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/onboarding" element={<OnboardingScreen />} />
-          <Route path="/user-setup" element={<UserSetup />} />
-          <Route path="/premium-trial" element={<ReferToUnlock />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/gender-select" element={<GenderSelect />} />
-          <Route path="/video-chat" element={<VideoChat />} />
-          <Route path="/voice" element={<VoicePage />} />
-          <Route path="/personal-chat" element={<PersonalChat />} />
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/refer" element={<ReferToUnlock />} />
-          <Route path="/referral-code" element={<ReferralCodeScreen />} />
-          <Route path="/ai-chatbot" element={<AIChatbotPage />} />
-          <Route path="/premium" element={<PremiumPage />} />
-          <Route path="/spin-wheel" element={<SpinWheel />} />
-          <Route path="/storage-debug" element={<StorageDebugPage />} />
-          <Route path="/firebase-debug" element={<FirebaseDebugPage />} />
-          <Route path="/ad-testing" element={<AdTestingPage />} />
-          <Route path="*" element={<HomePage />} />
-        </Routes>
+      <UltraAppWrapper>
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/onboarding" element={<OnboardingScreen />} />
+            <Route path="/user-setup" element={<UserSetup />} />
+            <Route path="/premium-trial" element={<ReferToUnlock />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/gender-select" element={<GenderSelect />} />
+            <Route path="/video-chat" element={<VideoChat />} />
+            <Route path="/voice" element={<VoicePage />} />
+            <Route path="/personal-chat" element={<PersonalChat />} />
+            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/friends" element={<FriendsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/refer" element={<ReferToUnlock />} />
+            <Route path="/referral-code" element={<ReferralCodeScreen />} />
+            <Route path="/ai-chatbot" element={<AIChatbotPage />} />
+            <Route path="/premium" element={<PremiumPage />} />
+            <Route path="/spin-wheel" element={<SpinWheel />} />
+            <Route path="/storage-debug" element={<StorageDebugPage />} />
+            <Route path="/firebase-debug" element={<FirebaseDebugPage />} />
+            <Route path="/ad-testing" element={<AdTestingPage />} />
+            <Route path="*" element={<HomePage />} />
+          </Routes>
 
-        <PWAInstallPrompt />
-      </div>
+          <PWAInstallPrompt />
+        </div>
+      </UltraAppWrapper>
     </AppStartupCheck>
   );
 }

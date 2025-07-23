@@ -11,9 +11,10 @@ interface ChatTimerProps {
   onUpgrade: () => void;
   onFriendRequestTime?: () => void;
   isFriendCall?: boolean;
+  isUltraPremium?: boolean;
 }
 
-export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false }: ChatTimerProps) {
+export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTimeUp, onUpgrade, onFriendRequestTime, isFriendCall = false, isUltraPremium = false }: ChatTimerProps) {
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutes for premium, 15 for free
   const [isActive, setIsActive] = useState(false);
   const [friendRequestTriggered, setFriendRequestTriggered] = useState(false);
@@ -80,7 +81,8 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
     return "text-red-600";
   };
 
-  if (!isConnected) return null;
+  // Don't show timer for ULTRA+ users unless it's a friend call
+  if (!isConnected || (isUltraPremium && !isFriendCall)) return null;
 
   return (
     <Card className="w-full max-w-md mx-auto mb-4">
@@ -93,7 +95,13 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
             </span>
           </div>
           
-          {hasPremiumAccess ? (
+          {isUltraPremium ? (
+            <div className="flex items-center gap-2 text-purple-600">
+              <Infinity className="h-6 w-6 text-purple-500" />
+              <span className="font-bold text-purple-600">Unlimited</span>
+              <Crown className="h-4 w-4 text-yellow-500" />
+            </div>
+          ) : hasPremiumAccess ? (
             <div className="flex items-center gap-2 text-purple-600">
               <div className={`font-mono text-xl font-bold ${getTimeColor()}`}>
                 {formatTime(timeLeft)}
@@ -148,7 +156,14 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
           </div>
         )}
         
-        {hasPremiumAccess && (
+        {isUltraPremium && (
+          <div className="mt-2 p-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg text-center">
+            <p className="text-sm text-purple-600 dark:text-purple-400">
+              💎 ULTRA+ Premium - Enjoy unlimited calls with no time limits! 💕
+            </p>
+          </div>
+        )}
+        {!isUltraPremium && hasPremiumAccess && (
           <div className="mt-2 p-2 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg text-center">
             <p className="text-sm text-green-600 dark:text-green-400">
               ✨ {isPremium ? "You have" : "Your partner has"} Premium - Enjoy {isFriendCall ? "unlimited" : "30-minute"} calls! 💕

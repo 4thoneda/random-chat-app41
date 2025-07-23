@@ -34,6 +34,9 @@ import MockWebRTC from "../lib/mockWebRTC";
 import { useInterstitialAd } from "../hooks/useInterstitialAd";
 import { useFaceFilters } from "../hooks/useFaceFilters";
 import FaceFilterPanel from "../components/FaceFilterPanel";
+import PremiumBadge from "../components/PremiumBadge";
+import PremiumReactions from "../components/PremiumReactions";
+import LastSeenDisplay from "../components/LastSeenDisplay";
 import { FaceFilter } from "../lib/faceFilters";
 import "../css/VideoChat.css";
 
@@ -54,20 +57,14 @@ interface NegotiationDone {
 
 export default function VideoChat() {
   const { socket, mockMatching, isUsingMockMode } = useSocket();
-  const { isPremium, setPremium } = usePremium();
+  const { isPremium, setPremium, isUltraPremium, isProMonthly } = usePremium();
   const { coins, isLoading: coinsLoading } = useCoin();
   const { addFriend, canAddMoreFriends, friends } = useFriends();
   
   // Check if user has ULTRA+ premium (3 months plan)
   useEffect(() => {
-    const checkUltraPremium = () => {
-      // Check if user has the highest tier premium
-      const premiumPlan = localStorage.getItem('ajnabicam_premium_plan');
-      setIsUltraPremium(isPremium && premiumPlan === 'ultra-quarterly');
-    };
-    
-    checkUltraPremium();
-  }, [isPremium]);
+    setIsUltraPremium(isUltraPremium());
+  }, [isPremium, isUltraPremium]);
   const location = useLocation();
   const [remoteChatToken, setRemoteChatToken] = useState<string | null>(null);
   const [isSearchingForMatch, setIsSearchingForMatch] = useState(false);
@@ -93,7 +90,9 @@ export default function VideoChat() {
   const [partnerPremium, setPartnerPremium] = useState(false);
   const [showFaceFilters, setShowFaceFilters] = useState(false);
   const [remoteVideoRef, setRemoteVideoRef] = useState<HTMLVideoElement | null>(null);
-  const [isUltraPremium, setIsUltraPremium] = useState(false);
+  const [isUltraPremiumState, setIsUltraPremium] = useState(false);
+  const [showPremiumReactions, setShowPremiumReactions] = useState(false);
+  const [partnerLastSeen, setPartnerLastSeen] = useState<Date | null>(null);
 
   // Face filters hook
   const {
@@ -204,7 +203,7 @@ export default function VideoChat() {
         expiry.setMonth(now.getMonth() + 1);
       }
 
-      setPremium(true, expiry);
+      setPremium(true, expiry, plan);
       // setShowPaywall(false); // Now handled in PremiumPage
 
       alert(
@@ -233,10 +232,12 @@ export default function VideoChat() {
     if (remoteChatToken) {
       handleChatComplete(); // Award coins for completing chat
 
-      // Show interstitial ad after call ends (for non-premium users)
-      setTimeout(() => {
-        showOnVideoCallEnd();
-      }, 1000); // Small delay to ensure smooth UX
+      // Show interstitial ad after call ends (only for non-ULTRA+ users)
+      if (!isUltraPremium()) {
+        setTimeout(() => {
+          showOnVideoCallEnd();
+        }, 1000); // Small delay to ensure smooth UX
+      }
     }
 
     peerservice.peer.getTransceivers().forEach((transceiver) => {
@@ -897,6 +898,24 @@ export default function VideoChat() {
       },
     );
 
+    // Handle premium reactions from partner
+    socket?.on("premium:reaction", ({ type }: { type: string }) => {
+      if (type === "flair") {
+        // Show flair effect on screen
+        console.log("Partner sent a flair! ✨");
+      } else if (type === "super_emoji") {
+        // Show super emoji effect
+        console.log("Partner sent a super emoji! 🔥");
+      }
+    });
+
+    // Handle last seen updates for premium users
+    socket?.on("partner:last_seen", ({ lastSeen }: { lastSeen: string }) => {
+      if (isUltraPremium() || isProMonthly()) {
+        setPartnerLastSeen(new Date(lastSeen));
+      }
+    });
+
     return () => {
       socket?.off("user:connect", handleUserJoined);
       socket?.off("offer", handleIncommingOffer);
@@ -905,6 +924,8 @@ export default function VideoChat() {
       socket?.off("peer:nego:final", handleNegotiationFinal);
       socket?.off("partnerDisconnected", userDisConnected);
       socket?.off("partner:premium:status");
+      socket?.off("premium:reaction");
+      socket?.off("partner:last_seen");
     };
   }, [
     handleIncommingAnswer,
@@ -954,8 +975,8 @@ export default function VideoChat() {
         peerservice.initPeer();
       }
 
-      // Show interstitial ad when leaving video chat (if there was an active call)
-      if (remoteChatToken) {
+      // Show interstitial ad when leaving video chat (only for non-ULTRA+ users)
+      if (remoteChatToken && !isUltraPremium()) {
         setTimeout(() => {
           showOnNavigation('home');
         }, 500);
@@ -1008,6 +1029,25 @@ export default function VideoChat() {
     }
   };
 
+  // Premium reactions handlers
+  const handleFlairSend = useCallback(() => {
+    if (!(isUltraPremium() || isProMonthly()) || !remoteChatToken) return;
+
+    socket?.emit("premium:reaction", {
+      type: "flair",
+      targetChatToken: remoteChatToken
+    });
+  }, [isUltraPremium, isProMonthly, remoteChatToken, socket]);
+
+  const handleSuperEmoji = useCallback(() => {
+    if (!(isUltraPremium() || isProMonthly()) || !remoteChatToken) return;
+
+    socket?.emit("premium:reaction", {
+      type: "super_emoji",
+      targetChatToken: remoteChatToken
+    });
+  }, [isUltraPremium, isProMonthly, remoteChatToken, socket]);
+
   useEffect(() => {
     const blocked = JSON.parse(
       localStorage.getItem("ajnabicam_blocked") || "[]",
@@ -1059,9 +1099,20 @@ export default function VideoChat() {
 
           <div className="flex-1 flex justify-center">
             <div className="text-center">
-              <span className="font-bold text-xl text-rose-600 tracking-wide block">
-                AjnabiCam
-              </span>
+              <div className="flex items-center justify-center gap-2">
+                <span className="font-bold text-xl text-rose-600 tracking-wide">
+                  AjnabiCam
+                </span>
+                {isUltraPremium() && (
+                  <PremiumBadge plan="ultra-quarterly" size="sm" />
+                )}
+                {isProMonthly() && (
+                  <PremiumBadge plan="pro-monthly" size="sm" />
+                )}
+                {isPremium && !isUltraPremium() && !isProMonthly() && (
+                  <PremiumBadge plan="weekly" size="sm" />
+                )}
+              </div>
               {isFriendCall && (
                 <span className="text-xs text-green-600 font-medium">
                   Friend Call
@@ -1090,18 +1141,20 @@ export default function VideoChat() {
             partnerPremium={partnerPremium}
             onTimeUp={handleTimeUp}
             onUpgrade={handleUpgrade}
+            isUltraPremium={isUltraPremium()}
           />
         </div>
       )}
 
-      {/* Video Streams */}
-      <div className="flex-1 flex flex-col items-center justify-start w-full px-2 pb-32 pt-2 relative">
-        <div className="w-full h-[65vh] rounded-3xl shadow-2xl bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 overflow-hidden relative border-2 border-peach-200/50 flex items-center justify-center">
+      {/* Video Streams - Split Layout */}
+      <div className="flex-1 flex flex-col w-full px-2 pb-32 pt-2 gap-2">
+        {/* Other Person's Video - Upper Half */}
+        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 overflow-hidden relative border-2 border-peach-200/50 flex items-center justify-center">
           {remoteStream ? (
             isVoiceOnly ? (
               <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-teal-400">
-                <div className="text-7xl mb-2">🎙️</div>
-                <p className="text-white text-lg font-semibold drop-shadow">
+                <div className="text-5xl mb-2">🎙️</div>
+                <p className="text-white text-base font-semibold drop-shadow">
                   {partnerName}'s Voice
                 </p>
                 {isFriendCall && (
@@ -1136,7 +1189,7 @@ export default function VideoChat() {
             )
           ) : (
             <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-rose-100 to-pink-100">
-              <ClipLoader color={loaderColor} size={40} />
+              <ClipLoader color={loaderColor} size={35} />
               <p className="text-gray-600 mt-3 text-sm font-medium">
                 {isSearchingForMatch
                   ? "🔍 Finding your perfect match..."
@@ -1145,7 +1198,7 @@ export default function VideoChat() {
                     : "��� Waiting for connection..."}
               </p>
               {isSearchingForMatch && (
-                <div className="mt-4 flex flex-col items-center">
+                <div className="mt-3 flex flex-col items-center">
                   <div className="flex space-x-1 mb-2">
                     <div
                       className="w-2 h-2 bg-rose-500 rounded-full animate-bounce"
@@ -1168,33 +1221,34 @@ export default function VideoChat() {
             </div>
           )}
 
-          {/* My stream as PiP */}
-          {myStream && !isVoiceOnly && (
-            <div className="absolute bottom-4 right-4 w-20 h-32 bg-gradient-to-br from-peach-200/90 via-cream-100/90 to-coral-200/90 backdrop-blur-sm rounded-xl shadow-lg border-2 border-peach-300/50 z-30 flex items-center justify-center">
-              <ReactPlayer
-                className="w-full h-full object-cover rounded-xl"
-                url={myStream}
-                playing
-                muted
-                width="100%"
-                height="100%"
-              />
-            </div>
-          )}
+
 
           {/* Friend indicator overlay */}
           {isFriendCall && remoteStream && (
-            <div className="absolute top-4 left-4 bg-green-500 px-3 py-1 rounded-full z-30">
-              <span className="text-white text-sm font-bold">
+            <div className="absolute top-3 left-3 bg-green-500 px-2 py-1 rounded-full z-30">
+              <span className="text-white text-xs font-bold">
                 👥 Friend Call
               </span>
             </div>
           )}
 
+          {/* Last seen indicator for premium users */}
+          {(isUltraPremium() || isProMonthly()) && remoteStream && !isFriendCall && (
+            <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-lg z-30">
+              <LastSeenDisplay
+                lastSeen={partnerLastSeen}
+                isOnline={true}
+                username={partnerName}
+                isVisible={true}
+                className="text-white text-xs"
+              />
+            </div>
+          )}
+
           {/* Face Filter Indicator */}
           {isFilterActive && remoteStream && (
-            <div className="absolute top-4 right-4 bg-purple-500 px-3 py-1 rounded-full z-30 flex items-center gap-2">
-              <span className="text-white text-sm font-bold">
+            <div className="absolute top-3 right-3 bg-purple-500 px-2 py-1 rounded-full z-30 flex items-center gap-1">
+              <span className="text-white text-xs font-bold">
                 {currentFilter?.icon} {currentFilter?.name}
               </span>
             </div>
@@ -1202,22 +1256,22 @@ export default function VideoChat() {
 
           {/* Face Filter Button - Only for ULTRA+ users */}
           {remoteStream && !isVoiceOnly && (
-            <div className="absolute bottom-4 left-4 z-30">
+            <div className="absolute bottom-3 left-3 z-30">
               <Button
                 onClick={() => setShowFaceFilters(true)}
-                className={`p-3 rounded-full shadow-lg transition-all duration-200 ${
-                  isUltraPremium
+                className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
+                  isUltraPremiumState
                     ? isFilterActive
                       ? "bg-purple-500 hover:bg-purple-600 text-white"
                       : "bg-white/90 hover:bg-white text-purple-500"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
-                disabled={!isUltraPremium}
+                disabled={!isUltraPremiumState}
               >
-                <span className="text-lg">🎭</span>
+                <span className="text-base">🎭</span>
               </Button>
-              
-              {!isUltraPremium && (
+
+              {!isUltraPremiumState && (
                 <div className="absolute -top-1 -right-1 bg-yellow-500 rounded-full p-1">
                   <Crown className="w-3 h-3 text-white" />
                 </div>
@@ -1226,20 +1280,59 @@ export default function VideoChat() {
           )}
         </div>
 
-        {/* Voice only card */}
-        {myStream && isVoiceOnly && (
-          <div className="w-full h-24 rounded-3xl shadow-2xl bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden relative border border-rose-100 mt-4 flex flex-col items-center justify-center">
-            <div className="text-4xl mb-1">🎙️</div>
-            <p className="text-white text-sm font-semibold drop-shadow">
-              Your Voice
-            </p>
-            {isPremium && (
-              <div className="flex items-center gap-1 bg-yellow-400 px-2 py-1 rounded-full text-xs font-bold text-white mt-1">
-                <Crown className="h-3 w-3" /> PREMIUM
-              </div>
-            )}
+        {/* My Video - Lower Half */}
+        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-coral-100 via-peach-50 to-blush-100 overflow-hidden relative border-2 border-coral-200/50 flex items-center justify-center">
+          {myStream && !isVoiceOnly ? (
+            <ReactPlayer
+              className="w-full h-full object-cover"
+              url={myStream}
+              playing
+              muted
+              width="100%"
+              height="100%"
+            />
+          ) : myStream && isVoiceOnly ? (
+            <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-purple-400 to-pink-400">
+              <div className="text-5xl mb-2">🎙️</div>
+              <p className="text-white text-base font-semibold drop-shadow">
+                Your Voice
+              </p>
+              {isPremium && (
+                <div className="flex items-center gap-1 bg-yellow-400 px-2 py-1 rounded-full text-xs font-bold text-white mt-2">
+                  <Crown className="h-3 w-3" /> PREMIUM
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-coral-100 to-rose-100">
+              <ClipLoader color={loaderColor} size={30} />
+              <p className="text-gray-600 mt-2 text-xs font-medium">
+                Setting up your camera...
+              </p>
+            </div>
+          )}
+
+          {/* My video label */}
+          <div className="absolute top-3 left-3 bg-coral-500 px-2 py-1 rounded-full z-30">
+            <span className="text-white text-xs font-bold">
+              {isUltraPremium() ? "👑 ULTRA+" : "📷 You"}
+            </span>
           </div>
-        )}
+
+          {/* Camera status indicator */}
+          <div className="absolute top-3 right-3 z-30">
+            <div className={`p-1 rounded-full ${isCameraOn ? 'bg-green-500' : 'bg-red-500'}`}>
+              {isCameraOn ? <Video className="w-3 h-3 text-white" /> : <VideoOff className="w-3 h-3 text-white" />}
+            </div>
+          </div>
+
+          {/* Mic status indicator */}
+          <div className="absolute bottom-3 right-3 z-30">
+            <div className={`p-1 rounded-full ${isMicOn ? 'bg-green-500' : 'bg-red-500'}`}>
+              {isMicOn ? <Mic className="w-3 h-3 text-white" /> : <MicOff className="w-3 h-3 text-white" />}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Controls */}
@@ -1299,6 +1392,18 @@ export default function VideoChat() {
           </div>
         )}
 
+        {/* Premium Reactions - Only for Pro Monthly and ULTRA+ users */}
+        {(isUltraPremium() || isProMonthly()) && remoteChatToken && (
+          <div className="w-full flex justify-center mt-2">
+            <PremiumReactions
+              onFlairSend={handleFlairSend}
+              onSuperEmoji={handleSuperEmoji}
+              disabled={!remoteChatToken}
+              isVisible={true}
+            />
+          </div>
+        )}
+
         {!isFriendCall && (
           <div className="w-full flex flex-row justify-center gap-2 mt-2">
             <Button
@@ -1344,7 +1449,7 @@ export default function VideoChat() {
           setShowFaceFilters(false);
         }}
         currentFilter={currentFilter}
-        isUltraPremium={isUltraPremium}
+        isUltraPremium={isUltraPremiumState}
         onUpgrade={handleUpgrade}
       />
 

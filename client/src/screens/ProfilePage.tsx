@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import UltraProfileEnhancements from "../components/UltraProfileEnhancements";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 import { 
   Camera, 
   ArrowLeft, 
@@ -52,7 +54,7 @@ export default function ProfilePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const { isPremium } = usePremium();
+  const { isPremium, isUltraPremium, setPremium } = usePremium();
   const { coins } = useCoin();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
@@ -480,8 +482,52 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <BottomNavBar />
+      {/* ULTRA+ Profile Enhancements */}
+      {isUltraPremium() && (
+        <UltraProfileEnhancements
+          isUltraPremium={true}
+          userProfile={{
+            name: name,
+            bio: bio,
+            profileImage: profileImage || undefined,
+            premiumSince: new Date('2024-01-15'), // Example date
+            totalFriends: 25,
+            totalChats: 150,
+            premiumFeatureUsage: {
+              reactionsUsed: 89,
+              filtersUsed: 15,
+              adsFree: 45,
+              unlimitedTime: 120
+            }
+          }}
+          onProfileUpdate={(updates) => {
+            console.log('Profile updates:', updates);
+            // Handle profile updates
+          }}
+        />
+      )}
+
+      {/* Debug: Test ULTRA+ Features */}
+      {!isUltraPremium() && (
+        <div className="px-4 mb-4">
+          <Button
+            onClick={() => {
+              const expiry = new Date();
+              expiry.setMonth(expiry.getMonth() + 3);
+              setPremium(true, expiry, 'ultra-quarterly');
+              alert('🎉 ULTRA+ activated for testing! Refresh to see changes.');
+              window.location.reload();
+            }}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg shadow-md transition-colors"
+          >
+            <Crown className="h-4 w-4 mr-2" />
+            🧪 Test ULTRA+ Features (Debug)
+          </Button>
+        </div>
+      )}
+
+      {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
 
       {/* Who Liked Me Modal */}
       <WhoLikedMeModal

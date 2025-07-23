@@ -33,6 +33,7 @@ export interface UserProfile {
   interests?: string[];
   isPremium: boolean;
   premiumExpiry?: Timestamp;
+  premiumPlan?: string;
   coins: number;
   totalCoinsEarned: number;
   totalCoinsSpent: number;
@@ -270,7 +271,7 @@ export async function completeOnboarding(userId: string, profileData: Partial<Us
 /**
  * Update user premium status
  */
-export async function updatePremiumStatus(userId: string, isPremium: boolean, expiryDate?: Date): Promise<boolean> {
+export async function updatePremiumStatus(userId: string, isPremium: boolean, expiryDate?: Date, plan?: string): Promise<boolean> {
   try {
     const userDocRef = doc(db, "users", userId);
     const updates: any = {
@@ -280,8 +281,10 @@ export async function updatePremiumStatus(userId: string, isPremium: boolean, ex
 
     if (isPremium && expiryDate) {
       updates.premiumExpiry = Timestamp.fromDate(expiryDate);
+      updates.premiumPlan = plan || null;
     } else if (!isPremium) {
       updates.premiumExpiry = null;
+      updates.premiumPlan = null;
     }
 
     await updateDoc(userDocRef, updates);

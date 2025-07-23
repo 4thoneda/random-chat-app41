@@ -6,10 +6,13 @@ import { getUserProfile, updatePremiumStatus } from "../lib/firestoreUtils";
 interface PremiumContextType {
   isPremium: boolean;
   premiumExpiry: Date | null;
+  premiumPlan: string | null;
   loading: boolean;
-  setPremium: (premium: boolean, expiry?: Date) => Promise<boolean>;
+  setPremium: (premium: boolean, expiry?: Date, plan?: string) => Promise<boolean>;
   checkPremiumStatus: () => boolean;
   syncPremiumStatus: () => Promise<void>;
+  isUltraPremium: () => boolean;
+  isProMonthly: () => boolean;
 }
 
 const PremiumContext = createContext<PremiumContextType | null>(null);
@@ -29,6 +32,7 @@ interface PremiumProviderProps {
 export const PremiumProvider = ({ children }: PremiumProviderProps) => {
   const [isPremium, setIsPremium] = useState(false);
   const [premiumExpiry, setPremiumExpiry] = useState<Date | null>(null);
+  const [premiumPlan, setPremiumPlan] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
@@ -42,6 +46,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
         setCurrentUserId(null);
         setIsPremium(false);
         setPremiumExpiry(null);
+        setPremiumPlan(null);
         setLoading(false);
       }
     });
@@ -57,7 +62,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
 
       const userProfile = await getUserProfile(userIdToUse);
       if (userProfile) {
-        const { isPremium: userIsPremium, premiumExpiry: userPremiumExpiry } = userProfile;
+        const { isPremium: userIsPremium, premiumExpiry: userPremiumExpiry, premiumPlan: userPremiumPlan } = userProfile;
 
         // Check if premium has expired
         const now = new Date();
@@ -66,26 +71,32 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
         if (userIsPremium && expiryDate && expiryDate > now) {
           setIsPremium(true);
           setPremiumExpiry(expiryDate);
+          setPremiumPlan(userPremiumPlan || null);
 
           // Sync with localStorage for offline access
           localStorage.setItem("premium_status", "true");
           localStorage.setItem("premium_expiry", expiryDate.toISOString());
+          localStorage.setItem("ajnabicam_premium_plan", userPremiumPlan || "");
         } else if (userIsPremium && (!expiryDate || expiryDate <= now)) {
           // Premium expired, update Firestore
           await updatePremiumStatus(userIdToUse, false);
           setIsPremium(false);
           setPremiumExpiry(null);
+          setPremiumPlan(null);
 
           // Clear localStorage
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         } else {
           setIsPremium(false);
           setPremiumExpiry(null);
+          setPremiumPlan(null);
 
           // Clear localStorage
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         }
       }
     } catch (error) {
@@ -94,17 +105,21 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
       // Fallback to localStorage if Firestore fails
       const savedPremium = localStorage.getItem("premium_status");
       const savedExpiry = localStorage.getItem("premium_expiry");
+      const savedPlan = localStorage.getItem("ajnabicam_premium_plan");
 
       if (savedPremium && savedExpiry) {
         const expiryDate = new Date(savedExpiry);
         if (expiryDate > new Date()) {
           setIsPremium(true);
           setPremiumExpiry(expiryDate);
+          setPremiumPlan(savedPlan || null);
         } else {
           setIsPremium(false);
           setPremiumExpiry(null);
+          setPremiumPlan(null);
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         }
       }
     } finally {
@@ -112,12 +127,12 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
     }
   };
 
-  const setPremium = async (premium: boolean, expiry?: Date): Promise<boolean> => {
+  const setPremium = async (premium: boolean, expiry?: Date, plan?: string): Promise<boolean> => {
     if (!currentUserId) return false;
 
     try {
       // Update Firestore first
-      const success = await updatePremiumStatus(currentUserId, premium, expiry);
+      const success = await updatePremiumStatus(currentUserId, premium, expiry, plan);
 
       if (success) {
         // Update local state
@@ -125,12 +140,16 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
 
         if (premium && expiry) {
           setPremiumExpiry(expiry);
+          setPremiumPlan(plan || null);
           localStorage.setItem("premium_status", "true");
           localStorage.setItem("premium_expiry", expiry.toISOString());
+          localStorage.setItem("ajnabicam_premium_plan", plan || "");
         } else {
           setPremiumExpiry(null);
+          setPremiumPlan(null);
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         }
 
         return true;
@@ -156,15 +175,26 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
     return isPremium;
   };
 
+  const isUltraPremium = (): boolean => {
+    return isPremium && premiumPlan === 'ultra-quarterly';
+  };
+
+  const isProMonthly = (): boolean => {
+    return isPremium && premiumPlan === 'pro-monthly';
+  };
+
   return (
     <PremiumContext.Provider
       value={{
         isPremium,
         premiumExpiry,
+        premiumPlan,
         loading,
         setPremium,
         checkPremiumStatus,
         syncPremiumStatus,
+        isUltraPremium,
+        isProMonthly,
       }}
     >
       {children}
