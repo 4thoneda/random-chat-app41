@@ -4,7 +4,7 @@ import { useSocket } from "../context/SocketProvider"
 import { usePremium } from "../context/PremiumProvider"
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Send, Eye, Palette, Check, CheckCheck } from "lucide-react";
+import { Send, Eye, Palette, Check, CheckCheck, Clock } from "lucide-react";
 import SecretChatModal from "./SecretChatModal";
 import WallpaperSelector from "./WallpaperSelector";
 // import PremiumPaywall from "./PremiumPaywall"; // Now using separate page
