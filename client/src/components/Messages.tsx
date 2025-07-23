@@ -256,8 +256,8 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                 {messagesArray.map((msg, ind) => (
                     <div key={msg.id || ind} className={`mb-2 ${msg.isSecret ? 'animate-pulse' : ''}`}>
                         <div className={`inline-block max-w-xs px-3 py-2 rounded-lg ${
-                            msg.sender === 'You' 
-                                ? 'bg-rose-500 text-white ml-auto' 
+                            msg.sender === 'You'
+                                ? 'bg-rose-500 text-white ml-auto'
                                 : 'bg-white text-gray-800 border border-gray-200'
                         } ${msg.isSecret ? 'border-purple-300 shadow-purple-200 shadow-md' : ''}`}>
                             <div className="flex items-center gap-2 mb-1">
@@ -268,7 +268,17 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                                     <Eye className="h-3 w-3 text-purple-500" />
                                 )}
                             </div>
-                            <div>{msg.message}</div>
+                            <div className="mb-1">{msg.message}</div>
+                            {/* Read receipt for own messages (premium users only) */}
+                            {msg.sender === 'You' && (isUltraPremium() || isProMonthly()) && (
+                                <div className="flex justify-end">
+                                    {msg.isRead ? (
+                                        <CheckCheck className="h-3 w-3 text-blue-300" />
+                                    ) : (
+                                        <Check className="h-3 w-3 text-gray-300" />
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
