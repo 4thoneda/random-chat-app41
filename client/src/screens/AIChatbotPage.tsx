@@ -198,7 +198,8 @@ const AIChatbotPage: React.FC = () => {
           </div>
         </div>
         
-        <BottomNavBar />
+        {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
     </>
   );
