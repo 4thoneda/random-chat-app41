@@ -81,7 +81,8 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
     return "text-red-600";
   };
 
-  if (!isConnected) return null;
+  // Don't show timer for ULTRA+ users unless it's a friend call
+  if (!isConnected || (isUltraPremium && !isFriendCall)) return null;
 
   return (
     <Card className="w-full max-w-md mx-auto mb-4">
