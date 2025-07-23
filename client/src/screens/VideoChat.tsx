@@ -73,7 +73,7 @@ export default function VideoChat() {
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
   const [showTreasureChest, setShowTreasureChest] = useState(false);
   const [isVoiceOnly, setIsVoiceOnly] = useState(false);
   const [partnerPremium, setPartnerPremium] = useState(false);
@@ -1103,7 +1103,7 @@ export default function VideoChat() {
                   ? "🔍 Finding your perfect match..."
                   : isFriendCall
                     ? `📞 Calling ${partnerName}...`
-                    : "��� Waiting for connection..."}
+                    : "���� Waiting for connection..."}
               </p>
               {isSearchingForMatch && (
                 <div className="mt-4 flex flex-col items-center">
