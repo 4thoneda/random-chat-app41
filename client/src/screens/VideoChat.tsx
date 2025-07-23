@@ -32,6 +32,9 @@ import { useTheme } from "../components/theme-provider";
 import { useNavigate, useLocation } from "react-router-dom";
 import MockWebRTC from "../lib/mockWebRTC";
 import { useInterstitialAd } from "../hooks/useInterstitialAd";
+import { useFaceFilters } from "../hooks/useFaceFilters";
+import FaceFilterPanel from "../components/FaceFilterPanel";
+import { FaceFilter } from "../lib/faceFilters";
 import "../css/VideoChat.css";
 
 interface Offer {
@@ -54,6 +57,17 @@ export default function VideoChat() {
   const { isPremium, setPremium } = usePremium();
   const { coins, isLoading: coinsLoading } = useCoin();
   const { addFriend, canAddMoreFriends, friends } = useFriends();
+  
+  // Check if user has ULTRA+ premium (3 months plan)
+  useEffect(() => {
+    const checkUltraPremium = () => {
+      // Check if user has the highest tier premium
+      const premiumPlan = localStorage.getItem('ajnabicam_premium_plan');
+      setIsUltraPremium(isPremium && premiumPlan === 'ultra-quarterly');
+    };
+    
+    checkUltraPremium();
+  }, [isPremium]);
   const location = useLocation();
   const [remoteChatToken, setRemoteChatToken] = useState<string | null>(null);
   const [isSearchingForMatch, setIsSearchingForMatch] = useState(false);
@@ -77,6 +91,17 @@ export default function VideoChat() {
   const [showTreasureChest, setShowTreasureChest] = useState(false);
   const [isVoiceOnly, setIsVoiceOnly] = useState(false);
   const [partnerPremium, setPartnerPremium] = useState(false);
+  const [showFaceFilters, setShowFaceFilters] = useState(false);
+  const [remoteVideoRef, setRemoteVideoRef] = useState<HTMLVideoElement | null>(null);
+  const [isUltraPremium, setIsUltraPremium] = useState(false);
+
+  // Face filters hook
+  const {
+    currentFilter,
+    isFilterActive,
+    applyFilter,
+    removeFilter,
+  } = useFaceFilters(remoteVideoRef);
 
   // Friends system state
   const [showStayConnected, setShowStayConnected] = useState(false);
@@ -1084,6 +1109,13 @@ export default function VideoChat() {
                     <span className="text-white text-sm font-bold">Friend</span>
                   </div>
                 )}
+                {isFilterActive && (
+                  <div className="mt-2 bg-purple-500 px-3 py-1 rounded-full">
+                    <span className="text-white text-sm font-bold">
+                      Filter: {currentFilter?.name}
+                    </span>
+                  </div>
+                )}
               </div>
             ) : (
               <ReactPlayer
@@ -1093,6 +1125,13 @@ export default function VideoChat() {
                 muted={false}
                 width="100%"
                 height="100%"
+                onReady={() => {
+                  // Get the video element for face filters
+                  const videoElement = document.querySelector('video[src*="blob:"]') as HTMLVideoElement;
+                  if (videoElement) {
+                    setRemoteVideoRef(videoElement);
+                  }
+                }}
               />
             )
           ) : (
@@ -1149,6 +1188,40 @@ export default function VideoChat() {
               <span className="text-white text-sm font-bold">
                 👥 Friend Call
               </span>
+            </div>
+          )}
+
+          {/* Face Filter Indicator */}
+          {isFilterActive && remoteStream && (
+            <div className="absolute top-4 right-4 bg-purple-500 px-3 py-1 rounded-full z-30 flex items-center gap-2">
+              <span className="text-white text-sm font-bold">
+                {currentFilter?.icon} {currentFilter?.name}
+              </span>
+            </div>
+          )}
+
+          {/* Face Filter Button - Only for ULTRA+ users */}
+          {remoteStream && !isVoiceOnly && (
+            <div className="absolute bottom-4 left-4 z-30">
+              <Button
+                onClick={() => setShowFaceFilters(true)}
+                className={`p-3 rounded-full shadow-lg transition-all duration-200 ${
+                  isUltraPremium
+                    ? isFilterActive
+                      ? "bg-purple-500 hover:bg-purple-600 text-white"
+                      : "bg-white/90 hover:bg-white text-purple-500"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+                disabled={!isUltraPremium}
+              >
+                <span className="text-lg">🎭</span>
+              </Button>
+              
+              {!isUltraPremium && (
+                <div className="absolute -top-1 -right-1 bg-yellow-500 rounded-full p-1">
+                  <Crown className="w-3 h-3 text-white" />
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -1261,6 +1334,18 @@ export default function VideoChat() {
       <TreasureChest
         isOpen={showTreasureChest}
         onClose={() => setShowTreasureChest(false)}
+      />
+
+      <FaceFilterPanel
+        isOpen={showFaceFilters}
+        onClose={() => setShowFaceFilters(false)}
+        onFilterSelect={(filter: FaceFilter) => {
+          applyFilter(filter);
+          setShowFaceFilters(false);
+        }}
+        currentFilter={currentFilter}
+        isUltraPremium={isUltraPremium}
+        onUpgrade={handleUpgrade}
       />
 
       <StayConnectedModal

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCoin } from "../context/CoinProvider";
+import { usePremium } from "../context/PremiumProvider";
 import PendingAdsModal from "./PendingAdsModal";
 
 interface AppStartupCheckProps {
@@ -8,6 +9,7 @@ interface AppStartupCheckProps {
 
 export default function AppStartupCheck({ children }: AppStartupCheckProps) {
   const { pendingAds } = useCoin();
+  const { isPremium } = usePremium();
   const [showPendingAds, setShowPendingAds] = useState(false);
   const [startupChecked, setStartupChecked] = useState(false);
 
@@ -16,11 +18,19 @@ export default function AppStartupCheck({ children }: AppStartupCheckProps) {
     if (!startupChecked) {
       setStartupChecked(true);
       
+      // Check if user has ULTRA+ premium and show welcome message
+      const premiumPlan = localStorage.getItem('ajnabicam_premium_plan');
+      if (isPremium && premiumPlan === 'ultra-quarterly') {
+        setTimeout(() => {
+          alert('🎭 Welcome ULTRA+ user! You can now apply face filters to your partner\'s video during calls. Look for the filter button in video chat!');
+        }, 2000);
+      }
+      
       if (pendingAds > 0) {
         setShowPendingAds(true);
       }
     }
-  }, [pendingAds, startupChecked]);
+  }, [pendingAds, startupChecked, isPremium]);
 
   const handleAllAdsWatched = () => {
     setShowPendingAds(false);

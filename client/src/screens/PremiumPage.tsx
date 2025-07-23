@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Crown, Check, X, ArrowLeft, Heart, Star, Sparkles, Zap, Shield, Users, Video, MessageCircle } from "lucide-react";
+import { Camera } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { usePremium } from "../context/PremiumProvider";
 
@@ -77,6 +78,9 @@ export default function PremiumPage({ onPurchase }: PremiumPageProps) {
     } else {
       expiry = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
     }
+    
+    // Store the premium plan type for feature access
+    localStorage.setItem('ajnabicam_premium_plan', plan);
     
     setPremium(true, expiry);
     
@@ -163,6 +167,12 @@ export default function PremiumPage({ onPurchase }: PremiumPageProps) {
       description: "Get connected to premium users faster",
       color: "text-royal-500"
     }
+    {
+      icon: Camera,
+      title: "Face Filters",
+      description: "Apply Instagram-style filters to your partner's video (ULTRA+ only)",
+      color: "text-purple-500"
+    },
   ];
 
   return (
