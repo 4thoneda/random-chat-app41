@@ -1173,8 +1173,8 @@ export default function VideoChat() {
 
           {/* Friend indicator overlay */}
           {isFriendCall && remoteStream && (
-            <div className="absolute top-4 left-4 bg-green-500 px-3 py-1 rounded-full z-30">
-              <span className="text-white text-sm font-bold">
+            <div className="absolute top-3 left-3 bg-green-500 px-2 py-1 rounded-full z-30">
+              <span className="text-white text-xs font-bold">
                 👥 Friend Call
               </span>
             </div>
