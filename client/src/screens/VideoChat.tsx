@@ -1191,10 +1191,10 @@ export default function VideoChat() {
 
           {/* Face Filter Button - Only for ULTRA+ users */}
           {remoteStream && !isVoiceOnly && (
-            <div className="absolute bottom-4 left-4 z-30">
+            <div className="absolute bottom-3 left-3 z-30">
               <Button
                 onClick={() => setShowFaceFilters(true)}
-                className={`p-3 rounded-full shadow-lg transition-all duration-200 ${
+                className={`p-2 rounded-full shadow-lg transition-all duration-200 ${
                   isUltraPremium
                     ? isFilterActive
                       ? "bg-purple-500 hover:bg-purple-600 text-white"
@@ -1203,9 +1203,9 @@ export default function VideoChat() {
                 }`}
                 disabled={!isUltraPremium}
               >
-                <span className="text-lg">🎭</span>
+                <span className="text-base">🎭</span>
               </Button>
-              
+
               {!isUltraPremium && (
                 <div className="absolute -top-1 -right-1 bg-yellow-500 rounded-full p-1">
                   <Crown className="w-3 h-3 text-white" />
