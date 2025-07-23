@@ -422,7 +422,7 @@ const ChatPageContent = ({
     null,
   );
   const navigate = useNavigate();
-  const { isPremium } = usePremium();
+  const { isPremium, isUltraPremium } = usePremium();
 
   const handleLongPress = (chatId: number) => {
     setLongPressedChatId(chatId);
