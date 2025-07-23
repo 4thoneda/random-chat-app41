@@ -318,7 +318,7 @@ export default function ProfilePage() {
               Get the VIP treatment, and enjoy better ways to connect with incredible people.
             </p>
             <button
-              onClick={() => setShowPremiumPaywall(true)}
+              onClick={() => navigate("/premium")}
               className="bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
             >
               Explore Premium+
