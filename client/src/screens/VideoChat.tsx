@@ -1094,9 +1094,10 @@ export default function VideoChat() {
         </div>
       )}
 
-      {/* Video Streams */}
-      <div className="flex-1 flex flex-col items-center justify-start w-full px-2 pb-32 pt-2 relative">
-        <div className="w-full h-[65vh] rounded-3xl shadow-2xl bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 overflow-hidden relative border-2 border-peach-200/50 flex items-center justify-center">
+      {/* Video Streams - Split Layout */}
+      <div className="flex-1 flex flex-col w-full px-2 pb-32 pt-2 gap-2">
+        {/* Other Person's Video - Upper Half */}
+        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 overflow-hidden relative border-2 border-peach-200/50 flex items-center justify-center">
           {remoteStream ? (
             isVoiceOnly ? (
               <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-teal-400">
