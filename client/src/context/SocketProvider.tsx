@@ -36,8 +36,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       let socketUrl: string;
 
       if (window.location.hostname.includes('webcontainer-api.io')) {
-        // WebContainer environment - use the exposed port URL
-        socketUrl = window.location.origin.replace('5173', '8000');
+        // WebContainer environment - use port 80 (mapped from server's 8000)
+        const baseUrl = window.location.origin.replace('5173', '80');
+        socketUrl = baseUrl;
       } else if (window.location.hostname === "localhost") {
         socketUrl = "http://localhost:8000";
       } else {
@@ -69,8 +70,34 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       newSocket.on("connect_error", (error) => {
         console.error("Socket connection error:", error);
         
-        // Try alternative port if localhost
-        if (window.location.hostname === "localhost" && socketUrl.includes(":8000")) {
+        // Try alternative port based on environment
+        if (window.location.hostname.includes('webcontainer-api.io')) {
+          console.log("Trying alternative WebContainer port 81...");
+          const altUrl = window.location.origin.replace('5173', '81');
+          const altSocket = io(altUrl, {
+            transports: ["websocket", "polling"],
+            secure: window.location.protocol === 'https:',
+            timeout: 20000,
+            forceNew: true,
+            reconnection: true,
+            reconnectionAttempts: 3,
+            reconnectionDelay: 1000,
+            withCredentials: true,
+          });
+          
+          altSocket.on("connect", () => {
+            console.log("Connected to alternative WebContainer port:", altSocket.id);
+            setSocket(altSocket);
+            setIsUsingMockMode(false);
+          });
+          
+          altSocket.on("connect_error", () => {
+            console.log("Alternative WebContainer port also failed, falling back to mock matching mode");
+            setIsUsingMockMode(true);
+            mockMatching.startBotSimulation();
+            altSocket.close();
+          });
+        } else if (window.location.hostname === "localhost" && socketUrl.includes(":8000")) {
           console.log("Trying alternative port 8001...");
           const altSocket = io("http://localhost:8001", {
             transports: ["websocket", "polling"],
