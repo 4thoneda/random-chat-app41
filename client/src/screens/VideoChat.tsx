@@ -34,6 +34,7 @@ import MockWebRTC from "../lib/mockWebRTC";
 import { useInterstitialAd } from "../hooks/useInterstitialAd";
 import { useFaceFilters } from "../hooks/useFaceFilters";
 import FaceFilterPanel from "../components/FaceFilterPanel";
+import PremiumBadge from "../components/PremiumBadge";
 import { FaceFilter } from "../lib/faceFilters";
 import "../css/VideoChat.css";
 
