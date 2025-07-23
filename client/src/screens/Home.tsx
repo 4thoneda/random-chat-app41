@@ -254,7 +254,10 @@ export default function Home() {
                       {t("app.name")}
                     </h1>
                     {isUltraPremium() && (
-                      <PremiumBadge plan="ultra-quarterly" size="sm" />
+                      <div className="flex items-center gap-1">
+                        <PremiumBadge plan="ultra-quarterly" size="sm" />
+                        <div className="text-yellow-300 animate-pulse">✨</div>
+                      </div>
                     )}
                     {isProMonthly() && (
                       <PremiumBadge plan="pro-monthly" size="sm" />
