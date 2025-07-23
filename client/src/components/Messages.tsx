@@ -178,17 +178,66 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
         console.log(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
     }, []);
 
+    // Handle typing status for premium users
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+
+        // Typing indicator for premium users
+        if (isUltraPremium() || isProMonthly()) {
+            if (!isTyping) {
+                setIsTyping(true);
+                socket?.emit("typing:start", { targetChatToken: remoteChatToken });
+            }
+
+            // Clear existing timeout
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
+
+            // Set new timeout
+            const timeout = setTimeout(() => {
+                setIsTyping(false);
+                socket?.emit("typing:end", { targetChatToken: remoteChatToken });
+            }, 2000);
+
+            setTypingTimeout(timeout);
+        }
+    };
+
     useEffect(() => {
         socket?.on("message:recieved", handleMessageReceived);
         socket?.on("secret:mode:changed", ({ enabled }: { enabled: boolean }) => {
             setIsSecretMode(enabled);
         });
 
+        // Read receipt events for premium users
+        socket?.on("message:read", ({ messageId }: { messageId: string }) => {
+            setMessagesArray(prev => prev.map(msg =>
+                msg.id === messageId ? { ...msg, isRead: true } : msg
+            ));
+        });
+
+        // Typing status events for premium users
+        socket?.on("typing:start", () => {
+            setPartnerTyping(true);
+        });
+
+        socket?.on("typing:end", () => {
+            setPartnerTyping(false);
+        });
+
         return () => {
             socket?.off("message:recieved", handleMessageReceived);
             socket?.off("secret:mode:changed");
+            socket?.off("message:read");
+            socket?.off("typing:start");
+            socket?.off("typing:end");
+
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
         }
-    }, [handleMessageReceived, socket]);
+    }, [handleMessageReceived, socket, typingTimeout]);
 
     return (
         <div className="flex flex-1 flex-col h-full">
