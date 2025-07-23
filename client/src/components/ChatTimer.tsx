@@ -95,7 +95,13 @@ export default function ChatTimer({ isPremium, isConnected, partnerPremium, onTi
             </span>
           </div>
           
-          {hasPremiumAccess ? (
+          {isUltraPremium ? (
+            <div className="flex items-center gap-2 text-purple-600">
+              <Infinity className="h-6 w-6 text-purple-500" />
+              <span className="font-bold text-purple-600">Unlimited</span>
+              <Crown className="h-4 w-4 text-yellow-500" />
+            </div>
+          ) : hasPremiumAccess ? (
             <div className="flex items-center gap-2 text-purple-600">
               <div className={`font-mono text-xl font-bold ${getTimeColor()}`}>
                 {formatTime(timeLeft)}
