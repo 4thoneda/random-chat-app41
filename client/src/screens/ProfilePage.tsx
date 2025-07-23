@@ -54,7 +54,7 @@ export default function ProfilePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const { isPremium, isUltraPremium } = usePremium();
+  const { isPremium, isUltraPremium, setPremium } = usePremium();
   const { coins } = useCoin();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
