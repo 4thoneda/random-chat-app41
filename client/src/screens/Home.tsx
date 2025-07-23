@@ -152,24 +152,24 @@ export default function Home() {
     navigate("/premium");
   };
 
-  const handlePremiumPurchase = (plan: string) => {
-    const now = new Date();
-    const expiry = new Date(now);
-    if (plan === "weekly") {
-      expiry.setDate(now.getDate() + 7);
-    } else {
-      expiry.setMonth(now.getMonth() + 1);
-    }
+  // const handlePremiumPurchase = (plan: string) => {
+  //   const now = new Date();
+  //   const expiry = new Date(now);
+  //   if (plan === "weekly") {
+  //     expiry.setDate(now.getDate() + 7);
+  //   } else {
+  //     expiry.setMonth(now.getMonth() + 1);
+  //   }
 
-    setPremium(true, expiry);
-    setShowPaywall(false);
+  //   setPremium(true, expiry);
+  //   setShowPaywall(false);
 
-    showBonusNotification(
-      "🎉 Welcome to Premium!",
-      `Your ${plan} subscription is now active! Enjoy unlimited features.`,
-      () => {},
-    );
-  };
+  //   showBonusNotification(
+  //     "🎉 Welcome to Premium!",
+  //     `Your ${plan} subscription is now active! Enjoy unlimited features.`,
+  //     () => {},
+  //   );
+  // }; // Now handled in PremiumPage
 
   // Show loading while checking authentication and onboarding status
   if (coinsLoading && currentUser) {
