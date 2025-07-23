@@ -1101,8 +1101,8 @@ export default function VideoChat() {
           {remoteStream ? (
             isVoiceOnly ? (
               <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-teal-400">
-                <div className="text-7xl mb-2">🎙️</div>
-                <p className="text-white text-lg font-semibold drop-shadow">
+                <div className="text-5xl mb-2">🎙️</div>
+                <p className="text-white text-base font-semibold drop-shadow">
                   {partnerName}'s Voice
                 </p>
                 {isFriendCall && (
