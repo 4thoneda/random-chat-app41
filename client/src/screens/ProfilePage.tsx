@@ -225,11 +225,13 @@ export default function ProfilePage() {
               <Camera size={18} className="text-white" />
             </button>
 
-            {/* Profile Views Badge */}
-            <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
-              <Eye size={14} className="text-white" />
-              <span className="text-white text-sm font-medium">{profileViews.toLocaleString()}</span>
-            </div>
+            {/* Profile Views Badge - Only for Premium Users */}
+            {isPremium && (
+              <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm px-3 py-1 flex items-center gap-2">
+                <Eye size={14} className="text-white" />
+                <span className="text-white text-sm font-medium">{profileViews.toLocaleString()}</span>
+              </div>
+            )}
 
             {/* Premium Badge */}
             {isPremium && (
