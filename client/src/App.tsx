@@ -20,6 +20,7 @@ import PersonalChat from "./screens/PersonalChat";
 import FriendsPage from "./screens/FriendsPage";
 import AIChatbotPage from "./screens/AIChatbotPage";
 import AdTestingPage from "./screens/AdTestingPage";
+import PremiumPage from "./screens/PremiumPage";
 import SpinWheel from "./components/SpinWheel";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
@@ -105,6 +106,7 @@ function App() {
         <Route path="/refer" element={<ReferToUnlock />} />
         <Route path="/referral-code" element={<ReferralCodeScreen />} />
         <Route path="/ai-chatbot" element={<AIChatbotPage />} />
+        <Route path="/premium" element={<PremiumPage />} />
         <Route path="/spin-wheel" element={<SpinWheel />} />
         <Route path="/storage-debug" element={<StorageDebugPage />} />
         <Route path="/firebase-debug" element={<FirebaseDebugPage />} />

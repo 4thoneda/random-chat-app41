@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useSocket } from "../context/SocketProvider"
 import { usePremium } from "../context/PremiumProvider"
 import { Button } from "./ui/button";
@@ -6,7 +7,7 @@ import { Input } from "./ui/input";
 import { Send, Eye, Palette } from "lucide-react";
 import SecretChatModal from "./SecretChatModal";
 import WallpaperSelector from "./WallpaperSelector";
-import PremiumPaywall from "./PremiumPaywall";
+// import PremiumPaywall from "./PremiumPaywall"; // Now using separate page
 
 interface MessageProps{
     remoteChatToken: string | null;
@@ -33,6 +34,7 @@ const wallpaperGradients: Record<string, string> = {
 };
 
 export default function Messages({remoteChatToken, messagesArray, setMessagesArray}: MessageProps) {
+    const navigate = useNavigate();
     const {socket} = useSocket();
     const { isPremium } = usePremium();
     const [message, setMessage] = useState<string>('');
@@ -40,7 +42,7 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
     const [showSecretModal, setShowSecretModal] = useState<boolean>(false);
     const [showWallpaperSelector, setShowWallpaperSelector] = useState<boolean>(false);
     const [currentWallpaper, setCurrentWallpaper] = useState<string>('default');
-    const [showPaywall, setShowPaywall] = useState<boolean>(false);
+    // const [showPaywall, setShowPaywall] = useState<boolean>(false); // Now using separate page
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -147,14 +149,14 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
     };
 
     const handleUpgrade = useCallback(() => {
-        setShowPaywall(true);
+        navigate('/premium');
         setShowSecretModal(false);
         setShowWallpaperSelector(false);
-    }, []);
+    }, [navigate]);
 
     const handlePremiumPurchase = useCallback((plan: string) => {
         console.log(`Processing payment for ${plan} plan`);
-        setShowPaywall(false);
+        // setShowPaywall(false); // Now handled in PremiumPage
         // Don't show alert here as it's handled by the parent component
         console.log(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
     }, []);
@@ -294,11 +296,7 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                 onUpgrade={handleUpgrade}
             />
 
-            <PremiumPaywall
-                isOpen={showPaywall}
-                onClose={() => setShowPaywall(false)}
-                onPurchase={handlePremiumPurchase}
-            />
+            {/* PremiumPaywall now moved to separate /premium page */}
         </div>
     );
 }

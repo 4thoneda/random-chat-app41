@@ -15,7 +15,7 @@ interface PremiumPaywallProps {
 
 export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumPaywallProps) {
 
-  const [selectedPlan, setSelectedPlan] = useState<string>("weekly");
+  const [selectedPlan, setSelectedPlan] = useState<string>("vip-weekly");
 
   // Razorpay handler
   const handleRazorpay = async (): Promise<void> => {
@@ -30,7 +30,9 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
       return;
     }
     
-    const amount = plan.id === "weekly" ? 9900 : 29900; // in paise (₹99/₹299)
+    const amount = plan.id === "vip-weekly" ? 9900 :
+                   plan.id === "pro-monthly" ? 29900 :
+                   plan.id === "ultra-quarterly" ? 89900 : 9900; // in paise
     const options = {
       key: RAZORPAY_KEY_ID,
       amount,
@@ -68,20 +70,36 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
 
   const plans = [
     {
-      id: "weekly",
-      name: "Weekly Premium",
+      id: "vip-weekly",
+      name: "VIP Weekly",
       price: "₹99",
       duration: "/week",
-      savings: "",
-      popular: false
+      originalPrice: "₹199",
+      savings: "50% OFF First Week!",
+      popular: false,
+      description: "Then ₹199/week",
+      badge: "🎯 Trial Offer"
     },
     {
-      id: "monthly",
-      name: "Monthly Premium", 
+      id: "pro-monthly",
+      name: "Pro Monthly",
       price: "₹299",
       duration: "/month",
-      savings: "Save ₹97!",
-      popular: true
+      savings: "Most Popular!",
+      popular: true,
+      description: "Best value for regular users",
+      badge: "⭐ Recommended"
+    },
+    {
+      id: "ultra-quarterly",
+      name: "ULTRA+ (3 Months)",
+      price: "₹899",
+      duration: "/3 months",
+      originalPrice: "₹897",
+      savings: "Save ₹498!",
+      popular: false,
+      description: "Maximum savings & features",
+      badge: "�� Premium"
     }
   ];
 
@@ -146,16 +164,29 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
                     Most Popular! 🔥
                   </span>
                 )}
-                <div className="flex justify-between items-center">
-                  <div>
+
+                {plan.badge && !plan.popular && (
+                  <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full">
+                    {plan.badge}
+                  </span>
+                )}
+
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
                     <h4 className="font-semibold text-gray-800 dark:text-white">{plan.name}</h4>
+                    {plan.description && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{plan.description}</p>
+                    )}
                     {plan.savings && (
-                      <p className="text-sm text-green-600 font-medium">{plan.savings}</p>
+                      <p className="text-sm text-green-600 font-medium mt-1">{plan.savings}</p>
                     )}
                   </div>
                   <div className="text-right">
+                    {plan.originalPrice && (
+                      <div className="text-sm text-gray-500 line-through">{plan.originalPrice}</div>
+                    )}
                     <span className="text-2xl font-bold text-purple-600">{plan.price}</span>
-                    <span className="text-gray-500">{plan.duration}</span>
+                    <span className="text-gray-500 text-sm block">{plan.duration}</span>
                   </div>
                 </div>
               </div>

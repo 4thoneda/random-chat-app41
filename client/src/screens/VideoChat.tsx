@@ -9,7 +9,7 @@ import ReactPlayer from "react-player";
 import { Button } from "../components/ui/button";
 import Messages from "../components/Messages";
 import ChatTimer from "../components/ChatTimer";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import TreasureChest from "../components/TreasureChest";
 import ReportUserModal from "../components/ReportUserModal";
 import BlockUserModal from "../components/BlockUserModal";
@@ -73,7 +73,7 @@ export default function VideoChat() {
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
   const [showTreasureChest, setShowTreasureChest] = useState(false);
   const [isVoiceOnly, setIsVoiceOnly] = useState(false);
   const [partnerPremium, setPartnerPremium] = useState(false);
@@ -180,7 +180,7 @@ export default function VideoChat() {
       }
 
       setPremium(true, expiry);
-      setShowPaywall(false);
+      // setShowPaywall(false); // Now handled in PremiumPage
 
       alert(
         `🎉 Welcome to Premium! Your ${plan} subscription is now active until ${expiry.toLocaleDateString()}`,
@@ -255,8 +255,8 @@ export default function VideoChat() {
   }, [isFriendCall, handleSkip]);
 
   const handleUpgrade = useCallback(() => {
-    setShowPaywall(true);
-  }, []);
+    navigate("/premium");
+  }, [navigate]);
 
   const handleStayConnected = useCallback(
     (wantToStay: boolean) => {
@@ -266,7 +266,7 @@ export default function VideoChat() {
         // Check if user can add more friends
         if (!canAddMoreFriends) {
           setShowStayConnected(false);
-          setShowPaywall(true);
+          navigate("/premium");
           return;
         }
 
@@ -383,7 +383,7 @@ export default function VideoChat() {
   // Premium feature: Switch to voice-only mode during call
   const toggleVoiceOnlyMode = useCallback(async () => {
     if (!isPremium) {
-      setShowPaywall(true);
+      navigate("/premium");
       return;
     }
 
@@ -829,7 +829,7 @@ export default function VideoChat() {
             alert(
               `❌ Couldn't add ${partnerName} as friend. You've reached the free limit of 3 friends. Upgrade to Premium for unlimited friends!`,
             );
-            setShowPaywall(true);
+            navigate("/premium");
           }
 
           setShowStayConnected(false);
@@ -1256,11 +1256,7 @@ export default function VideoChat() {
       )}
 
       {/* Modals */}
-      <PremiumPaywall
-        isOpen={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
 
       <TreasureChest
         isOpen={showTreasureChest}

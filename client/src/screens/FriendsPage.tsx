@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BottomNavBar from '../components/BottomNavBar';
-import PremiumPaywall from '../components/PremiumPaywall';
+// import PremiumPaywall from '../components/PremiumPaywall'; // Now using separate page
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { ArrowLeft, Video, Crown, Users, Trash2, UserPlus } from 'lucide-react';
@@ -13,7 +13,7 @@ const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
   const { friends, removeFriend, canAddMoreFriends, maxFreeLimit } = useFriends();
   const { isPremium, setPremium } = usePremium();
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
 
   const handleBackClick = () => {
     navigate(-1);
@@ -40,7 +40,7 @@ const FriendsPage: React.FC = () => {
   };
 
   const handleUpgrade = () => {
-    setShowPaywall(true);
+    navigate('/premium');
   };
 
   const handlePremiumPurchase = (plan: string) => {
@@ -53,7 +53,7 @@ const FriendsPage: React.FC = () => {
     }
     
     setPremium(true, expiry);
-    setShowPaywall(false);
+    // setShowPaywall(false); // Now handled in PremiumPage
     alert(`🎉 Welcome to Premium! You can now add unlimited friends!`);
   };
 
@@ -210,11 +210,7 @@ const FriendsPage: React.FC = () => {
         <BottomNavBar />
       </main>
 
-      <PremiumPaywall
-        isOpen={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
     </>
   );
 };

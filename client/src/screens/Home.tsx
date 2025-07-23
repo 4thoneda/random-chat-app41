@@ -22,7 +22,7 @@ import {
   User,
 } from "lucide-react";
 import GenderFilter from "../components/GenderFilter";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import TreasureChest from "../components/TreasureChest";
 import BottomNavBar from "../components/BottomNavBar";
 import { usePremium } from "../context/PremiumProvider";
@@ -77,7 +77,7 @@ export default function Home() {
   const { t } = useLanguage();
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
   const [showTreasureChest, setShowTreasureChest] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState(12847);
@@ -149,27 +149,27 @@ export default function Home() {
   }, [navigate]);
 
   const handleUpgrade = () => {
-    setShowPaywall(true);
+    navigate("/premium");
   };
 
-  const handlePremiumPurchase = (plan: string) => {
-    const now = new Date();
-    const expiry = new Date(now);
-    if (plan === "weekly") {
-      expiry.setDate(now.getDate() + 7);
-    } else {
-      expiry.setMonth(now.getMonth() + 1);
-    }
+  // const handlePremiumPurchase = (plan: string) => {
+  //   const now = new Date();
+  //   const expiry = new Date(now);
+  //   if (plan === "weekly") {
+  //     expiry.setDate(now.getDate() + 7);
+  //   } else {
+  //     expiry.setMonth(now.getMonth() + 1);
+  //   }
 
-    setPremium(true, expiry);
-    setShowPaywall(false);
+  //   setPremium(true, expiry);
+  //   setShowPaywall(false);
 
-    showBonusNotification(
-      "🎉 Welcome to Premium!",
-      `Your ${plan} subscription is now active! Enjoy unlimited features.`,
-      () => {},
-    );
-  };
+  //   showBonusNotification(
+  //     "🎉 Welcome to Premium!",
+  //     `Your ${plan} subscription is now active! Enjoy unlimited features.`,
+  //     () => {},
+  //   );
+  // }; // Now handled in PremiumPage
 
   // Show loading while checking authentication and onboarding status
   if (coinsLoading && currentUser) {
@@ -454,11 +454,7 @@ export default function Home() {
         <BottomNavBar />
       </main>
 
-      <PremiumPaywall
-        isOpen={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
 
       <TreasureChest
         isOpen={showTreasureChest}

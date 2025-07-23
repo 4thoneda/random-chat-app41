@@ -41,7 +41,7 @@ import BannerAd from "../components/BannerAd";
 import LanguageSelector from "../components/LanguageSelector";
 import SettingsModal from "../components/SettingsModal";
 import HelpSupportModal from "../components/HelpSupportModal";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import { TestTube } from "lucide-react";
 
 export default function ProfilePage() {
@@ -61,7 +61,7 @@ export default function ProfilePage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [settingType, setSettingType] = useState<'privacy' | 'notifications' | 'account' | 'general' | null>(null);
   const [showHelpModal, setShowHelpModal] = useState(false);
-  const [showPremiumPaywall, setShowPremiumPaywall] = useState(false);
+  // const [showPremiumPaywall, setShowPremiumPaywall] = useState(false); // Now using separate page
   const [referralCount, setReferralCount] = useState(0);
   const [profileCompletion, setProfileCompletion] = useState(35);
 
@@ -174,7 +174,7 @@ export default function ProfilePage() {
     }
 
     setPremium(true, expiry);
-    setShowPremiumPaywall(false);
+    // setShowPremiumPaywall(false); // Now handled in PremiumPage
     alert(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
   };
 
@@ -318,7 +318,7 @@ export default function ProfilePage() {
               Get the VIP treatment, and enjoy better ways to connect with incredible people.
             </p>
             <button
-              onClick={() => setShowPremiumPaywall(true)}
+              onClick={() => navigate("/premium")}
               className="bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
             >
               Explore Premium+
@@ -442,11 +442,7 @@ export default function ProfilePage() {
         onClose={() => setShowHelpModal(false)}
       />
 
-      <PremiumPaywall
-        isOpen={showPremiumPaywall}
-        onClose={() => setShowPremiumPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
     </div>
   );
 }
