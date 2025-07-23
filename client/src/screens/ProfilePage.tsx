@@ -20,7 +20,9 @@ import {
   Plus,
   X,
   Star,
-  Edit3
+  Edit3,
+  Check,
+  Info
 } from "lucide-react";
 import {
   doc,
@@ -44,7 +46,8 @@ import { TestTube } from "lucide-react";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const [name, setName] = useState("Mystery Person");
+  const [name, setName] = useState("V");
+  const [age, setAge] = useState(22);
   const [editingName, setEditingName] = useState(false);
   const [bio, setBio] = useState("");
   const [editingBio, setEditingBio] = useState(false);
@@ -52,7 +55,6 @@ export default function ProfilePage() {
   const [additionalImages, setAdditionalImages] = useState<string[]>([]);
   const [referralCode, setReferralCode] = useState("");
   const [loading, setLoading] = useState(true);
-  const [age, setAge] = useState<number | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
@@ -61,12 +63,37 @@ export default function ProfilePage() {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showPremiumPaywall, setShowPremiumPaywall] = useState(false);
   const [referralCount, setReferralCount] = useState(0);
+  const [profileCompletion, setProfileCompletion] = useState(35);
 
   const { isPremium, setPremium } = usePremium();
   const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const additionalImageInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
+
+  // Premium features data
+  const premiumFeatures = [
+    { name: "Get exclusive photo insights", premium: true, free: false },
+    { name: "Fast track your likes", premium: true, free: false },
+    { name: "Stand out every day", premium: true, free: false },
+    { name: "Unlimited likes", premium: true, free: false },
+    { name: "See who liked you", premium: true, free: false },
+    { name: "Advanced filters", premium: true, free: false },
+    { name: "Incognito mode", premium: true, free: false },
+    { name: "Travel mode", premium: true, free: false },
+    { name: "2 Compliments a week", premium: true, free: false },
+    { name: "10 SuperSwipes a week", premium: true, free: false },
+    { name: "2 Spotlights a week", premium: true, free: false },
+    { name: "Unlimited Extends", premium: true, free: false },
+    { name: "Unlimited Rematch", premium: true, free: false },
+    { name: "Unlimited Backtrack", premium: true, free: false },
+  ];
+
+  const tabs = [
+    { id: 'pay', label: 'Pay plan', active: true },
+    { id: 'dating', label: 'Dating advice', active: false },
+    { id: 'photo', label: 'Photo insights', active: false },
+  ];
 
   useEffect(() => {
     if (!user) return;
@@ -77,13 +104,22 @@ export default function ProfilePage() {
     const unsubscribe = onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setName(data.username || data.name || "Mystery Person");
-        setAge(data.age || null);
+        setName(data.username || data.name || "V");
+        setAge(data.age || 22);
         setBio(data.bio || "");
         setProfileImage(data.profileImage || null);
         setAdditionalImages(data.additionalImages || []);
         setReferralCode(data.referralCode || generateReferralCode(user.uid));
         setReferralCount(data.referralCount || 0);
+        
+        // Calculate profile completion
+        let completion = 0;
+        if (data.username) completion += 20;
+        if (data.profileImage) completion += 30;
+        if (data.bio) completion += 25;
+        if (data.age) completion += 15;
+        if (data.additionalImages?.length > 0) completion += 10;
+        setProfileCompletion(completion);
       }
       setLoading(false);
     });
@@ -92,38 +128,9 @@ export default function ProfilePage() {
   }, [user]);
 
   const generateReferralCode = (uid: string) => {
-    return uid.slice(0, 6).toUpperCase(); // e.g. A1B2C3
+    return uid.slice(0, 6).toUpperCase();
   };
 
-  const handleNameEdit = () => {
-    setEditingName(true);
-  };
-
-  const handleNameSave = async () => {
-    setEditingName(false);
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        username: name,
-        updatedAt: new Date()
-      });
-    }
-  };
-
-  const handleBioEdit = () => {
-    setEditingBio(true);
-  };
-
-  const handleBioSave = async () => {
-    setEditingBio(false);
-    if (user) {
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        bio: bio,
-        updatedAt: new Date()
-      });
-    }
-  };
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
@@ -157,82 +164,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAdditionalImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !user) return;
-
-    if (additionalImages.length >= 2) {
-      alert("You can only upload up to 2 additional photos");
-      return;
-    }
-
-    setUploadingImage(true);
-    setUploadProgress(0);
-
-    try {
-      const result = await uploadProfileImage(
-        file,
-        user.uid,
-        (progress) => setUploadProgress(progress)
-      );
-
-      const newAdditionalImages = [...additionalImages, result.url];
-      setAdditionalImages(newAdditionalImages);
-
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        additionalImages: newAdditionalImages,
-        updatedAt: new Date()
-      });
-
-      console.log("Additional image uploaded successfully!!");
-    } catch (error) {
-      console.error("Error uploading additional image:", error);
-      alert("Failed to upload image. Please try again.");
-    } finally {
-      setUploadingImage(false);
-      setUploadProgress(0);
-    }
-  };
-
-  const removeAdditionalImage = async (imageUrl: string) => {
-    if (!user) return;
-
-    const newAdditionalImages = additionalImages.filter(img => img !== imageUrl);
-    setAdditionalImages(newAdditionalImages);
-
-    const userRef = doc(db, "users", user.uid);
-    await updateDoc(userRef, {
-      additionalImages: newAdditionalImages,
-      updatedAt: new Date()
-    });
-  };
-  const handleCopyReferralCode = () => {
-    navigator.clipboard.writeText(referralCode);
-    alert("Referral code copied to clipboard!");
-  };
-
-  const handleShareReferralCode = () => {
-    const shareText = `Join me on AjnabiCam! Use my referral code: ${referralCode} to get 12 hours of Premium FREE! Download: https://ajnabicam.com`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'Join AjnabiCam',
-        text: shareText,
-        url: 'https://ajnabicam.com'
-      });
-    } else {
-      // Fallback for browsers that don't support Web Share API
-      navigator.clipboard.writeText(shareText);
-      alert("Referral message copied to clipboard! Share it with your friends.");
-    }
-  };
-
-  const handleSettingsClick = (type: 'privacy' | 'notifications' | 'account' | 'general') => {
-    setSettingType(type);
-    setShowSettingsModal(true);
-  };
-
   const handlePremiumPurchase = (plan: string) => {
     const now = new Date();
     const expiry = new Date(now);
@@ -247,48 +178,12 @@ export default function ProfilePage() {
     alert(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
   };
 
-  // Check if user has successfully referred someone (simulate for now)
-  const checkReferralSuccess = () => {
-    // In a real app, this would check if the referred user has signed up and completed onboarding
-    // For now, we'll simulate this by checking if they've shared their code
-    const hasShared = localStorage.getItem(`ajnabicam_shared_referral_${user?.uid}`);
-    return hasShared === 'true';
-  };
-
-  const handleReferralReward = async () => {
-    if (!user) return;
-
-    try {
-      // Mark as shared
-      localStorage.setItem(`ajnabicam_shared_referral_${user.uid}`, 'true');
-      
-      // Grant 12 hours of premium
-      const now = new Date();
-      const expiry = new Date(now.getTime() + 12 * 60 * 60 * 1000); // 12 hours
-      
-      setPremium(true, expiry);
-      
-      // Update referral count in Firestore
-      const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, {
-        referralCount: referralCount + 1,
-        lastReferralReward: new Date(),
-        updatedAt: new Date()
-      });
-
-      alert("🎉 Congratulations! You've earned 12 hours of Premium FREE for referring a friend!");
-    } catch (error) {
-      console.error("Error processing referral reward:", error);
-      alert("Error processing referral reward. Please try again.");
-    }
-  };
-
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-coral-600 mb-4">Please log in first</h2>
-          <Button onClick={() => navigate("/onboarding")} className="bg-coral-600 text-white">
+          <h2 className="text-xl font-bold text-gray-600 mb-4">Please log in first</h2>
+          <Button onClick={() => navigate("/onboarding")} className="bg-blue-600 text-white">
             Go to Login
           </Button>
         </div>
@@ -298,459 +193,236 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral-500 mx-auto mb-4"></div>
-          <p className="text-coral-600 font-medium">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20">
-      {/* Header with Back Button */}
-      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 text-white p-6 shadow-xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5"></div>
-        <div className="relative z-10 flex items-center gap-4">
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* Header */}
+      <div className="bg-white px-6 py-4 flex items-center justify-between border-b border-gray-100">
+        <div className="flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-full hover:bg-white/20 transition-colors"
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
-            <ArrowLeft size={24} />
+            <ArrowLeft size={24} className="text-gray-700" />
           </button>
-          <div>
-            <h1 className="text-2xl font-bold">{t('profile.title')}</h1>
-            <p className="text-sm text-peach-100">Manage your account and preferences</p>
-          </div>
+          <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
         </div>
+        <button
+          onClick={() => navigate('/profile')}
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <Settings size={24} className="text-gray-700" />
+        </button>
       </div>
 
-      <div className="max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-8 lg:space-y-10">
-
-
-        {/* Profile Card */}
-        <Card className="romantic-card shadow-xl">
-          <CardHeader className="text-center">
-            {/* User Name */}
-            <div className="text-center">
-              {editingName ? (
-                <div className="flex items-center justify-center gap-2">
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="border-b border-coral-300 focus:outline-none focus:border-coral-500 px-2 text-2xl text-center bg-transparent font-bold"
-                    autoFocus
-                    maxLength={20}
+      <div className="max-w-md mx-auto">
+        {/* Profile Section */}
+        <div className="bg-white px-6 py-6">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="relative">
+              <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200">
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
                   />
-                  <Button size="sm" onClick={handleNameSave} className="bg-coral-500 text-white">
-                    Save
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center gap-2">
-                  <h1 className="text-3xl font-bold text-coral-800">
-                    {name}
-                  </h1>
-                  <Button variant="ghost" size="icon" onClick={handleNameEdit}>
-                    <Pencil size={16} className="text-coral-600" />
-                  </Button>
-                </div>
-              )}
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-400 to-purple-500">
+                    <span className="text-white text-2xl font-bold">{name.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Profile completion percentage */}
+              <div className="absolute -bottom-2 -right-2 bg-black text-white text-xs px-2 py-1 rounded-full font-medium">
+                {profileCompletion}%
+              </div>
+              
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute bottom-0 right-0 bg-white border-2 border-gray-200 rounded-full p-1 hover:bg-gray-50 transition-colors"
+                disabled={uploadingImage}
+              >
+                <Camera size={12} className="text-gray-600" />
+              </button>
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
             </div>
-
-            {/* User Age */}
-            <div className="text-center mt-4">
-              {age ? (
-                <p className="text-xl text-gray-600 font-medium">{age} years old</p>
-              ) : (
-                <p className="text-lg text-gray-400 italic">Age not specified</p>
-              )}
+            
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-gray-900">{name}, {age}</h2>
+              <button className="mt-2 px-4 py-2 border border-gray-300 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                Complete profile
+              </button>
             </div>
+          </div>
 
-            {/* User Bio */}
-            <div className="text-center mt-6">
-              <h3 className="text-lg font-semibold text-coral-700 mb-2">About Me</h3>
+          {/* Tabs */}
+          <div className="flex gap-1 mb-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`flex-1 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  tab.active
+                    ? 'bg-black text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Feature Cards */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-yellow-100 rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                <Star className="w-5 h-5 text-yellow-800" />
+              </div>
               <div>
-                {editingBio ? (
-                  <div className="space-y-2">
-                    <Textarea
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      className="w-full text-left resize-none"
-                      rows={3}
-                      maxLength={500}
-                      placeholder="Tell people about yourself..."
-                      autoFocus
-                    />
-                    <div className="flex justify-center gap-2">
-                      <Button size="sm" onClick={handleBioSave} className="bg-coral-500 text-white">
-                        Save
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => setEditingBio(false)}>
-                        Cancel
-                      </Button>
+                <h3 className="font-semibold text-gray-900">Spotlight</h3>
+                <p className="text-sm text-gray-600">Stand out</p>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-100 rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                <Star className="w-5 h-5 text-yellow-800" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">SuperSwipe</h3>
+                <p className="text-sm text-gray-600">Get noticed</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Card */}
+          <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl p-6 text-center mb-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Premium+</h3>
+            <p className="text-gray-800 mb-4 text-sm leading-relaxed">
+              Get the VIP treatment, and enjoy better ways to connect with incredible people.
+            </p>
+            <button
+              onClick={() => setShowPremiumPaywall(true)}
+              className="bg-black text-white px-6 py-3 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+            >
+              Explore Premium+
+            </button>
+          </div>
+
+          {/* Features Comparison */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900">What you get:</h3>
+              <div className="flex gap-8">
+                <span className="text-sm font-semibold text-gray-900">Premium+</span>
+                <span className="text-sm font-semibold text-gray-400">Premium</span>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {premiumFeatures.slice(0, 3).map((feature, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-900 text-sm">{feature.name}</span>
+                    <Info className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex gap-8">
+                    <div className="w-6 flex justify-center">
+                      {feature.premium && <Check className="w-5 h-5 text-green-600" />}
+                    </div>
+                    <div className="w-6 flex justify-center">
+                      {feature.free && <Check className="w-5 h-5 text-green-600" />}
                     </div>
                   </div>
-                ) : (
-                  <div className="relative">
-                    <div>
-                      {bio ? (
-                        <p className="text-base text-gray-700 leading-relaxed text-left bg-gray-50 p-4 rounded-lg border">
-                          {bio}
-                        </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* All Features List (when not premium) */}
+        {!isPremium && (
+          <div className="bg-white px-6 py-6 border-t border-gray-100">
+            <div className="space-y-4">
+              {premiumFeatures.map((feature, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-900 text-sm">{feature.name}</span>
+                    <Info className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex gap-8">
+                    <div className="w-6 flex justify-center">
+                      {feature.premium && <Check className="w-5 h-5 text-green-600" />}
+                    </div>
+                    <div className="w-6 flex justify-center">
+                      {feature.free ? (
+                        <Check className="w-5 h-5 text-green-600" />
                       ) : (
-                        <p className="text-base text-gray-400 italic bg-gray-50 p-4 rounded-lg border">
-                          Add a bio to tell people about yourself
-                        </p>
+                        <X className="w-5 h-5 text-gray-300" />
                       )}
                     </div>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={handleBioEdit}
-                      className="absolute top-2 right-2"
-                    >
-                      <Edit3 size={14} className="text-coral-600" />
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Photos Section */}
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold text-coral-700 mb-4">My Photos</h3>
-              
-              {/* Main Profile Photo */}
-              <div className="mb-6">
-                <div className="relative mx-auto w-fit">
-                  <div className="jewelry-frame">
-                    <img
-                      src={
-                        profileImage ||
-                        "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
-                      }
-                      alt="Profile"
-                      className="w-48 h-48 rounded-lg object-cover border-4 border-white shadow-lg"
-                    />
-                  </div>
-                  
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute bottom-2 right-2 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploadingImage}
-                  >
-                    <Camera size={16} />
-                  </Button>
-                  
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-
-                  {uploadingImage && (
-                    <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                      <div className="text-center text-white">
-                        <div className="text-sm mb-2">{Math.round(uploadProgress)}%</div>
-                        <div className="w-24 h-2 bg-white/30 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-white transition-all duration-300"
-                            style={{ width: `${uploadProgress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 mt-2">Main Photo</p>
-              </div>
-
-              {/* Additional Photos - Vertical Stack */}
-              {additionalImages.length > 0 && (
-                <div className="space-y-4">
-                  {additionalImages.map((imageUrl, index) => (
-                    <div key={index} className="relative mx-auto w-fit group">
-                      <img
-                        src={imageUrl}
-                        alt={`Photo ${index + 2}`}
-                        className="w-48 h-48 object-cover rounded-lg border-2 border-gray-200 shadow-md"
-                      />
-                      <Button
-                        size="sm"
-                        onClick={() => removeAdditionalImage(imageUrl)}
-                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      <p className="text-sm text-gray-500 mt-2 text-center">Photo {index + 2}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {/* Add More Photos Button */}
-              {additionalImages.length < 2 && (
-                <div className="mt-6">
-                  <div className="w-48 h-48 mx-auto border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
-                    <input
-                      ref={additionalImageInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleAdditionalImageChange}
-                    />
-                    <Button
-                      variant="ghost"
-                      onClick={() => additionalImageInputRef.current?.click()}
-                      disabled={uploadingImage}
-                      className="w-full h-full flex flex-col items-center justify-center"
-                    >
-                      <Plus className="h-8 w-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500">Add Photo</span>
-                    </Button>
                   </div>
                 </div>
-              )}
+              ))}
             </div>
-          </CardHeader>
-        </Card>
-
-        {/* Referral Rewards Card */}
-        <Card className="romantic-card shadow-xl border-2 border-green-300">
-          <CardHeader className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-t-lg">
-            <h3 className="text-lg font-bold text-center">{t('profile.referral.title')}</h3>
-            <div className="text-center mt-2">
-              <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 inline-block">
-                <span className="text-sm font-medium">Successful Referrals: {referralCount}</span>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-6 space-y-4">
-            <div className="bg-green-50 rounded-xl p-4 border border-green-200">
-              <div className="text-center mb-3">
-                <h4 className="font-semibold text-green-800 mb-1">{t('profile.referral.id')}</h4>
-                <div className="bg-white border-2 border-green-300 rounded-lg px-4 py-3 font-mono text-lg font-bold text-green-700 select-all">
-                  {referralCode}
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleCopyReferralCode}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                >
-                  <Copy className="h-4 w-4 mr-2" />
-                  {t('profile.referral.copy')}
-                </Button>
-                <Button
-                  onClick={handleShareReferralCode}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share
-                </Button>
-              </div>
-            </div>
-
-            {/* Referral Reward Section */}
-            <div className="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-xl p-4 border border-orange-200">
-              <div className="text-center">
-                <div className="text-2xl mb-2">🎁</div>
-                <h4 className="font-bold text-orange-800 mb-2">
-                  Refer 1 Friend = 12 Hours FREE Premium!
-                </h4>
-                <p className="text-sm text-orange-700 mb-4">
-                  {t('profile.referral.share')}
-                </p>
-                
-                {checkReferralSuccess() ? (
-                  <Button
-                    onClick={handleReferralReward}
-                    className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-bold py-3"
-                  >
-                    🎉 Claim 12 Hours Premium!
-                  </Button>
-                ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-orange-600 mb-2">
-                      Share your code to unlock the reward!
-                    </p>
-                    <Button
-                      onClick={() => {
-                        handleShareReferralCode();
-                        // Simulate successful referral after sharing
-                        setTimeout(() => {
-                          localStorage.setItem(`ajnabicam_shared_referral_${user.uid}`, 'true');
-                          alert("🎉 Referral shared! You can now claim your 12 hours of Premium!");
-                        }, 2000);
-                      }}
-                      className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3"
-                    >
-                      📱 Share & Unlock Reward
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="text-center">
-              <p className="text-xs text-green-600 leading-relaxed">
-                💡 <strong>How it works:</strong> Share your referral code with friends. 
-                When they sign up and complete their first video call, you both get premium benefits!
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Settings Card */}
-        <Card className="romantic-card shadow-xl">
-          <CardHeader>
-            <h3 className="text-lg font-bold text-coral-800 text-center flex items-center justify-center gap-2">
-              <Settings className="h-5 w-5" />
-              {t('profile.settings')}
-            </h3>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button
-              onClick={() => handleSettingsClick('privacy')}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <Shield className="h-5 w-5 mr-3 text-blue-600" />
-              <div>
-                <div className="font-medium">{t('profile.settings.privacy')}</div>
-                <div className="text-sm text-gray-500">Control who can see your information</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => handleSettingsClick('notifications')}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <Bell className="h-5 w-5 mr-3 text-purple-600" />
-              <div>
-                <div className="font-medium">{t('profile.settings.notifications')}</div>
-                <div className="text-sm text-gray-500">Manage your notification preferences</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => handleSettingsClick('account')}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <User className="h-5 w-5 mr-3 text-red-600" />
-              <div>
-                <div className="font-medium">{t('profile.settings.account')}</div>
-                <div className="text-sm text-gray-500">Account security and data management</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => setShowLanguageSelector(true)}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <Globe className="h-5 w-5 mr-3 text-green-600" />
-              <div>
-                <div className="font-medium">{t('profile.settings.language')}</div>
-                <div className="text-sm text-gray-500">Change app language</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => navigate('/storage-debug')}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <Database className="h-5 w-5 mr-3 text-indigo-600" />
-              <div>
-                <div className="font-medium">Storage Debug</div>
-                <div className="text-sm text-gray-500">Test Firebase Storage connection</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => navigate('/ad-testing')}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <TestTube className="h-5 w-5 mr-3 text-green-600" />
-              <div>
-                <div className="font-medium">AdMob Testing</div>
-                <div className="text-sm text-gray-500">Test mobile ads functionality</div>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => setShowHelpModal(true)}
-              variant="outline"
-              className="w-full justify-start text-left p-4 h-auto border-peach-200 hover:bg-peach-50"
-            >
-              <HelpCircle className="h-5 w-5 mr-3 text-orange-600" />
-              <div>
-                <div className="font-medium">Help & Support</div>
-                <div className="text-sm text-gray-500">Get help and contact support</div>
-              </div>
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Premium Upgrade Card - Only for non-premium users */}
-        {!isPremium && (
-          <Card className="romantic-card border-2 border-coral-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-coral-500 to-peach-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.upgrade')}</h2>
-              </div>
-              <p className="text-coral-100 mb-4">{t('profile.premium.unlock')}</p>
-              <div className="space-y-2 text-sm">
-                <p>{t('profile.premium.features.gender')}</p>
-                <p>{t('profile.premium.features.voice')}</p>
-                <p>{t('profile.premium.features.unlimited')}</p>
-              </div>
-              <Button
-                onClick={() => setShowPremiumPaywall(true)}
-                className="mt-4 bg-white text-coral-600 hover:bg-gray-100 font-bold"
-              >
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade Now
-              </Button>
-            </CardHeader>
-          </Card>
-        )}
-
-        {/* Premium Status Card - Only for premium users */}
-        {isPremium && (
-          <Card className="romantic-card border-2 border-cream-300 shadow-xl">
-            <CardHeader className="text-center bg-gradient-to-r from-cream-500 to-peach-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-300" />
-                <h2 className="text-xl font-bold">{t('profile.premium.active')}</h2>
-              </div>
-              <p className="text-cream-100">{t('profile.premium.enjoying')}</p>
-            </CardHeader>
-          </Card>
-        )}
-
-        {/* Banner Ad at Bottom - Only for non-premium users */}
-        {!isPremium && (
-          <div className="mt-6">
-            <BannerAd
-              size="responsive"
-              position="bottom"
-              className="shadow-lg rounded-xl overflow-hidden"
-            />
           </div>
         )}
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+        <div className="max-w-md mx-auto px-6 py-3">
+          <div className="flex justify-around">
+            <button className="flex flex-col items-center gap-1">
+              <div className="w-6 h-6 bg-black rounded-full"></div>
+              <span className="text-xs font-medium text-gray-900">Profile</span>
+            </button>
+            <button 
+              onClick={() => navigate('/')}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+              <span className="text-xs text-gray-500">Discover</span>
+            </button>
+            <button 
+              onClick={() => navigate('/friends')}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+              <span className="text-xs text-gray-500">People</span>
+            </button>
+            <button 
+              onClick={() => navigate('/chat')}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+              <span className="text-xs text-gray-500">Liked You</span>
+            </button>
+            <button 
+              onClick={() => navigate('/chat')}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
+              <span className="text-xs text-gray-500">Chats</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Modals */}
@@ -775,8 +447,6 @@ export default function ProfilePage() {
         onClose={() => setShowPremiumPaywall(false)}
         onPurchase={handlePremiumPurchase}
       />
-
-      <BottomNavBar />
     </div>
   );
 }
