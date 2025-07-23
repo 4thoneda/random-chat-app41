@@ -157,8 +157,17 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-6 left-6 w-12 h-12 bg-gradient-to-br from-sindoor-300 to-henna-400 opacity-20 animate-pulse"></div>
+        <div className="absolute top-20 right-4 w-10 h-10 bg-gradient-to-br from-royal-300 to-gulmohar-400 opacity-30 animate-bounce"></div>
+        <div className="absolute bottom-32 left-4 w-8 h-8 bg-gradient-to-br from-jasmine-300 to-sindoor-400 opacity-25 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-48 right-8 w-6 h-6 bg-gradient-to-br from-passion-400 to-royal-400 opacity-20 animate-bounce" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 sticky top-0 z-10">
+      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 px-4 py-3 flex items-center justify-between border-b border-peach-200 sticky top-0 z-10 shadow-lg relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15 backdrop-blur-sm"></div>
         <button
           onClick={() => navigate(-1)}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors"
