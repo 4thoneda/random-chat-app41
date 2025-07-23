@@ -15,7 +15,7 @@ interface PremiumPaywallProps {
 
 export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumPaywallProps) {
 
-  const [selectedPlan, setSelectedPlan] = useState<string>("weekly");
+  const [selectedPlan, setSelectedPlan] = useState<string>("vip-weekly");
 
   // Razorpay handler
   const handleRazorpay = async (): Promise<void> => {
