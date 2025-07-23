@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import BottomNavBar from '../components/BottomNavBar';
 import UltraBottomNavBar from '../components/UltraBottomNavBar';
+import { UltraPageTransition } from '../components/UltraBottomNavBar';
 import { usePremium } from '../context/PremiumProvider';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -65,7 +66,14 @@ const AIChatbotPage: React.FC = () => {
       <Helmet>
         <title>AjnabiCam - AI Chat Assistant</title>
       </Helmet>
-      <main className="flex flex-col items-center min-h-screen w-full max-w-md mx-auto bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 px-2 py-4 relative pb-20">
+      <UltraPageTransition>
+        <main className={`flex flex-col items-center min-h-screen w-full ${
+          isUltraPremium() ? 'max-w-full' : 'max-w-md'
+        } mx-auto ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+            : 'bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50'
+        } px-2 py-4 relative pb-20`}>
         {/* Enhanced Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-6 left-6 w-12 h-12 bg-gradient-to-br from-peach-300 to-coral-400 rounded-full opacity-20 animate-pulse"></div>
@@ -100,7 +108,11 @@ const AIChatbotPage: React.FC = () => {
         </div>
 
         {/* Header */}
-        <div className="w-full flex items-center p-4 bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 text-white font-bold text-xl rounded-t-2xl shadow-lg relative overflow-hidden">
+        <div className={`w-full flex items-center p-4 ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700' 
+            : 'bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500'
+        } text-white font-bold text-xl rounded-t-2xl shadow-lg relative overflow-hidden`}>
           {/* Header Background Pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-cream-100/25 to-white/15 backdrop-blur-sm"></div>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-peach-200/15 to-transparent"></div>
@@ -200,7 +212,8 @@ const AIChatbotPage: React.FC = () => {
         
         {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
         {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
-      </main>
+        </main>
+      </UltraPageTransition>
     </>
   );
 };

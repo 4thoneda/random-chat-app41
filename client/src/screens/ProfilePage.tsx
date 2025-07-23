@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import UltraProfileEnhancements from "../components/UltraProfileEnhancements";
 import UltraBottomNavBar from "../components/UltraBottomNavBar";
+import { UltraPageTransition } from "../components/UltraBottomNavBar";
 import { 
   Camera, 
   ArrowLeft, 
@@ -203,7 +204,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 pb-20 relative overflow-hidden">
+    <UltraPageTransition>
+      <div className={`min-h-screen ${
+        isUltraPremium() 
+          ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+          : 'bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50'
+      } pb-20 relative overflow-hidden`}>
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-6 left-6 w-12 h-12 bg-gradient-to-br from-sindoor-300 to-henna-400 opacity-20 animate-pulse"></div>
@@ -213,7 +219,13 @@ export default function ProfilePage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 px-4 py-3 flex items-center justify-between border-b border-peach-200 sticky top-0 z-10 shadow-lg relative overflow-hidden">
+      <div className={`${
+        isUltraPremium() 
+          ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700' 
+          : 'bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500'
+      } px-4 py-3 flex items-center justify-between border-b ${
+        isUltraPremium() ? 'border-purple-300' : 'border-peach-200'
+      } sticky top-0 z-10 shadow-lg relative overflow-hidden`}>
         <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15 backdrop-blur-sm"></div>
         <button
           onClick={() => navigate(-1)}
@@ -232,7 +244,9 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      <div className="max-w-sm mx-auto px-4 py-6">
+      <div className={`${
+        isUltraPremium() ? 'max-w-2xl' : 'max-w-sm'
+      } mx-auto px-4 py-6`}>
         {/* Profile Image Section */}
         <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden mb-6 relative">
           <div className="relative h-[50vh] overflow-hidden">
@@ -536,6 +550,7 @@ export default function ProfilePage() {
         likes={likesData}
         onRevealLike={handleRevealLike}
       />
-    </div>
+      </div>
+    </UltraPageTransition>
   );
 }

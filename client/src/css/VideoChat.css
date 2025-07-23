@@ -176,11 +176,30 @@ button {
   /* ULTRA+ Theme Body Classes */
   .ultra-premium-theme,
   .ultra-premium-app {
-    background: linear-gradient(-45deg, #faf5ff, #fdf2f8, #f3e8ff, #fef7cd, #f0f9ff);
+    background: linear-gradient(-45deg, #faf5ff, #fdf2f8, #f3e8ff, #fef7cd, #f0f9ff) !important;
     background-size: 500% 500%;
     animation: gradient-shift 20s ease infinite;
     position: relative;
     min-height: 100vh;
+  }
+
+  /* Native App Responsive Layout */
+  @media (min-width: 768px) {
+    .ultra-premium-app {
+      padding: 0 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ultra-premium-app {
+      padding: 0 4rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ultra-premium-app {
+      padding: 0 6rem;
+    }
   }
 
   /* Global ULTRA+ App Styling */
@@ -199,6 +218,18 @@ button {
     z-index: 1;
   }
 
+  /* Native App Container */
+  .ultra-app-container {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .ultra-app-container {
+      max-width: 100%;
+    }
+  }
+
   .ultra-premium-theme .ultra-premium-wrapper {
     position: relative;
     min-height: 100vh;
@@ -206,16 +237,30 @@ button {
 
   /* Premium Card Enhancements */
   .ultra-premium-theme .card {
-    border: 1px solid rgba(168, 85, 247, 0.2);
-    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(168, 85, 247, 0.2) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(10px);
+    border-radius: 1rem !important;
   }
 
   .ultra-premium-theme .card:hover {
-    border-color: rgba(168, 85, 247, 0.4);
-    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.15);
-    transform: translateY(-2px);
+    border-color: rgba(168, 85, 247, 0.4) !important;
+    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.15) !important;
+    transform: translateY(-2px) !important;
     transition: all 0.3s ease;
+  }
+
+  /* Native App Button Styles */
+  .ultra-premium-app button:not(.btn-premium) {
+    border-radius: 0.75rem !important;
+    transition: all 0.3s ease !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ultra-premium-app button:not(.btn-premium):hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15) !important;
   }
 
   /* Premium Button Styles */
@@ -242,64 +287,65 @@ button {
     left: 100%;
   }
 
-  /* ULTRA+ Enhanced Components */
-  .ultra-premium-app .card,
-  .ultra-premium-app .bg-white {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(168, 85, 247, 0.1);
-  }
-
-  .ultra-premium-app .card:hover {
-    border-color: rgba(168, 85, 247, 0.3);
-    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.1);
-    transform: translateY(-1px);
-  }
-
-  /* ULTRA+ Button Enhancements */
-  .ultra-premium-app button:not(.btn-premium) {
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ultra-premium-app button:not(.btn-premium):hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
-  }
-
   /* ULTRA+ Input Enhancements */
   .ultra-premium-app input,
   .ultra-premium-app textarea {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(168, 85, 247, 0.2);
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(168, 85, 247, 0.2) !important;
     backdrop-filter: blur(5px);
+    border-radius: 0.75rem !important;
   }
 
   .ultra-premium-app input:focus,
   .ultra-premium-app textarea:focus {
-    border-color: rgba(168, 85, 247, 0.5);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1) !important;
   }
 
   /* ULTRA+ Navigation Enhancements */
   .ultra-premium-app nav,
   .ultra-premium-app .bottom-nav {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(168, 85, 247, 0.1);
+    border-top: 1px solid rgba(168, 85, 247, 0.1) !important;
+    border-radius: 1.5rem 1.5rem 0 0 !important;
   }
 
   /* ULTRA+ Text Enhancements */
   .ultra-premium-app h1,
   .ultra-premium-app h2,
   .ultra-premium-app h3 {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899) !important;
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
+    color: transparent !important;
     background-size: 200% 200%;
     animation: gradient-shift 3s ease infinite;
+  }
+
+  /* Responsive Typography for ULTRA+ */
+  @media (min-width: 768px) {
+    .ultra-premium-app h1 {
+      font-size: 2.5rem !important;
+    }
+    .ultra-premium-app h2 {
+      font-size: 2rem !important;
+    }
+    .ultra-premium-app h3 {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ultra-premium-app h1 {
+      font-size: 3rem !important;
+    }
+    .ultra-premium-app h2 {
+      font-size: 2.25rem !important;
+    }
+    .ultra-premium-app h3 {
+      font-size: 1.75rem !important;
+    }
   }
 
   /* ULTRA+ Scroll Enhancements */
@@ -308,15 +354,56 @@ button {
   }
 
   .ultra-premium-app::-webkit-scrollbar-track {
-    background: rgba(168, 85, 247, 0.1);
+    background: rgba(168, 85, 247, 0.1) !important;
     border-radius: 4px;
   }
 
   .ultra-premium-app::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #a855f7, #ec4899);
+    background: linear-gradient(135deg, #a855f7, #ec4899) !important;
     border-radius: 4px;
   }
 
   .ultra-premium-app::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #9333ea, #db2777);
+    background: linear-gradient(135deg, #9333ea, #db2777) !important;
+  }
+
+  /* Native App Safe Areas */
+  @supports (padding: max(0px)) {
+    .ultra-premium-app {
+      padding-left: max(1rem, env(safe-area-inset-left)) !important;
+      padding-right: max(1rem, env(safe-area-inset-right)) !important;
+      padding-top: max(0rem, env(safe-area-inset-top)) !important;
+      padding-bottom: max(1rem, env(safe-area-inset-bottom)) !important;
+    }
+  }
+
+  /* Touch Optimizations for Native Feel */
+  .ultra-premium-app button,
+  .ultra-premium-app .touch-target {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  @media (max-width: 768px) {
+    .ultra-premium-app button,
+    .ultra-premium-app .touch-target {
+      min-height: 44px !important;
+      min-width: 44px !important;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .ultra-premium-app button,
+    .ultra-premium-app .touch-target {
+      min-height: 48px !important;
+      min-width: 48px !important;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .ultra-premium-app button,
+    .ultra-premium-app .touch-target {
+      min-height: 52px !important;
+      min-width: 52px !important;
+    }
   }

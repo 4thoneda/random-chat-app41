@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import BottomNavBar from "../components/BottomNavBar";
 import UltraBottomNavBar from "../components/UltraBottomNavBar";
+import { UltraPageTransition } from "../components/UltraBottomNavBar";
 import { usePremium } from "../context/PremiumProvider";
 import { Button } from "../components/ui/button";
 import { ArrowLeft, Mic, Crown } from "lucide-react";
@@ -24,9 +25,20 @@ export default function VoicePage() {
       <Helmet>
         <title>AjnabiCam - Voice Chat</title>
       </Helmet>
-      <main className="flex flex-col items-center min-h-screen w-full max-w-md mx-auto bg-white px-2 py-4 relative pb-20">
+      <UltraPageTransition>
+        <main className={`flex flex-col items-center min-h-screen w-full ${
+          isUltraPremium() ? 'max-w-full' : 'max-w-md'
+        } mx-auto ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+            : 'bg-white'
+        } px-2 py-4 relative pb-20`}>
         {/* Header */}
-        <div className="w-full flex items-center p-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xl rounded-t-2xl shadow-lg">
+        <div className={`w-full flex items-center p-4 ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+            : 'bg-gradient-to-r from-rose-500 to-pink-600'
+        } text-white font-bold text-xl rounded-t-2xl shadow-lg`}>
           <button 
             onClick={handleBackClick} 
             className="mr-3 text-white font-bold text-xl hover:scale-110 transition-transform"
@@ -100,7 +112,8 @@ export default function VoicePage() {
         </div>
         
         {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
-      </main>
+        </main>
+      </UltraPageTransition>
     </>
   );
 }

@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import BottomNavBar from '../components/BottomNavBar';
 import UltraBottomNavBar from '../components/UltraBottomNavBar';
 import UltraPremiumFriendsEnhancement from '../components/UltraPremiumFriendsEnhancement';
+import { UltraPageTransition } from '../components/UltraBottomNavBar';
 // import PremiumPaywall from '../components/PremiumPaywall'; // Now using separate page
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -79,9 +80,22 @@ const FriendsPage: React.FC = () => {
       <Helmet>
         <title>AjnabiCam - Friends</title>
       </Helmet>
-      <main className="flex flex-col items-center min-h-screen w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto bg-white px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative pb-20 sm:pb-24 lg:pb-28">
+      <UltraPageTransition>
+        <main className={`flex flex-col items-center min-h-screen w-full ${
+          isUltraPremium() 
+            ? 'max-w-full' 
+            : 'max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl'
+        } mx-auto ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+            : 'bg-white'
+        } px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 relative pb-20 sm:pb-24 lg:pb-28`}>
         {/* Header */}
-        <div className="w-full flex items-center p-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xl rounded-t-2xl shadow-lg">
+        <div className={`w-full flex items-center p-4 ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+            : 'bg-gradient-to-r from-rose-500 to-pink-600'
+        } text-white font-bold text-xl rounded-t-2xl shadow-lg`}>
           <button 
             onClick={handleBackClick} 
             className="mr-3 text-white font-bold text-xl hover:scale-110 transition-transform"
@@ -92,7 +106,11 @@ const FriendsPage: React.FC = () => {
           <Users className="h-6 w-6" />
         </div>
 
-        <div className="w-full flex flex-col bg-white rounded-b-2xl border border-pink-100 shadow-xl mb-6 overflow-hidden">
+        <div className={`w-full flex flex-col ${
+          isUltraPremium() 
+            ? 'bg-white/90 backdrop-blur-lg border border-purple-200' 
+            : 'bg-white border border-pink-100'
+        } rounded-b-2xl shadow-xl mb-6 overflow-hidden`}>
           {/* Friends Limit Info */}
           <div className="p-4 bg-gradient-to-r from-pink-50 to-rose-50 border-b border-pink-100">
             <div className="flex items-center justify-between">
@@ -236,7 +254,8 @@ const FriendsPage: React.FC = () => {
 
         {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
         {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
-      </main>
+        </main>
+      </UltraPageTransition>
 
       {/* PremiumPaywall now moved to separate /premium page */}
     </>

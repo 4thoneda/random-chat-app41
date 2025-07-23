@@ -39,6 +39,7 @@ import PremiumReactions from "../components/PremiumReactions";
 import LastSeenDisplay from "../components/LastSeenDisplay";
 import { FaceFilter } from "../lib/faceFilters";
 import "../css/VideoChat.css";
+import { UltraPageTransition } from "../components/UltraBottomNavBar";
 
 interface Offer {
   offer: RTCSessionDescriptionInit;
@@ -1085,23 +1086,44 @@ export default function VideoChat() {
   }
 
   return (
-    <div className="relative min-h-screen w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto bg-white flex flex-col items-center justify-between overflow-y-auto">
+    <UltraPageTransition>
+      <div className={`relative min-h-screen w-full ${
+        isUltraPremium() 
+          ? 'max-w-full' 
+          : 'max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl'
+      } mx-auto ${
+        isUltraPremium() 
+          ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+          : 'bg-white'
+      } flex flex-col items-center justify-between overflow-y-auto`}>
       {/* Enhanced Top Bar */}
-      <div className="w-full bg-white shadow-sm px-3 sm:px-4 lg:px-6 py-3 sm:py-4 z-20 border-b border-pink-100">
+      <div className={`w-full ${
+        isUltraPremium() 
+          ? 'bg-gradient-to-r from-purple-600/95 via-pink-600/95 to-purple-700/95 backdrop-blur-lg' 
+          : 'bg-white'
+      } shadow-sm px-3 sm:px-4 lg:px-6 py-3 sm:py-4 z-20 border-b ${
+        isUltraPremium() ? 'border-purple-300/50' : 'border-pink-100'
+      }`}>
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
-            className="rounded-full p-2 hover:bg-rose-50"
+            className={`rounded-full p-2 ${
+              isUltraPremium() 
+                ? 'hover:bg-white/20 text-white' 
+                : 'hover:bg-rose-50'
+            }`}
             onClick={handleCleanup}
           >
-            <ArrowLeft size={22} className="text-rose-500" />
+            <ArrowLeft size={22} className={isUltraPremium() ? "text-white" : "text-rose-500"} />
           </Button>
 
           <div className="flex-1 flex justify-center">
             <div className="text-center">
               <div className="flex items-center justify-center gap-2">
-                <span className="font-bold text-xl text-rose-600 tracking-wide">
-                  AjnabiCam
+                <span className={`font-bold text-xl tracking-wide ${
+                  isUltraPremium() ? 'text-white drop-shadow-lg' : 'text-rose-600'
+                }`}>
+                  {isUltraPremium() ? "AjnabiCam ULTRA+" : "AjnabiCam"}
                 </span>
                 {isUltraPremium() && (
                   <PremiumBadge plan="ultra-quarterly" size="sm" />
@@ -1114,7 +1136,9 @@ export default function VideoChat() {
                 )}
               </div>
               {isFriendCall && (
-                <span className="text-xs text-green-600 font-medium">
+                <span className={`text-xs font-medium ${
+                  isUltraPremium() ? 'text-green-300' : 'text-green-600'
+                }`}>
                   Friend Call
                 </span>
               )}
@@ -1124,7 +1148,11 @@ export default function VideoChat() {
           <Button
             onClick={() => setShowTreasureChest(true)}
             disabled={coinsLoading}
-            className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-semibold px-3 py-2 rounded-full shadow-md"
+            className={`${
+              isUltraPremium() 
+                ? 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600' 
+                : 'bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700'
+            } text-white font-semibold px-3 py-2 rounded-full shadow-md`}
           >
             <Coins className="h-4 w-4 mr-1" />
             {coinsLoading ? "..." : coins}
@@ -1147,9 +1175,15 @@ export default function VideoChat() {
       )}
 
       {/* Video Streams - Split Layout */}
-      <div className="flex-1 flex flex-col w-full px-2 pb-32 pt-2 gap-2">
+      <div className={`flex-1 flex flex-col w-full px-2 pb-32 pt-2 gap-2 ${
+        isUltraPremium() ? 'max-w-6xl mx-auto' : ''
+      }`}>
         {/* Other Person's Video - Upper Half */}
-        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 overflow-hidden relative border-2 border-peach-200/50 flex items-center justify-center">
+        <div className={`w-full h-[42vh] rounded-2xl shadow-xl ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-purple-100 via-pink-50 to-purple-100 border-2 border-purple-200/50' 
+            : 'bg-gradient-to-br from-peach-100 via-cream-50 to-blush-100 border-2 border-peach-200/50'
+        } overflow-hidden relative flex items-center justify-center`}>
           {remoteStream ? (
             isVoiceOnly ? (
               <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-teal-400">
@@ -1281,7 +1315,11 @@ export default function VideoChat() {
         </div>
 
         {/* My Video - Lower Half */}
-        <div className="w-full h-[42vh] rounded-2xl shadow-xl bg-gradient-to-br from-coral-100 via-peach-50 to-blush-100 overflow-hidden relative border-2 border-coral-200/50 flex items-center justify-center">
+        <div className={`w-full h-[42vh] rounded-2xl shadow-xl ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-pink-100 via-purple-50 to-pink-100 border-2 border-pink-200/50' 
+            : 'bg-gradient-to-br from-coral-100 via-peach-50 to-blush-100 border-2 border-coral-200/50'
+        } overflow-hidden relative flex items-center justify-center`}>
           {myStream && !isVoiceOnly ? (
             <ReactPlayer
               className="w-full h-full object-cover"
@@ -1313,7 +1351,11 @@ export default function VideoChat() {
           )}
 
           {/* My video label */}
-          <div className="absolute top-3 left-3 bg-coral-500 px-2 py-1 rounded-full z-30">
+          <div className={`absolute top-3 left-3 px-2 py-1 rounded-full z-30 ${
+            isUltraPremium() 
+              ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
+              : 'bg-coral-500'
+          }`}>
             <span className="text-white text-xs font-bold">
               {isUltraPremium() ? "👑 ULTRA+" : "📷 You"}
             </span>
@@ -1336,8 +1378,14 @@ export default function VideoChat() {
       </div>
 
       {/* Controls */}
-      <div className="fixed bottom-0 left-0 w-full z-40 flex flex-col items-center pb-4 max-w-md mx-auto">
-        <div className="w-full flex flex-row justify-center items-center gap-2 bg-white rounded-2xl shadow-2xl px-3 py-2 border border-pink-100">
+      <div className={`fixed bottom-0 left-0 w-full z-40 flex flex-col items-center pb-4 ${
+        isUltraPremium() ? 'max-w-full' : 'max-w-md'
+      } mx-auto`}>
+        <div className={`w-full max-w-md mx-auto flex flex-row justify-center items-center gap-2 ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-r from-white/95 via-purple-50/95 to-pink-50/95 backdrop-blur-lg border border-purple-200/50' 
+            : 'bg-white border border-pink-100'
+        } rounded-2xl shadow-2xl px-3 py-2`}>
           <Button
             className="flex-1 mx-1 p-3 bg-rose-500 text-white rounded-xl text-lg font-bold shadow-md"
             onClick={handleSkip}
@@ -1487,6 +1535,7 @@ export default function VideoChat() {
           User blocked. You won't be matched again.
         </div>
       )}
-    </div>
+      </div>
+    </UltraPageTransition>
   );
 }

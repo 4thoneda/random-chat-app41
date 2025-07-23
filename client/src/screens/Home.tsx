@@ -34,6 +34,7 @@ import PremiumBadge from "../components/PremiumBadge";
 import { OnlineNotificationManager } from "../components/OnlineNotification";
 import UltraHomeEnhancements from "../components/UltraHomeEnhancements";
 import UltraBottomNavBar from "../components/UltraBottomNavBar";
+import { UltraPageTransition } from "../components/UltraBottomNavBar";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
@@ -194,7 +195,16 @@ export default function Home() {
           {t("app.name")} - Random Video Chat - Live chat with ajnabis
         </title>
       </Helmet>
-      <main className="flex flex-col min-h-screen w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50 relative pb-16 sm:pb-20 lg:pb-24 overflow-hidden">
+      <UltraPageTransition>
+        <main className={`flex flex-col min-h-screen w-full ${
+          isUltraPremium() 
+            ? 'max-w-full' 
+            : 'max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl'
+        } mx-auto ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-br from-white/95 via-purple-50/90 to-pink-50/90' 
+            : 'bg-gradient-to-br from-peach-25 via-cream-50 to-blush-50'
+        } relative pb-16 sm:pb-20 lg:pb-24 overflow-hidden`}>
         {/* Enhanced Animated Background Elements with Indian flair */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-6 sm:top-10 left-6 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-sindoor-300 to-henna-400 rounded-full opacity-20 animate-pulse"></div>
@@ -235,10 +245,24 @@ export default function Home() {
         </div>
 
         {/* Enhanced Two-Row Header Design */}
-        <header className="w-full bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500 shadow-lg px-4 sm:px-6 lg:px-8 py-4 sm:py-5 border-b border-peach-200 relative overflow-hidden">
+        <header className={`w-full ${
+          isUltraPremium() 
+            ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700' 
+            : 'bg-gradient-to-r from-peach-400 via-coral-400 to-blush-500'
+        } shadow-lg px-4 sm:px-6 lg:px-8 py-4 sm:py-5 border-b ${
+          isUltraPremium() ? 'border-purple-300' : 'border-peach-200'
+        } relative overflow-hidden`}>
           {/* Header Background Pattern with Indian touch */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15 backdrop-blur-sm"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-henna-200/15 to-transparent"></div>
+          <div className={`absolute inset-0 ${
+            isUltraPremium() 
+              ? 'bg-gradient-to-r from-white/20 via-purple-100/30 to-white/20' 
+              : 'bg-gradient-to-r from-white/15 via-jasmine-100/25 to-white/15'
+          } backdrop-blur-sm`}></div>
+          <div className={`absolute top-0 left-0 w-full h-full ${
+            isUltraPremium() 
+              ? 'bg-gradient-to-r from-transparent via-pink-200/20 to-transparent' 
+              : 'bg-gradient-to-r from-transparent via-henna-200/15 to-transparent'
+          }`}></div>
 
           <div className="relative z-10 space-y-4">
             {/* Top Row: Logo + Settings & Coins */}
@@ -246,12 +270,12 @@ export default function Home() {
               {/* Left: AjnabiCam Logo */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg">
-                  <Heart className="h-5 w-5 text-white" />
+                  {isUltraPremium() ? <Gem className="h-5 w-5 text-white" /> : <Heart className="h-5 w-5 text-white" />}
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
                     <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">
-                      {t("app.name")}
+                      {isUltraPremium() ? "AjnabiCam ULTRA+" : t("app.name")}
                     </h1>
                     {isUltraPremium() && (
                       <div className="flex items-center gap-1">
@@ -518,7 +542,8 @@ export default function Home() {
 
         {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
         {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
-      </main>
+        </main>
+      </UltraPageTransition>
 
       {/* PremiumPaywall now moved to separate /premium page */}
 
