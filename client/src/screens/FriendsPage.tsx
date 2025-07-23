@@ -208,8 +208,34 @@ const FriendsPage: React.FC = () => {
             </div>
           )}
         </div>
-        
-        <BottomNavBar />
+
+        {/* ULTRA+ Friends Enhancement */}
+        {isUltraPremium() && (
+          <div className="w-full mb-6">
+            <UltraPremiumFriendsEnhancement
+              friends={friends.map(friend => ({
+                id: friend.id,
+                name: friend.name,
+                profileImage: friend.avatar,
+                isOnline: friend.isOnline,
+                lastSeen: new Date(Date.now() - Math.random() * 86400000), // Random last seen within 24h
+                isPremium: Math.random() > 0.7, // 30% chance premium
+                mutualFriends: Math.floor(Math.random() * 5),
+                totalChats: Math.floor(Math.random() * 20) + 1,
+                compatibility: Math.floor(Math.random() * 40) + 60 // 60-100% compatibility
+              }))}
+              isUltraPremium={true}
+              onVideoCall={handleVideoCall}
+              onMessage={(friendId) => {
+                // Handle message
+                console.log(`Starting chat with friend ${friendId}`);
+              }}
+            />
+          </div>
+        )}
+
+        {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
 
       {/* PremiumPaywall now moved to separate /premium page */}
