@@ -241,7 +241,7 @@ export default function ProfilePage() {
         </Card>
 
         {/* User Information Section */}
-        <Card className="bg-white shadow-lg border-0 rounded-3xl mb-6">
+        <Card className="bg-white shadow-lg border-0 mb-6">
           <CardContent className="p-6">
             {/* Name and Age */}
             <div className="flex items-center justify-between mb-4">
