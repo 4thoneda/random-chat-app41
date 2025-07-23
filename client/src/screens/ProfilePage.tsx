@@ -359,7 +359,7 @@ export default function ProfilePage() {
         <div className="space-y-3">
           <Button
             onClick={() => navigate('/premium')}
-            className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-yellow-900 font-semibold py-4 rounded-2xl"
+            className="w-full bg-gradient-to-r from-peach-400 to-coral-500 hover:from-peach-500 hover:to-coral-600 text-white font-semibold py-4 shadow-lg"
           >
             <Crown className="w-5 h-5 mr-2" />
             Upgrade to Premium
