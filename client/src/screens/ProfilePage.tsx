@@ -442,11 +442,7 @@ export default function ProfilePage() {
         onClose={() => setShowHelpModal(false)}
       />
 
-      <PremiumPaywall
-        isOpen={showPremiumPaywall}
-        onClose={() => setShowPremiumPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
     </div>
   );
 }
