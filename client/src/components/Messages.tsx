@@ -156,7 +156,7 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
 
     const handlePremiumPurchase = useCallback((plan: string) => {
         console.log(`Processing payment for ${plan} plan`);
-        setShowPaywall(false);
+        // setShowPaywall(false); // Now handled in PremiumPage
         // Don't show alert here as it's handled by the parent component
         console.log(`🎉 Welcome to Premium! Your ${plan} subscription is now active!`);
     }, []);
