@@ -36,8 +36,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       let socketUrl: string;
 
       if (window.location.hostname.includes('webcontainer-api.io')) {
-        // WebContainer environment - use port 80 (mapped from server's 8000)
-        const baseUrl = window.location.origin.replace('5173', '80');
+        // WebContainer environment - use HTTP (not HTTPS) for WebSocket
+        const protocol = 'http';
+        const host = window.location.hostname.replace('5173', '80');
+        const baseUrl = `${protocol}://${host}`;
         socketUrl = baseUrl;
       } else if (window.location.hostname === "localhost") {
         socketUrl = "http://localhost:8000";
@@ -49,13 +51,13 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
       const newSocket = io(socketUrl, {
         transports: ["websocket", "polling"],
-        secure: window.location.protocol === 'https:',
+        secure: false, // Disable secure connection for WebContainer
         timeout: 20000,
         forceNew: true,
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
-        withCredentials: true,
+        withCredentials: false, // Disable credentials for WebContainer
       });
 
       newSocket.on("connect", () => {
@@ -73,16 +75,18 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         // Try alternative port based on environment
         if (window.location.hostname.includes('webcontainer-api.io')) {
           console.log("Trying alternative WebContainer port 81...");
-          const altUrl = window.location.origin.replace('5173', '81');
+          const altProtocol = 'http';
+          const altHost = window.location.hostname.replace('5173', '81');
+          const altUrl = `${altProtocol}://${altHost}`;
           const altSocket = io(altUrl, {
             transports: ["websocket", "polling"],
-            secure: window.location.protocol === 'https:',
+            secure: false,
             timeout: 20000,
             forceNew: true,
             reconnection: true,
             reconnectionAttempts: 3,
             reconnectionDelay: 1000,
-            withCredentials: true,
+            withCredentials: false,
           });
           
           altSocket.on("connect", () => {
