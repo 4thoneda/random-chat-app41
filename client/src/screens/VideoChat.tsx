@@ -60,14 +60,8 @@ export default function VideoChat() {
   
   // Check if user has ULTRA+ premium (3 months plan)
   useEffect(() => {
-    const checkUltraPremium = () => {
-      // Check if user has the highest tier premium
-      const premiumPlan = localStorage.getItem('ajnabicam_premium_plan');
-      setIsUltraPremium(isPremium && premiumPlan === 'ultra-quarterly');
-    };
-    
-    checkUltraPremium();
-  }, [isPremium]);
+    setIsUltraPremium(isUltraPremium());
+  }, [isPremium, isUltraPremium]);
   const location = useLocation();
   const [remoteChatToken, setRemoteChatToken] = useState<string | null>(null);
   const [isSearchingForMatch, setIsSearchingForMatch] = useState(false);
