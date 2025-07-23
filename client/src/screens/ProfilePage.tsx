@@ -177,9 +177,8 @@ export default function ProfilePage() {
       </div>
 
       <div className="max-w-sm mx-auto px-4 py-6">
-        {/* Main Profile Card */}
+        {/* Profile Image Section */}
         <Card className="bg-white shadow-xl border-0 rounded-3xl overflow-hidden mb-6 relative">
-          {/* Profile Image Section */}
           <div className="relative h-[50vh] overflow-hidden">
             {profileImage ? (
               <img
@@ -197,7 +196,7 @@ export default function ProfilePage() {
                 </div>
               </div>
             )}
-            
+
             {/* Upload overlay */}
             {uploadingImage && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -207,7 +206,7 @@ export default function ProfilePage() {
                 </div>
               </div>
             )}
-            
+
             {/* Camera button */}
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -216,13 +215,13 @@ export default function ProfilePage() {
             >
               <Camera size={18} className="text-white" />
             </button>
-            
+
             {/* Profile Views Badge */}
             <div className="absolute top-4 left-4 bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-2">
               <Eye size={14} className="text-white" />
               <span className="text-white text-sm font-medium">{profileViews.toLocaleString()}</span>
             </div>
-            
+
             {/* Premium Badge */}
             {isPremium && (
               <div className="absolute top-14 left-4 bg-gradient-to-r from-yellow-400 to-yellow-500 px-2 py-1 rounded-full flex items-center gap-1">
@@ -230,63 +229,6 @@ export default function ProfilePage() {
                 <span className="text-yellow-800 text-xs font-bold">PREMIUM</span>
               </div>
             )}
-            
-            {/* Profile Info Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 pt-16">
-              {/* Name and Age */}
-              <div className="flex items-end justify-between mb-4">
-                <div>
-                  <h2 className="text-white text-3xl font-bold mb-1">{name}, {age}</h2>
-                  <div className="flex items-center gap-2 text-white/90 mb-3">
-                    <MapPin size={16} />
-                    <span className="text-sm">{location}</span>
-                  </div>
-                </div>
-                
-                <button className="bg-white/20 backdrop-blur-sm p-2 rounded-full hover:bg-white/30 transition-colors">
-                  <Edit3 size={16} className="text-white" />
-                </button>
-              </div>
-
-              {/* Bio */}
-              <p className="text-white/90 text-sm leading-relaxed mb-4">{bio}</p>
-
-              {/* Profession */}
-              <div className="flex items-center gap-2 text-white/90 mb-4">
-                <Briefcase size={16} />
-                <span className="text-sm">{profession}</span>
-              </div>
-
-              {/* Interest Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {interests.map((interest, index) => (
-                  <span
-                    key={index}
-                    className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <Button
-                  onClick={() => navigate('/video-chat')}
-                  className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 rounded-2xl border-0"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Start Chat
-                </Button>
-                
-                <Button
-                  onClick={() => navigate('/friends')}
-                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold px-4 py-3 rounded-2xl border-0"
-                >
-                  <Heart className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
 
             <input
               ref={fileInputRef}
@@ -298,7 +240,66 @@ export default function ProfilePage() {
           </div>
         </Card>
 
-        {/* Quick Stats Cards */}
+        {/* User Information Section */}
+        <Card className="bg-white shadow-lg border-0 rounded-3xl mb-6">
+          <CardContent className="p-6">
+            {/* Name and Age */}
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-gray-900 text-3xl font-bold mb-1">{name}, {age}</h2>
+                <div className="flex items-center gap-2 text-gray-600 mb-3">
+                  <MapPin size={16} />
+                  <span className="text-sm">{location}</span>
+                </div>
+              </div>
+
+              <button className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-colors">
+                <Edit3 size={16} className="text-gray-600" />
+              </button>
+            </div>
+
+            {/* Bio */}
+            <p className="text-gray-700 text-sm leading-relaxed mb-4">{bio}</p>
+
+            {/* Profession */}
+            <div className="flex items-center gap-2 text-gray-600 mb-4">
+              <Briefcase size={16} />
+              <span className="text-sm font-medium">{profession}</span>
+            </div>
+
+            {/* Interest Tags */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {interests.map((interest, index) => (
+                <span
+                  key={index}
+                  className="bg-gray-100 px-3 py-1 rounded-full text-gray-700 text-xs font-medium"
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                onClick={() => navigate('/video-chat')}
+                className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 rounded-2xl border-0"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Start Chat
+              </Button>
+
+              <Button
+                onClick={() => navigate('/friends')}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-3 rounded-2xl border-0"
+              >
+                <Heart className="w-4 h-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Profile Stats Cards */}
         <div className="grid grid-cols-3 gap-3 mb-6">
           <Card className="bg-white shadow-sm border-0 rounded-2xl">
             <CardContent className="p-4 text-center">
