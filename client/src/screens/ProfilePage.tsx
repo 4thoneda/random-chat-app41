@@ -507,6 +507,25 @@ export default function ProfilePage() {
         />
       )}
 
+      {/* Debug: Test ULTRA+ Features */}
+      {!isUltraPremium() && (
+        <div className="px-4 mb-4">
+          <Button
+            onClick={() => {
+              const expiry = new Date();
+              expiry.setMonth(expiry.getMonth() + 3);
+              setPremium(true, expiry, 'ultra-quarterly');
+              alert('🎉 ULTRA+ activated for testing! Refresh to see changes.');
+              window.location.reload();
+            }}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg shadow-md transition-colors"
+          >
+            <Crown className="h-4 w-4 mr-2" />
+            🧪 Test ULTRA+ Features (Debug)
+          </Button>
+        </div>
+      )}
+
       {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
       {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
 
