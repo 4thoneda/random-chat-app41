@@ -30,7 +30,9 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
       return;
     }
     
-    const amount = plan.id === "weekly" ? 9900 : 29900; // in paise (₹99/₹299)
+    const amount = plan.id === "vip-weekly" ? 9900 :
+                   plan.id === "pro-monthly" ? 29900 :
+                   plan.id === "ultra-quarterly" ? 89900 : 9900; // in paise
     const options = {
       key: RAZORPAY_KEY_ID,
       amount,
