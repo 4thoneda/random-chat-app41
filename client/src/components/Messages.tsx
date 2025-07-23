@@ -11,8 +11,8 @@ import WallpaperSelector from "./WallpaperSelector";
 
 interface MessageProps{
     remoteChatToken: string | null;
-    messagesArray: Array<{ sender: string; message: string; id?: string; isSecret?: boolean; timestamp?: number }>;
-    setMessagesArray: React.Dispatch<React.SetStateAction<Array<{ sender: string; message: string; id?: string; isSecret?: boolean; timestamp?: number }>>>;
+    messagesArray: Array<{ sender: string; message: string; id?: string; isSecret?: boolean; timestamp?: number; isRead?: boolean }>;
+    setMessagesArray: React.Dispatch<React.SetStateAction<Array<{ sender: string; message: string; id?: string; isSecret?: boolean; timestamp?: number; isRead?: boolean }>>>;
 }
 
 interface ReceivedMessageProps {
