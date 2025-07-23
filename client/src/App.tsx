@@ -24,6 +24,7 @@ import PremiumPage from "./screens/PremiumPage";
 import SpinWheel from "./components/SpinWheel";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import AppStartupCheck from "./components/AppStartupCheck";
+import UltraAppWrapper from "./components/UltraAppWrapper";
 
 import { useNavigate } from "react-router-dom";
 
