@@ -180,7 +180,7 @@ export default function VideoChat() {
       }
 
       setPremium(true, expiry);
-      setShowPaywall(false);
+      // setShowPaywall(false); // Now handled in PremiumPage
 
       alert(
         `🎉 Welcome to Premium! Your ${plan} subscription is now active until ${expiry.toLocaleDateString()}`,
