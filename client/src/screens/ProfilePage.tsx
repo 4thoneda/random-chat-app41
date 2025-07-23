@@ -56,6 +56,36 @@ export default function ProfilePage() {
   const { coins } = useCoin();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
+  const [showLikesModal, setShowLikesModal] = useState(false);
+  const [likesData, setLikesData] = useState([
+    {
+      id: '1',
+      name: 'Sarah',
+      age: 24,
+      location: 'Mumbai, India',
+      avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '2 hours ago',
+      isRevealed: false
+    },
+    {
+      id: '2',
+      name: 'Priya',
+      age: 22,
+      location: 'Delhi, India',
+      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '1 day ago',
+      isRevealed: false
+    },
+    {
+      id: '3',
+      name: 'Anjali',
+      age: 26,
+      location: 'Bangalore, India',
+      avatar: 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop',
+      timeAgo: '3 days ago',
+      isRevealed: false
+    }
+  ]);
 
   useEffect(() => {
     if (!user) return;
