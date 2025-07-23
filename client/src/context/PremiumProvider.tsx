@@ -32,6 +32,7 @@ interface PremiumProviderProps {
 export const PremiumProvider = ({ children }: PremiumProviderProps) => {
   const [isPremium, setIsPremium] = useState(false);
   const [premiumExpiry, setPremiumExpiry] = useState<Date | null>(null);
+  const [premiumPlan, setPremiumPlan] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
