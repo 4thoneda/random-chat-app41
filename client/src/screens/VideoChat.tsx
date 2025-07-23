@@ -1359,6 +1359,18 @@ export default function VideoChat() {
           </div>
         )}
 
+        {/* Premium Reactions - Only for Pro Monthly and ULTRA+ users */}
+        {(isUltraPremium() || isProMonthly()) && remoteChatToken && (
+          <div className="w-full flex justify-center mt-2">
+            <PremiumReactions
+              onFlairSend={handleFlairSend}
+              onSuperEmoji={handleSuperEmoji}
+              disabled={!remoteChatToken}
+              isVisible={true}
+            />
+          </div>
+        )}
+
         {!isFriendCall && (
           <div className="w-full flex flex-row justify-center gap-2 mt-2">
             <Button
