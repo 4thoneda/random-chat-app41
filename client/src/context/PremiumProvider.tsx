@@ -132,7 +132,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
 
     try {
       // Update Firestore first
-      const success = await updatePremiumStatus(currentUserId, premium, expiry);
+      const success = await updatePremiumStatus(currentUserId, premium, expiry, plan);
 
       if (success) {
         // Update local state
@@ -140,12 +140,16 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
 
         if (premium && expiry) {
           setPremiumExpiry(expiry);
+          setPremiumPlan(plan || null);
           localStorage.setItem("premium_status", "true");
           localStorage.setItem("premium_expiry", expiry.toISOString());
+          localStorage.setItem("ajnabicam_premium_plan", plan || "");
         } else {
           setPremiumExpiry(null);
+          setPremiumPlan(null);
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         }
 
         return true;
