@@ -898,6 +898,24 @@ export default function VideoChat() {
       },
     );
 
+    // Handle premium reactions from partner
+    socket?.on("premium:reaction", ({ type }: { type: string }) => {
+      if (type === "flair") {
+        // Show flair effect on screen
+        console.log("Partner sent a flair! ✨");
+      } else if (type === "super_emoji") {
+        // Show super emoji effect
+        console.log("Partner sent a super emoji! 🔥");
+      }
+    });
+
+    // Handle last seen updates for premium users
+    socket?.on("partner:last_seen", ({ lastSeen }: { lastSeen: string }) => {
+      if (isUltraPremium() || isProMonthly()) {
+        setPartnerLastSeen(new Date(lastSeen));
+      }
+    });
+
     return () => {
       socket?.off("user:connect", handleUserJoined);
       socket?.off("offer", handleIncommingOffer);
