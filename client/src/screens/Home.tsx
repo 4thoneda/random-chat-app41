@@ -32,6 +32,8 @@ import BannerAd from "../components/BannerAd";
 import RewardedAdButton from "../components/RewardedAdButton";
 import PremiumBadge from "../components/PremiumBadge";
 import { OnlineNotificationManager } from "../components/OnlineNotification";
+import UltraHomeEnhancements from "../components/UltraHomeEnhancements";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 
 // Ad unit IDs for scrollable banner ads
 const adUnitIds = [
