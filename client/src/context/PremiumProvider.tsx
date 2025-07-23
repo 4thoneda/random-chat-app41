@@ -62,7 +62,7 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
 
       const userProfile = await getUserProfile(userIdToUse);
       if (userProfile) {
-        const { isPremium: userIsPremium, premiumExpiry: userPremiumExpiry } = userProfile;
+        const { isPremium: userIsPremium, premiumExpiry: userPremiumExpiry, premiumPlan: userPremiumPlan } = userProfile;
 
         // Check if premium has expired
         const now = new Date();
