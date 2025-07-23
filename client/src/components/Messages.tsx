@@ -42,6 +42,9 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
     const [showSecretModal, setShowSecretModal] = useState<boolean>(false);
     const [showWallpaperSelector, setShowWallpaperSelector] = useState<boolean>(false);
     const [currentWallpaper, setCurrentWallpaper] = useState<string>('default');
+    const [isTyping, setIsTyping] = useState<boolean>(false);
+    const [partnerTyping, setPartnerTyping] = useState<boolean>(false);
+    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
     // const [showPaywall, setShowPaywall] = useState<boolean>(false); // Now using separate page
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
