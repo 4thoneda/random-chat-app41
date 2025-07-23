@@ -10,6 +10,7 @@ import { ArrowLeft, Bot, Send, Sparkles } from 'lucide-react';
 
 const AIChatbotPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isUltraPremium } = usePremium();
   const [messages, setMessages] = useState<Array<{ text: string; isUser: boolean; timestamp: Date }>>([
     {
       text: "Hello! I'm your AI assistant. How can I help you today? 💕",
