@@ -17,6 +17,7 @@ import {
   Camera,
 } from "lucide-react";
 import BottomNavBar from "../components/BottomNavBar";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 import { useFriends } from "../context/FriendsProvider";
 import { usePremium } from "../context/PremiumProvider";
 import WallpaperModal from "../components/WallpaperModal";
