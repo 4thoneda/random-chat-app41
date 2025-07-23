@@ -1212,6 +1212,19 @@ export default function VideoChat() {
             </div>
           )}
 
+          {/* Last seen indicator for premium users */}
+          {(isUltraPremium() || isProMonthly()) && remoteStream && !isFriendCall && (
+            <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-lg z-30">
+              <LastSeenDisplay
+                lastSeen={partnerLastSeen}
+                isOnline={true}
+                username={partnerName}
+                isVisible={true}
+                className="text-white text-xs"
+              />
+            </div>
+          )}
+
           {/* Face Filter Indicator */}
           {isFilterActive && remoteStream && (
             <div className="absolute top-3 right-3 bg-purple-500 px-2 py-1 rounded-full z-30 flex items-center gap-1">
