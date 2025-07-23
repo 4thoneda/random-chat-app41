@@ -42,7 +42,7 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
     const [showSecretModal, setShowSecretModal] = useState<boolean>(false);
     const [showWallpaperSelector, setShowWallpaperSelector] = useState<boolean>(false);
     const [currentWallpaper, setCurrentWallpaper] = useState<string>('default');
-    const [showPaywall, setShowPaywall] = useState<boolean>(false);
+    // const [showPaywall, setShowPaywall] = useState<boolean>(false); // Now using separate page
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
