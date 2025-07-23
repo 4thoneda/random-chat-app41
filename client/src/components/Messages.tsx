@@ -149,10 +149,10 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
     };
 
     const handleUpgrade = useCallback(() => {
-        setShowPaywall(true);
+        navigate('/premium');
         setShowSecretModal(false);
         setShowWallpaperSelector(false);
-    }, []);
+    }, [navigate]);
 
     const handlePremiumPurchase = useCallback((plan: string) => {
         console.log(`Processing payment for ${plan} plan`);
