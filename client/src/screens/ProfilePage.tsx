@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import UltraProfileEnhancements from "../components/UltraProfileEnhancements";
+import UltraBottomNavBar from "../components/UltraBottomNavBar";
 import { 
   Camera, 
   ArrowLeft, 
