@@ -41,7 +41,7 @@ import BannerAd from "../components/BannerAd";
 import LanguageSelector from "../components/LanguageSelector";
 import SettingsModal from "../components/SettingsModal";
 import HelpSupportModal from "../components/HelpSupportModal";
-import PremiumPaywall from "../components/PremiumPaywall";
+// import PremiumPaywall from "../components/PremiumPaywall"; // Now using separate page
 import { TestTube } from "lucide-react";
 
 export default function ProfilePage() {
