@@ -210,11 +210,7 @@ const FriendsPage: React.FC = () => {
         <BottomNavBar />
       </main>
 
-      <PremiumPaywall
-        isOpen={showPaywall}
-        onClose={() => setShowPaywall(false)}
-        onPurchase={handlePremiumPurchase}
-      />
+      {/* PremiumPaywall now moved to separate /premium page */}
     </>
   );
 };
