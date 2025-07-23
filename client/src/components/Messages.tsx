@@ -7,7 +7,7 @@ import { Input } from "./ui/input";
 import { Send, Eye, Palette } from "lucide-react";
 import SecretChatModal from "./SecretChatModal";
 import WallpaperSelector from "./WallpaperSelector";
-import PremiumPaywall from "./PremiumPaywall";
+// import PremiumPaywall from "./PremiumPaywall"; // Now using separate page
 
 interface MessageProps{
     remoteChatToken: string | null;
