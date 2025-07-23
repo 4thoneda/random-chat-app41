@@ -1137,7 +1137,7 @@ export default function VideoChat() {
             )
           ) : (
             <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-rose-100 to-pink-100">
-              <ClipLoader color={loaderColor} size={40} />
+              <ClipLoader color={loaderColor} size={35} />
               <p className="text-gray-600 mt-3 text-sm font-medium">
                 {isSearchingForMatch
                   ? "🔍 Finding your perfect match..."
