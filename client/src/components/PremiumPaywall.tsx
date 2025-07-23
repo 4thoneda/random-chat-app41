@@ -70,20 +70,36 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
 
   const plans = [
     {
-      id: "weekly",
-      name: "Weekly Premium",
+      id: "vip-weekly",
+      name: "VIP Weekly",
       price: "₹99",
       duration: "/week",
-      savings: "",
-      popular: false
+      originalPrice: "₹199",
+      savings: "50% OFF First Week!",
+      popular: false,
+      description: "Then ₹199/week",
+      badge: "🎯 Trial Offer"
     },
     {
-      id: "monthly",
-      name: "Monthly Premium", 
+      id: "pro-monthly",
+      name: "Pro Monthly",
       price: "₹299",
       duration: "/month",
-      savings: "Save ₹97!",
-      popular: true
+      savings: "Most Popular!",
+      popular: true,
+      description: "Best value for regular users",
+      badge: "⭐ Recommended"
+    },
+    {
+      id: "ultra-quarterly",
+      name: "ULTRA+ (3 Months)",
+      price: "₹899",
+      duration: "/3 months",
+      originalPrice: "₹897",
+      savings: "Save ₹498!",
+      popular: false,
+      description: "Maximum savings & features",
+      badge: "💎 Premium"
     }
   ];
 
