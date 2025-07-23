@@ -36,6 +36,7 @@ import { uploadProfileImage } from "../lib/storageUtils";
 import { usePremium } from "../context/PremiumProvider";
 import { useCoin } from "../context/CoinProvider";
 import BottomNavBar from "../components/BottomNavBar";
+import WhoLikedMeModal from "../components/WhoLikedMeModal";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
