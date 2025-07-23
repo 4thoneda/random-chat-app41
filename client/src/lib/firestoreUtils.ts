@@ -33,6 +33,7 @@ export interface UserProfile {
   interests?: string[];
   isPremium: boolean;
   premiumExpiry?: Timestamp;
+  premiumPlan?: string;
   coins: number;
   totalCoinsEarned: number;
   totalCoinsSpent: number;
