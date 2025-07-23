@@ -250,7 +250,7 @@ export default function ProfilePage() {
         </Card>
 
         {/* User Information Section */}
-        <Card className="bg-white shadow-lg border-0 mb-6">
+        <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0 mb-6 relative z-10">
           <CardContent className="p-6">
             {/* Name and Age */}
             <div className="flex items-center justify-between mb-4">
