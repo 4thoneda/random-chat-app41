@@ -482,6 +482,14 @@ export default function ProfilePage() {
 
       {/* Bottom Navigation */}
       <BottomNavBar />
+
+      {/* Who Liked Me Modal */}
+      <WhoLikedMeModal
+        isOpen={showLikesModal}
+        onClose={() => setShowLikesModal(false)}
+        likes={likesData}
+        onRevealLike={handleRevealLike}
+      />
     </div>
   );
 }
