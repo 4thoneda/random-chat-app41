@@ -14,7 +14,7 @@ import { usePremium } from '../context/PremiumProvider';
 const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
   const { friends, removeFriend, canAddMoreFriends, maxFreeLimit } = useFriends();
-  const { isPremium, setPremium } = usePremium();
+  const { isPremium, setPremium, isUltraPremium } = usePremium();
   // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
 
   const handleBackClick = () => {
