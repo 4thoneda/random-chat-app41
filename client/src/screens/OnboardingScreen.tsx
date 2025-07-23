@@ -6,15 +6,27 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { firebaseApp, db, storage } from '../firebaseConfig';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
 import { Card } from '../components/ui/card';
 import { useLanguage, languages } from '../context/LanguageProvider';
-import { Globe, User, Users, ChevronDown, Camera, Upload } from 'lucide-react';
+import { Globe, User, Users, ChevronDown, Camera, Upload, X, Plus, Star } from 'lucide-react';
+
+interface PhotoSlot {
+  id: number;
+  file: File | null;
+  preview: string | null;
+  isProfile: boolean;
+}
 
 export default function OnboardingScreen() {
   const [username, setUsername] = useState('');
   const [gender, setGender] = useState('');
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profileImagePreview, setProfileImagePreview] = useState<string>('');
+  const [bio, setBio] = useState('');
+  const [photos, setPhotos] = useState<PhotoSlot[]>([
+    { id: 1, file: null, preview: null, isProfile: true },
+    { id: 2, file: null, preview: null, isProfile: false },
+    { id: 3, file: null, preview: null, isProfile: false },
+  ]);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -22,7 +34,7 @@ export default function OnboardingScreen() {
   const navigate = useNavigate();
   const auth = getAuth(firebaseApp);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, photoId: number) => {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
@@ -37,17 +49,33 @@ export default function OnboardingScreen() {
         return;
       }
 
-      setProfileImage(file);
-      
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         if (e.target?.result) {
-          setProfileImagePreview(e.target.result as string);
+          setPhotos(prev => prev.map(photo => 
+            photo.id === photoId 
+              ? { ...photo, file, preview: e.target.result as string }
+              : photo
+          ));
         }
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const removePhoto = (photoId: number) => {
+    setPhotos(prev => prev.map(photo => 
+      photo.id === photoId 
+        ? { ...photo, file: null, preview: null }
+        : photo
+    ));
+  };
+
+  const setAsProfilePicture = (photoId: number) => {
+    setPhotos(prev => prev.map(photo => ({
+      ...photo,
+      isProfile: photo.id === photoId
+    })));
   };
 
   const uploadImageToFirebase = async (file: File, userId: string): Promise<string | null> => {
@@ -62,6 +90,25 @@ export default function OnboardingScreen() {
     }
   };
 
+  const uploadMultipleImages = async (photos: PhotoSlot[], userId: string): Promise<{profileImage: string | null, additionalImages: string[]}> => {
+    const results = { profileImage: null as string | null, additionalImages: [] as string[] };
+    
+    for (const photo of photos) {
+      if (photo.file) {
+        const imageUrl = await uploadImageToFirebase(photo.file, userId);
+        if (imageUrl) {
+          if (photo.isProfile) {
+            results.profileImage = imageUrl;
+          } else {
+            results.additionalImages.push(imageUrl);
+          }
+        }
+      }
+    }
+    
+    return results;
+  };
+
   const handleContinue = async () => {
     if (!username.trim()) {
       alert('Please enter a username');
@@ -73,8 +120,9 @@ export default function OnboardingScreen() {
       return;
     }
 
-    if (!profileImage) {
-      alert('Please upload a profile picture');
+    const hasProfilePhoto = photos.some(photo => photo.isProfile && photo.file);
+    if (!hasProfilePhoto) {
+      alert('Please upload at least one photo and set it as your profile picture');
       return;
     }
     
@@ -88,11 +136,11 @@ export default function OnboardingScreen() {
           throw new Error('No authenticated user found');
         }
 
-        // Upload profile image
+        // Upload all images
         setUploadProgress(30);
-        const imageUrl = await uploadImageToFirebase(profileImage, user.uid);
+        const uploadResults = await uploadMultipleImages(photos, user.uid);
         
-        if (!imageUrl) {
+        if (!uploadResults.profileImage) {
           throw new Error('Failed to upload profile image');
         }
         
@@ -103,7 +151,9 @@ export default function OnboardingScreen() {
         await setDoc(userDocRef, {
           username: username.trim(),
           gender,
-          profileImageUrl: imageUrl,
+          bio: bio.trim(),
+          profileImageUrl: uploadResults.profileImage,
+          additionalImages: uploadResults.additionalImages,
           language,
           onboardingComplete: true,
           coins: 100, // Initialize with coins
@@ -144,7 +194,9 @@ export default function OnboardingScreen() {
       await setDoc(userDocRef, {
         username: 'User',
         gender: 'other',
+        bio: '',
         profileImageUrl: '', // No image for skipped onboarding
+        additionalImages: [],
         language,
         onboardingComplete: true,
         coins: 100, // Initialize with coins
@@ -182,45 +234,80 @@ export default function OnboardingScreen() {
         </div>
 
         <div className="space-y-6">
-          {/* Profile Image Upload */}
+          {/* Photo Upload Section - Bumble Style */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
               <Camera className="h-4 w-4" />
-              Profile Picture
+              Add Photos (Up to 3)
             </label>
-            <div className="flex flex-col items-center">
-              <div className="relative w-24 h-24 mb-4">
-                {profileImagePreview ? (
-                  <img
-                    src={profileImagePreview}
-                    alt="Profile preview"
-                    className="w-full h-full rounded-full object-cover border-4 border-peach-200 shadow-lg"
-                  />
-                ) : (
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-peach-200 to-coral-200 flex items-center justify-center border-4 border-peach-200 shadow-lg">
-                    <Camera className="h-8 w-8 text-peach-600" />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer rounded-full"
-                  disabled={isLoading}
-                />
+            
+            {/* Photo Grid - Bumble Style */}
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {photos.map((photo, index) => (
+                <div key={photo.id} className="relative aspect-[3/4] group">
+                  {photo.preview ? (
+                    <div className="relative w-full h-full">
+                      <img
+                        src={photo.preview}
+                        alt={`Photo ${index + 1}`}
+                        className="w-full h-full object-cover rounded-xl border-2 border-gray-200 shadow-md"
+                      />
+                      
+                      {/* Profile Picture Badge */}
+                      {photo.isProfile && (
+                        <div className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                          <Star className="h-3 w-3" />
+                          Main
+                        </div>
+                      )}
+                      
+                      {/* Action Buttons */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2">
+                        {!photo.isProfile && (
+                          <Button
+                            size="sm"
+                            onClick={() => setAsProfilePicture(photo.id)}
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-2 py-1"
+                            disabled={isLoading}
+                          >
+                            <Star className="h-3 w-3" />
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          onClick={() => removePhoto(photo.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1"
+                          disabled={isLoading}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, photo.id)}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        disabled={isLoading}
+                      />
+                      <Plus className="h-6 w-6 text-gray-400 group-hover:text-gray-600 mb-1" />
+                      <span className="text-xs text-gray-500 text-center px-1">
+                        {index === 0 ? 'Main Photo' : `Photo ${index + 1}`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center">
+              <p className="text-xs text-gray-500 mb-2">
+                📸 Add up to 3 photos • First photo will be your main profile picture
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-peach-600 border-peach-300 hover:bg-peach-50"
-              onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}
-                disabled={isLoading}
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                Choose Photo
-              </Button>
               <p className="text-xs text-gray-500 mt-2 text-center">
-                Max 5MB • JPG, PNG, GIF
+                💡 Tip: Tap the star to set a photo as your main profile picture
               </p>
             </div>
           </div>
@@ -284,6 +371,29 @@ export default function OnboardingScreen() {
             />
           </div>
 
+          {/* Bio Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+              <User className="h-4 w-4" />
+              About You
+            </label>
+            <Textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell people a bit about yourself... What makes you unique? What are you looking for?"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-peach-500 focus:border-transparent resize-none"
+              rows={4}
+              maxLength={500}
+              disabled={isLoading}
+            />
+            <div className="flex justify-between items-center mt-1">
+              <p className="text-xs text-gray-500">
+                💭 Share your interests, hobbies, or what you're looking for
+              </p>
+              <span className="text-xs text-gray-400">{bio.length}/500</span>
+            </div>
+          </div>
+
           {/* Gender Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
@@ -329,7 +439,7 @@ export default function OnboardingScreen() {
           <div className="space-y-3 pt-4">
             <Button
               onClick={handleContinue}
-              disabled={!username.trim() || !gender || !profileImage || isLoading}
+              disabled={!username.trim() || !gender || !photos.some(p => p.isProfile && p.file) || isLoading}
               className="w-full py-3 rounded-xl bg-gradient-to-r from-peach-500 via-coral-500 to-blush-600 hover:from-peach-600 hover:via-coral-600 hover:to-blush-700 text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all duration-200"
             >
               {isLoading ? (

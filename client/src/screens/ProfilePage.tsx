@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Pencil, 
   Camera, 
@@ -15,7 +16,11 @@ import {
   User, 
   Globe, 
   Database,
-  HelpCircle
+  HelpCircle,
+  Plus,
+  X,
+  Star,
+  Edit3
 } from "lucide-react";
 import {
   doc,
@@ -41,7 +46,10 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const [name, setName] = useState("Mystery Person");
   const [editingName, setEditingName] = useState(false);
+  const [bio, setBio] = useState("");
+  const [editingBio, setEditingBio] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [additionalImages, setAdditionalImages] = useState<string[]>([]);
   const [referralCode, setReferralCode] = useState("");
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -56,6 +64,7 @@ export default function ProfilePage() {
   const { isPremium, setPremium } = usePremium();
   const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const additionalImageInputRef = useRef<HTMLInputElement>(null);
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -68,7 +77,9 @@ export default function ProfilePage() {
       if (docSnap.exists()) {
         const data = docSnap.data();
         setName(data.username || data.name || "Mystery Person");
+        setBio(data.bio || "");
         setProfileImage(data.profileImage || null);
+        setAdditionalImages(data.additionalImages || []);
         setReferralCode(data.referralCode || generateReferralCode(user.uid));
         setReferralCount(data.referralCount || 0);
       }
@@ -97,6 +108,20 @@ export default function ProfilePage() {
     }
   };
 
+  const handleBioEdit = () => {
+    setEditingBio(true);
+  };
+
+  const handleBioSave = async () => {
+    setEditingBio(false);
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        bio: bio,
+        updatedAt: new Date()
+      });
+    }
+  };
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
@@ -130,6 +155,56 @@ export default function ProfilePage() {
     }
   };
 
+  const handleAdditionalImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (additionalImages.length >= 2) {
+      alert("You can only upload up to 2 additional photos");
+      return;
+    }
+
+    setUploadingImage(true);
+    setUploadProgress(0);
+
+    try {
+      const result = await uploadProfileImage(
+        file,
+        user.uid,
+        (progress) => setUploadProgress(progress)
+      );
+
+      const newAdditionalImages = [...additionalImages, result.url];
+      setAdditionalImages(newAdditionalImages);
+
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        additionalImages: newAdditionalImages,
+        updatedAt: new Date()
+      });
+
+      console.log("Additional image uploaded successfully!!");
+    } catch (error) {
+      console.error("Error uploading additional image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const removeAdditionalImage = async (imageUrl: string) => {
+    if (!user) return;
+
+    const newAdditionalImages = additionalImages.filter(img => img !== imageUrl);
+    setAdditionalImages(newAdditionalImages);
+
+    const userRef = doc(db, "users", user.uid);
+    await updateDoc(userRef, {
+      additionalImages: newAdditionalImages,
+      updatedAt: new Date()
+    });
+  };
   const handleCopyReferralCode = () => {
     navigator.clipboard.writeText(referralCode);
     alert("Referral code copied to clipboard!");
@@ -255,51 +330,99 @@ export default function ProfilePage() {
         {/* Profile Card */}
         <Card className="romantic-card shadow-xl">
           <CardHeader className="text-center">
-            <div className="relative mx-auto mb-4">
-              <div className="jewelry-frame">
-                <img
-                  src={
-                    profileImage ||
-                    "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
-                  }
-                  alt="Profile"
-                  className="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full object-cover border-4 border-white shadow-lg"
+            {/* Photo Gallery - Bumble Style */}
+            <div className="mb-6">
+              {/* Main Profile Photo */}
+              <div className="relative mx-auto mb-4">
+                <div className="jewelry-frame">
+                  <img
+                    src={
+                      profileImage ||
+                      "https://api.dicebear.com/7.x/thumbs/svg?seed=user"
+                    }
+                    alt="Profile"
+                    className="w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 xl:w-44 xl:h-44 rounded-full object-cover border-4 border-white shadow-lg"
+                  />
+                </div>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute bottom-1 right-1 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                >
+                  <Camera size={16} />
+                </Button>
+                
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
                 />
-              </div>
-              
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute bottom-1 right-1 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploadingImage}
-              >
-                <Camera size={16} />
-              </Button>
-              
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-              />
 
-              {uploadingImage && (
-                <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <div className="text-xs mb-1">{Math.round(uploadProgress)}%</div>
-                    <div className="w-16 h-1 bg-white/30 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-white transition-all duration-300"
-                        style={{ width: `${uploadProgress}%` }}
-                      />
+                {uploadingImage && (
+                  <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <div className="text-xs mb-1">{Math.round(uploadProgress)}%</div>
+                      <div className="w-16 h-1 bg-white/30 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-white transition-all duration-300"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+
+              {/* Additional Photos Grid */}
+              <div className="flex justify-center gap-3 mb-4">
+                {/* Show existing additional images */}
+                {additionalImages.map((imageUrl, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={imageUrl}
+                      alt={`Additional photo ${index + 1}`}
+                      className="w-16 h-20 object-cover rounded-lg border-2 border-gray-200 shadow-md"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={() => removeAdditionalImage(imageUrl)}
+                      className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+                
+                {/* Add more photos button */}
+                {additionalImages.length < 2 && (
+                  <div className="w-16 h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+                    <input
+                      ref={additionalImageInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAdditionalImageChange}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => additionalImageInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="w-full h-full p-0"
+                    >
+                      <Plus className="h-4 w-4 text-gray-400" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
 
+            {/* Name and Bio Section */}
             <div className="text-center">
               {editingName ? (
                 <div className="flex items-center justify-center gap-2">
@@ -324,7 +447,48 @@ export default function ProfilePage() {
                   </Button>
                 </div>
               )}
-              <p className="text-sm text-gray-600 mt-1">{t('profile.addPhoto')}</p>
+              
+              {/* Bio Section */}
+              <div className="mt-4">
+                {editingBio ? (
+                  <div className="space-y-2">
+                    <Textarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      className="w-full text-center resize-none"
+                      rows={3}
+                      maxLength={500}
+                      placeholder="Tell people about yourself..."
+                      autoFocus
+                    />
+                    <div className="flex justify-center gap-2">
+                      <Button size="sm" onClick={handleBioSave} className="bg-coral-500 text-white">
+                        Save
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setEditingBio(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-start justify-center gap-2">
+                    <div className="flex-1">
+                      {bio ? (
+                        <p className="text-sm text-gray-600 leading-relaxed max-w-xs mx-auto">
+                          {bio}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-400 italic">
+                          Add a bio to tell people about yourself
+                        </p>
+                      )}
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={handleBioEdit}>
+                      <Edit3 size={14} className="text-coral-600" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </CardHeader>
         </Card>

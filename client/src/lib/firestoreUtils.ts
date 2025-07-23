@@ -24,9 +24,10 @@ export interface UserProfile {
   username: string;
   email?: string;
   profileImage?: string;
+  additionalImages?: string[];
+  bio?: string;
   gender: 'male' | 'female' | 'other';
   language: string;
-  bio?: string;
   age?: number;
   location?: string;
   interests?: string[];
@@ -69,6 +70,8 @@ export async function ensureUserDocumentExists(userId: string, initialData?: Par
       const defaultUserProfile: UserProfile = {
         userId,
         username: initialData?.username || `User${Math.floor(Math.random() * 10000)}`,
+        bio: initialData?.bio || '',
+        additionalImages: initialData?.additionalImages || [],
         gender: initialData?.gender || 'male',
         language: initialData?.language || 'en',
         isPremium: false,
