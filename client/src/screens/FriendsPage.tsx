@@ -13,7 +13,7 @@ const FriendsPage: React.FC = () => {
   const navigate = useNavigate();
   const { friends, removeFriend, canAddMoreFriends, maxFreeLimit } = useFriends();
   const { isPremium, setPremium } = usePremium();
-  const [showPaywall, setShowPaywall] = useState(false);
+  // const [showPaywall, setShowPaywall] = useState(false); // Now using separate page
 
   const handleBackClick = () => {
     navigate(-1);
