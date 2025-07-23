@@ -100,6 +100,12 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
             messageId
         });
 
+        // Send typing status end for premium users
+        if (isUltraPremium() || isProMonthly()) {
+            socket?.emit("typing:end", { targetChatToken: remoteChatToken });
+            setIsTyping(false);
+        }
+
         // Auto-delete secret message after 3 seconds
         if (isSecretMode) {
             setTimeout(() => {
