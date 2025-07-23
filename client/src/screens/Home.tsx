@@ -149,7 +149,7 @@ export default function Home() {
   }, [navigate]);
 
   const handleUpgrade = () => {
-    setShowPaywall(true);
+    navigate("/premium");
   };
 
   const handlePremiumPurchase = (plan: string) => {
