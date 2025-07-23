@@ -105,17 +105,21 @@ export const PremiumProvider = ({ children }: PremiumProviderProps) => {
       // Fallback to localStorage if Firestore fails
       const savedPremium = localStorage.getItem("premium_status");
       const savedExpiry = localStorage.getItem("premium_expiry");
+      const savedPlan = localStorage.getItem("ajnabicam_premium_plan");
 
       if (savedPremium && savedExpiry) {
         const expiryDate = new Date(savedExpiry);
         if (expiryDate > new Date()) {
           setIsPremium(true);
           setPremiumExpiry(expiryDate);
+          setPremiumPlan(savedPlan || null);
         } else {
           setIsPremium(false);
           setPremiumExpiry(null);
+          setPremiumPlan(null);
           localStorage.removeItem("premium_status");
           localStorage.removeItem("premium_expiry");
+          localStorage.removeItem("ajnabicam_premium_plan");
         }
       }
     } finally {
