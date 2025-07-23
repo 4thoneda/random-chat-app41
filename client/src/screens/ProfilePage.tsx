@@ -282,18 +282,32 @@ export default function ProfilePage() {
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button
-                onClick={() => navigate('/video-chat')}
-                className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 rounded-2xl border-0"
+                onClick={() => {
+                  // Edit profile functionality
+                  alert('Edit profile feature coming soon!');
+                }}
+                className="flex-1 bg-gradient-to-r from-romance-500 to-passion-500 hover:from-romance-600 hover:to-passion-600 text-white font-semibold py-3 border-0"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Start Chat
+                <Edit3 className="w-4 h-4 mr-2" />
+                Edit Profile
               </Button>
 
               <Button
-                onClick={() => navigate('/friends')}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-3 rounded-2xl border-0"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'My Profile',
+                      text: `Check out my profile on AjnabiCam!`,
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Profile link copied to clipboard!');
+                  }
+                }}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-3 border-0"
               >
-                <Heart className="w-4 h-4" />
+                <Users className="w-4 h-4" />
               </Button>
             </div>
           </CardContent>
