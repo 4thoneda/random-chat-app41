@@ -271,7 +271,7 @@ export async function completeOnboarding(userId: string, profileData: Partial<Us
 /**
  * Update user premium status
  */
-export async function updatePremiumStatus(userId: string, isPremium: boolean, expiryDate?: Date): Promise<boolean> {
+export async function updatePremiumStatus(userId: string, isPremium: boolean, expiryDate?: Date, plan?: string): Promise<boolean> {
   try {
     const userDocRef = doc(db, "users", userId);
     const updates: any = {
