@@ -482,8 +482,33 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <BottomNavBar />
+      {/* ULTRA+ Profile Enhancements */}
+      {isUltraPremium() && (
+        <UltraProfileEnhancements
+          isUltraPremium={true}
+          userProfile={{
+            name: name,
+            bio: bio,
+            profileImage: profileImage || undefined,
+            premiumSince: new Date('2024-01-15'), // Example date
+            totalFriends: 25,
+            totalChats: 150,
+            premiumFeatureUsage: {
+              reactionsUsed: 89,
+              filtersUsed: 15,
+              adsFree: 45,
+              unlimitedTime: 120
+            }
+          }}
+          onProfileUpdate={(updates) => {
+            console.log('Profile updates:', updates);
+            // Handle profile updates
+          }}
+        />
+      )}
+
+      {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+      {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
 
       {/* Who Liked Me Modal */}
       <WhoLikedMeModal
