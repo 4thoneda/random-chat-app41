@@ -328,11 +328,24 @@ export default function ProfilePage() {
         <div className="grid grid-cols-3 gap-3 mb-6">
           <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
             <CardContent className="p-4 text-center">
-              <div className="w-10 h-10 bg-blue-100 flex items-center justify-center mx-auto mb-2">
-                <Eye className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="text-lg font-bold text-gray-800">{profileViews}</div>
-              <div className="text-xs text-gray-500">Views</div>
+              {isPremium ? (
+                <>
+                  <div className="w-10 h-10 bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                    <Eye className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="text-lg font-bold text-blue-700">{profileViews}</div>
+                  <div className="text-xs text-blue-600">Views</div>
+                </>
+              ) : (
+                <>
+                  <div className="w-10 h-10 bg-gray-200 flex items-center justify-center mx-auto mb-2 relative">
+                    <Eye className="w-5 h-5 text-gray-400" />
+                    <Crown className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1" />
+                  </div>
+                  <div className="text-lg font-bold text-gray-400">***</div>
+                  <div className="text-xs text-gray-400">Premium</div>
+                </>
+              )}
             </CardContent>
           </Card>
 
