@@ -91,6 +91,8 @@ export default function VideoChat() {
   const [showFaceFilters, setShowFaceFilters] = useState(false);
   const [remoteVideoRef, setRemoteVideoRef] = useState<HTMLVideoElement | null>(null);
   const [isUltraPremiumState, setIsUltraPremium] = useState(false);
+  const [showPremiumReactions, setShowPremiumReactions] = useState(false);
+  const [partnerLastSeen, setPartnerLastSeen] = useState<Date | null>(null);
 
   // Face filters hook
   const {
