@@ -6,10 +6,13 @@ import { getUserProfile, updatePremiumStatus } from "../lib/firestoreUtils";
 interface PremiumContextType {
   isPremium: boolean;
   premiumExpiry: Date | null;
+  premiumPlan: string | null;
   loading: boolean;
-  setPremium: (premium: boolean, expiry?: Date) => Promise<boolean>;
+  setPremium: (premium: boolean, expiry?: Date, plan?: string) => Promise<boolean>;
   checkPremiumStatus: () => boolean;
   syncPremiumStatus: () => Promise<void>;
+  isUltraPremium: () => boolean;
+  isProMonthly: () => boolean;
 }
 
 const PremiumContext = createContext<PremiumContextType | null>(null);
