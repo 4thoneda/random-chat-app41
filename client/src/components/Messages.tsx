@@ -34,6 +34,7 @@ const wallpaperGradients: Record<string, string> = {
 };
 
 export default function Messages({remoteChatToken, messagesArray, setMessagesArray}: MessageProps) {
+    const navigate = useNavigate();
     const {socket} = useSocket();
     const { isPremium } = usePremium();
     const [message, setMessage] = useState<string>('');
