@@ -468,7 +468,34 @@ export default function Home() {
           </div>
         </button>
 
-        <BottomNavBar />
+        {/* ULTRA+ Home Enhancements */}
+        {isUltraPremium() && (
+          <div className="px-4 mb-6">
+            <UltraHomeEnhancements
+              isUltraPremium={true}
+              onQuickMatch={() => {
+                setIsConnecting(true);
+                navigate("/video-chat", {
+                  state: { genderFilter: "all", voiceOnly: false, isSearching: true }
+                });
+              }}
+              onPremiumSearch={() => {
+                // Premium search with VIP matching
+                setIsConnecting(true);
+                navigate("/video-chat", {
+                  state: { genderFilter: "premium", voiceOnly: false, isSearching: true }
+                });
+              }}
+              onAnalytics={() => {
+                // Open premium analytics dashboard
+                console.log("Opening ULTRA+ Analytics Dashboard");
+              }}
+            />
+          </div>
+        )}
+
+        {/* Use UltraBottomNavBar for ULTRA+ users, regular for others */}
+        {isUltraPremium() ? <UltraBottomNavBar /> : <BottomNavBar />}
       </main>
 
       {/* PremiumPaywall now moved to separate /premium page */}
