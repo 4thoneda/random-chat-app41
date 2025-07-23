@@ -395,6 +395,29 @@ export default function ProfilePage() {
           </Card>
         </div>
 
+        {/* Secondary Stats Row */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                <Star className="w-5 h-5 text-yellow-600" />
+              </div>
+              <div className="text-lg font-bold text-yellow-700">{coins}</div>
+              <div className="text-xs text-yellow-600">Coins</div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/80 backdrop-blur-sm shadow-sm border-0">
+            <CardContent className="p-4 text-center">
+              <div className="w-10 h-10 bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                <MessageCircle className="w-5 h-5 text-purple-600" />
+              </div>
+              <div className="text-lg font-bold text-purple-700">156</div>
+              <div className="text-xs text-purple-600">Chats</div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Additional Actions */}
         <div className="space-y-3">
           <Button
