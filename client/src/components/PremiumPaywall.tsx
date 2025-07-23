@@ -99,7 +99,7 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
       savings: "Save ₹498!",
       popular: false,
       description: "Maximum savings & features",
-      badge: "💎 Premium"
+      badge: "�� Premium"
     }
   ];
 
@@ -164,16 +164,29 @@ export default function PremiumPaywall({ isOpen, onClose, onPurchase }: PremiumP
                     Most Popular! 🔥
                   </span>
                 )}
-                <div className="flex justify-between items-center">
-                  <div>
+
+                {plan.badge && !plan.popular && (
+                  <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full">
+                    {plan.badge}
+                  </span>
+                )}
+
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
                     <h4 className="font-semibold text-gray-800 dark:text-white">{plan.name}</h4>
+                    {plan.description && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{plan.description}</p>
+                    )}
                     {plan.savings && (
-                      <p className="text-sm text-green-600 font-medium">{plan.savings}</p>
+                      <p className="text-sm text-green-600 font-medium mt-1">{plan.savings}</p>
                     )}
                   </div>
                   <div className="text-right">
+                    {plan.originalPrice && (
+                      <div className="text-sm text-gray-500 line-through">{plan.originalPrice}</div>
+                    )}
                     <span className="text-2xl font-bold text-purple-600">{plan.price}</span>
-                    <span className="text-gray-500">{plan.duration}</span>
+                    <span className="text-gray-500 text-sm block">{plan.duration}</span>
                   </div>
                 </div>
               </div>
