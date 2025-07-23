@@ -950,8 +950,8 @@ export default function VideoChat() {
         peerservice.initPeer();
       }
 
-      // Show interstitial ad when leaving video chat (if there was an active call)
-      if (remoteChatToken) {
+      // Show interstitial ad when leaving video chat (only for non-ULTRA+ users)
+      if (remoteChatToken && !isUltraPremium()) {
         setTimeout(() => {
           showOnNavigation('home');
         }, 500);
