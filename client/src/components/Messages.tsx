@@ -133,13 +133,21 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
 
         setMessagesArray((prev) => [...prev, newMessage]);
 
+        // Send read receipt for premium users
+        if ((isUltraPremium() || isProMonthly()) && messageId) {
+            socket?.emit("message:read", {
+                messageId,
+                targetChatToken: remoteChatToken
+            });
+        }
+
         // Auto-delete secret message after 3 seconds
         if (isSecret) {
             setTimeout(() => {
                 setMessagesArray(prev => prev.filter(msg => msg.id !== newMessage.id));
             }, 3000);
         }
-    }, [setMessagesArray]);
+    }, [setMessagesArray, remoteChatToken, socket, isUltraPremium, isProMonthly]);
 
     const handleSecretModeToggle = (enabled: boolean) => {
         setIsSecretMode(enabled);
