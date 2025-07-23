@@ -299,6 +299,18 @@ export default function Messages({remoteChatToken, messagesArray, setMessagesArr
                     </div>
                 )}
 
+                {/* Last seen indicator for premium users */}
+                {(isUltraPremium() || isProMonthly()) && !partnerTyping && messagesArray.length > 0 && (
+                    <div className="mb-2 flex justify-center">
+                        <div className="bg-gray-100 px-3 py-1 rounded-full">
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                                <Clock className="h-3 w-3" />
+                                <span>Active now</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div ref={messagesEndRef} />
             </div>
 
